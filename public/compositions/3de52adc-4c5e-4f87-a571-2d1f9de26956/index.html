@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CaptionAI Composition 3de52adc-4c5e-4f87-a571-2d1f9de26956</title>
+  <style>
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: transparent;
+      font-family: Avenir Next, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    #stage {
+      position: relative;
+      width: 720px;
+      height: 1280px;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .clip {
+      position: absolute;
+    }
+
+    .video-layer {
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 50%;
+      object-fit: cover;
+    }
+
+    .caption {
+      z-index: 40;
+      max-width: 86%;
+      transform: translate(-50%, -50%);
+      color: #ffffff;
+      opacity: 1;
+      font-size: 76px;
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: 0px;
+      text-align: center;
+      text-transform: uppercase;
+      text-shadow: 0 5px 18px rgba(0,0,0,0.65);
+      -webkit-text-stroke: 3px #000000;
+    }
+
+    .script-visual {
+      z-index: 20;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 50%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 26px;
+      box-sizing: border-box;
+      padding: 90px 86px 76px;
+      overflow: hidden;
+      color: #fff;
+      background:
+        radial-gradient(circle at 72% 24%, color-mix(in srgb, var(--accent) 44%, transparent), transparent 34%),
+        radial-gradient(circle at 16% 78%, color-mix(in srgb, var(--secondary) 28%, transparent), transparent 32%),
+        linear-gradient(135deg, var(--bg), #050505);
+    }
+
+    .script-visual::after {
+      content: "";
+      position: absolute;
+      inset: 42px;
+      border: 2px solid color-mix(in srgb, var(--accent) 36%, transparent);
+      pointer-events: none;
+    }
+
+    .visual-grid {
+      position: absolute;
+      inset: 0;
+      opacity: 0.22;
+      background-image:
+        linear-gradient(color-mix(in srgb, var(--secondary) 34%, transparent) 1px, transparent 1px),
+        linear-gradient(90deg, color-mix(in srgb, var(--secondary) 34%, transparent) 1px, transparent 1px);
+      background-size: 72px 72px;
+      transform: perspective(700px) rotateX(58deg) translateY(140px);
+      transform-origin: bottom;
+    }
+
+    .visual-orbit {
+      position: absolute;
+      right: 78px;
+      top: 82px;
+      width: 260px;
+      height: 260px;
+      border: 22px solid color-mix(in srgb, var(--accent) 72%, transparent);
+      border-left-color: transparent;
+      border-radius: 999px;
+      filter: drop-shadow(0 0 24px color-mix(in srgb, var(--accent) 42%, transparent));
+    }
+
+    .visual-kicker {
+      position: relative;
+      margin: 0;
+      color: var(--accent);
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .script-visual h2 {
+      position: relative;
+      max-width: 760px;
+      margin: 0;
+      font-size: 104px;
+      line-height: 0.94;
+      letter-spacing: 0;
+      text-wrap: balance;
+    }
+
+    .visual-script {
+      position: relative;
+      max-width: 840px;
+      margin: 0;
+      color: rgba(255,255,255,0.78);
+      font-size: 34px;
+      font-weight: 600;
+      line-height: 1.22;
+    }
+
+    .visual-keywords {
+      position: relative;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .visual-keywords span {
+      border: 2px solid color-mix(in srgb, var(--accent) 60%, transparent);
+      background: rgba(0,0,0,0.2);
+      padding: 12px 18px;
+      color: #fff;
+      font-size: 26px;
+      font-weight: 800;
+    }
+
+    .caption > span {
+      display: inline-block;
+      padding: 0;
+      background: rgba(0, 0, 0, 0);
+      border-radius: 18px;
+    }
+
+    .effect-sticker {
+      -webkit-text-stroke-width: 4px;
+    }
+
+    .low-confidence > span {
+      outline: 3px solid rgba(250, 204, 21, 0.65);
+    }
+
+    .overlay {
+      z-index: 50;
+      color: #fff;
+      font-size: 48px;
+      font-weight: 800;
+      text-shadow: 0 5px 18px rgba(0,0,0,0.45);
+    }
+
+    .transition {
+      inset: 0;
+      z-index: 60;
+      pointer-events: none;
+    }
+
+    .transition-flash-white {
+      background: white;
+      opacity: 0.82;
+    }
+
+    .transition-blur-dissolve,
+    .transition-whip-pan,
+    .transition-zoom-cut,
+    .transition-glitch {
+      backdrop-filter: blur(18px);
+      background: rgba(255,255,255,0.08);
+    }
+  </style>
+  <script type="application/json" id="captionai-edit-plan">{
+  &quot;projectId&quot;: &quot;3de52adc-4c5e-4f87-a571-2d1f9de26956&quot;,
+  &quot;duration&quot;: 22.871,
+  &quot;fps&quot;: 30,
+  &quot;quality&quot;: &quot;720p&quot;,
+  &quot;generatedBy&quot;: &quot;CaptionAI composition compiler&quot;,
+  &quot;clipCount&quot;: 29
+}</script>
+</head>
+<body>
+  <div id="stage" data-composition-id="captionai-3de52adc-4c5e-4f87-a571-2d1f9de26956" data-start="0" data-duration="24.71" data-width="720" data-height="1280" data-fps="30">
+    <video id="video-0001" class="clip video-layer" data-start="0" data-duration="22.871" data-track-index="0" data-volume="1" src="/uploads/1777059832299-edit.MOV" muted playsinline></video>
+    <section id="visual-0001" class="clip script-visual motif-default" data-start="0.01" data-duration="3.64" data-track-index="2" style="--bg:#101820; --accent:#facc15; --secondary:#38bdf8;">
+      <div class="visual-grid"></div>
+      <div class="visual-orbit"></div>
+      <p class="visual-kicker">default</p>
+      <h2>Tumhari + Kyunki</h2>
+      <p class="visual-script">Chat GPT use karna band karo kyunki ise tumhari tareef</p>
+      <div class="visual-keywords"><span>Tumhari</span><span>Kyunki</span><span>Tareef</span></div>
+    </section>
+    <section id="visual-0002" class="clip script-visual motif-default" data-start="3.65" data-duration="2.57" data-track-index="2" style="--bg:#172554; --accent:#2dd4bf; --secondary:#f8fafc;">
+      <div class="visual-grid"></div>
+      <div class="visual-orbit"></div>
+      <p class="visual-kicker">default</p>
+      <h2>Tumhare + Ghatiya</h2>
+      <p class="visual-script">karne ke alawa kuch nahi aata Ye tumhare ghatiya se</p>
+      <div class="visual-keywords"><span>Tumhare</span><span>Ghatiya</span><span>Karne</span></div>
+    </section>
+    <section id="visual-0003" class="clip script-visual motif-idea" data-start="6.22" data-duration="2.62" data-track-index="2" style="--bg:#1f2937; --accent:#fb7185; --secondary:#fbbf24;">
+      <div class="visual-grid"></div>
+      <div class="visual-orbit"></div>
+      <p class="visual-kicker">idea</p>
+      <h2>Business + Ghatiya</h2>
+      <p class="visual-script">ghatiya business idea pe bhi tumhari tareef hi karega aur</p>
+      <div class="visual-keywords"><span>Business</span><span>Ghatiya</span><span>Tumhari</span></div>
+    </section>
+    <section id="visual-0004" class="clip script-visual motif-default" data-start="8.84" data-duration="2.06" data-track-index="2" style="--bg:#052e2b; --accent:#a7f3d0; --secondary:#60a5fa;">
+      <div class="visual-grid"></div>
+      <div class="visual-orbit"></div>
+      <p class="visual-kicker">default</p>
+      <h2>Batayega + Balki</h2>
+      <p class="visual-script">balki ye bhi batayega that why this is such a</p>
+      <div class="visual-keywords"><span>Batayega</span><span>Balki</span><span>Such</span></div>
+    </section>
+    <section id="visual-0005" class="clip script-visual motif-tech" data-start="10.9" data-duration="3.33" data-track-index="2" style="--bg:#111827; --accent:#c084fc; --secondary:#f97316;">
+      <div class="visual-grid"></div>
+      <div class="visual-orbit"></div>
+      <p class="visual-kicker">tech</p>
+      <h2>Instruction + Settings</h2>
+      <p class="visual-script">great idea Isliye maine settings mein jaake instruction prompt daal</p>
+      <div class="visual-keywords"><span>Instruction</span><span>Settings</span><span>Isliye</span></div>
+    </section>
+    <section id="visual-0006" class="clip script-visual motif-idea" data-start="14.23" data-duration="2.73" data-track-index="2" style="--bg:#101820; --accent:#facc15; --secondary:#38bdf8;">
+      <div class="visual-grid"></div>
+      <div class="visual-orbit"></div>
+      <p class="visual-kicker">idea</p>
+      <h2>Argument + Counter</h2>
+      <p class="visual-script">diya Ab na ki ye mere ideas pe counter argument</p>
+      <div class="visual-keywords"><span>Argument</span><span>Counter</span><span>Ideas</span></div>
+    </section>
+    <section id="visual-0007" class="clip script-visual motif-default" data-start="16.96" data-duration="3.02" data-track-index="2" style="--bg:#172554; --accent:#2dd4bf; --secondary:#f8fafc;">
+      <div class="visual-grid"></div>
+      <div class="visual-orbit"></div>
+      <p class="visual-kicker">default</p>
+      <h2>Assumptions + Kharaab</h2>
+      <p class="visual-script">karega balki kharaab logic aur weak assumptions ko bhi call</p>
+      <div class="visual-keywords"><span>Assumptions</span><span>Kharaab</span><span>Karega</span></div>
+    </section>
+    <section id="visual-0008" class="clip script-visual motif-tech" data-start="19.98" data-duration="3.72" data-track-index="2" style="--bg:#1f2937; --accent:#fb7185; --secondary:#fbbf24;">
+      <div class="visual-grid"></div>
+      <div class="visual-orbit"></div>
+      <p class="visual-kicker">tech</p>
+      <h2>Comment + Karega</h2>
+      <p class="visual-script">out karega If you want this prompt kuch bhi comment kar do aur main saari</p>
+      <div class="visual-keywords"><span>Comment</span><span>Karega</span><span>Prompt</span></div>
+    </section>
+    <section id="visual-0009" class="clip script-visual motif-tech" data-start="23.7" data-duration="1.01" data-track-index="2" style="--bg:#052e2b; --accent:#a7f3d0; --secondary:#60a5fa;">
+      <div class="visual-grid"></div>
+      <div class="visual-orbit"></div>
+      <p class="visual-kicker">tech</p>
+      <h2>Details + Dunga</h2>
+      <p class="visual-script">details bhej dunga</p>
+      <div class="visual-keywords"><span>Details</span><span>Dunga</span><span>Bhej</span></div>
+    </section>
+    <div id="caption-0001" class="clip caption caption-word-pop effect-sticker" data-start="0.01" data-duration="1.81" data-track-index="4" style="left:50.000%; top:82.000%;">
+      <span>Chat GPT use karna band</span>
+    </div>
+    <div id="caption-0002" class="clip caption caption-word-pop effect-sticker" data-start="1.83" data-duration="1.82" data-track-index="4" style="left:50.000%; top:82.000%;">
+      <span>karo kyunki ise tumhari tareef</span>
+    </div>
+    <div id="caption-0003" class="clip caption caption-word-pop effect-sticker" data-start="3.65" data-duration="1.14" data-track-index="4" style="left:50.000%; top:82.000%;">
+      <span>karne ke alawa kuch nahi</span>
+    </div>
+    <div id="caption-0004" class="clip caption caption-word-pop effect-sticker" data-start="4.79" data-duration="1.43" data-track-index="4" style="left:50.000%; top:82.000%;">
+      <span>aata Ye tumhare ghatiya se</span>
+    </div>
+    <div id="caption-0005" class="clip caption caption-word-pop effect-sticker" data-start="6.22" data-duration="1.34" data-track-index="4" style="left:50.000%; top:82.000%;">
+      <span>ghatiya business idea pe bhi</span>
+    </div>
+    <div id="caption-0006" class="clip caption caption-word-pop effect-sticker" data-start="7.56" data-duration="1.28" data-track-index="4" style="left:50.000%; top:82.000%;">
+      <span>tumhari tareef hi karega aur</span>
+    </div>
+    <div id="caption-0007" class="clip caption caption-word-pop effect-sticker" data-start="8.84" data-duration="1.21" data-track-index="4" style="left:50.000%; top:82.000%;">
+      <span>balki ye bhi batayega that</span>
+    </div>
+    <div id="caption-0008" class="clip caption caption-word-pop effect-sticker" data-start="10.05" data-duration="0.85" data-track-index="4" style="left:50.000%; top:82.000%;">
+      <span>why this is such a</span>
+    </div>
+    <div id="caption-0009" class="clip caption caption-word-pop effect-sticker" data-start="10.9" data-duration="1.77" data-track-index="4" style="left:50.000%; top:82.000%;">
+      <span>great idea Isliye maine settings</span>
+    </div>
+    <div id="caption-0010" class="clip caption caption-word-pop effect-sticker" data-start="12.67" data-duration="1.56" data-track-index="4" style="left:50.000%; top:82.000%;">
+      <span>mein jaake instruction prompt daal</span>
+    </div>
+    <div id="caption-0011" class="clip caption caption-word-pop effect-sticker" data-start="14.23" data-duration="1.05" data-track-index="4" style="left:50.000%; top:82.000%;">
+      <span>diya Ab na ki ye</span>
+    </div>
+    <div id="caption-0012" class="clip caption caption-word-pop effect-sticker" data-start="15.28" data-duration="1.68" data-track-index="4" style="left:50.000%; top:82.000%;">
+      <span>mere ideas pe counter argument</span>
+    </div>
+    <div id="caption-0013" class="clip caption caption-word-pop effect-sticker" data-start="16.96" data-duration="1.51" data-track-index="4" style="left:50.000%; top:82.000%;">
+      <span>karega balki kharaab logic aur</span>
+    </div>
+    <div id="caption-0014" class="clip caption caption-word-pop effect-sticker" data-start="18.47" data-duration="1.51" data-track-index="4" style="left:50.000%; top:82.000%;">
+      <span>weak assumptions ko bhi call</span>
+    </div>
+    <div id="caption-0015" class="clip caption caption-word-pop effect-sticker" data-start="19.98" data-duration="1.22" data-track-index="4" style="left:50.000%; top:82.000%;">
+      <span>out karega If you want</span>
+    </div>
+    <div id="caption-0016" class="clip caption caption-word-pop effect-sticker" data-start="21.2" data-duration="1.64" data-track-index="4" style="left:50.000%; top:82.000%;">
+      <span>this prompt kuch bhi comment</span>
+    </div>
+    <div id="caption-0017" class="clip caption caption-word-pop effect-sticker" data-start="22.84" data-duration="0.86" data-track-index="4" style="left:50.000%; top:82.000%;">
+      <span>kar do aur main saari</span>
+    </div>
+    <div id="caption-0018" class="clip caption caption-word-pop effect-sticker" data-start="23.7" data-duration="1.01" data-track-index="4" style="left:50.000%; top:82.000%;">
+      <span>details bhej dunga</span>
+    </div>
+  </div>
+</body>
+</html>

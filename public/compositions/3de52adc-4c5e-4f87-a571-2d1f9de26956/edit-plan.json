@@ -1,0 +1,524 @@
+{
+  "version": 1,
+  "projectId": "3de52adc-4c5e-4f87-a571-2d1f9de26956",
+  "duration": 22.871,
+  "fps": 30,
+  "width": 720,
+  "height": 1280,
+  "quality": "720p",
+  "settings": {
+    "style": "creator-pop",
+    "fontFamily": "Avenir Next",
+    "fontWeight": 900,
+    "fontScale": 1,
+    "layout": "bottom",
+    "positionX": 0.5,
+    "positionY": 0.82,
+    "maxWordsPerLine": 4,
+    "maxLines": 2,
+    "effectPreset": "sticker",
+    "animation": "word-pop",
+    "animationSpeed": 1.1,
+    "transition": "snappy",
+    "language": "hinglish",
+    "defaultScript": "roman",
+    "capitalization": "uppercase",
+    "textColor": "#ffffff",
+    "textOpacity": 1,
+    "backgroundColor": "#000000",
+    "backgroundOpacity": 0,
+    "emphasisColor": "#facc15",
+    "activeWordColor": "#facc15",
+    "activeWordBackground": "#000000",
+    "activeWordBackgroundOpacity": 0.72,
+    "strokeColor": "#000000",
+    "strokeWidth": 3,
+    "letterSpacing": 0,
+    "lineHeight": 1.1,
+    "shadowStrength": 0.65,
+    "highlightEnabled": true,
+    "videoEffect": "vibrant",
+    "motionPreset": "none",
+    "effectIntensity": 0.65
+  },
+  "tracks": [
+    {
+      "id": "video-main",
+      "name": "A-Roll",
+      "kind": "video",
+      "index": 0
+    },
+    {
+      "id": "script-visuals",
+      "name": "Script Visuals",
+      "kind": "overlay",
+      "index": 2
+    },
+    {
+      "id": "video-effects",
+      "name": "Video Effects",
+      "kind": "effect",
+      "index": 1
+    },
+    {
+      "id": "captions-main",
+      "name": "Captions",
+      "kind": "caption",
+      "index": 4
+    },
+    {
+      "id": "overlays-main",
+      "name": "Overlays",
+      "kind": "overlay",
+      "index": 5
+    },
+    {
+      "id": "audio-main",
+      "name": "Source Audio",
+      "kind": "audio",
+      "index": 0
+    },
+    {
+      "id": "sfx-main",
+      "name": "SFX",
+      "kind": "sfx",
+      "index": 3
+    },
+    {
+      "id": "transitions-main",
+      "name": "Transitions",
+      "kind": "transition",
+      "index": 6
+    }
+  ],
+  "clips": [
+    {
+      "id": "video-0001",
+      "type": "video",
+      "trackId": "video-main",
+      "start": 0,
+      "duration": 22.871,
+      "src": "/uploads/1777059832299-edit.MOV",
+      "volume": 1
+    },
+    {
+      "id": "effect-base-grade",
+      "type": "effect",
+      "trackId": "video-effects",
+      "start": 0,
+      "duration": 22.871,
+      "effect": "vibrant",
+      "intensity": 0.65
+    },
+    {
+      "id": "visual-0001",
+      "type": "script-visual",
+      "trackId": "script-visuals",
+      "start": 0.01,
+      "duration": 3.64,
+      "scene": {
+        "id": "visual-0001",
+        "start": 0.01,
+        "end": 3.65,
+        "title": "Tumhari + Kyunki",
+        "subtitle": "Chat GPT use karna band karo kyunki ise tumhari tareef",
+        "keywords": [
+          "Tumhari",
+          "Kyunki",
+          "Tareef"
+        ],
+        "palette": {
+          "background": "#101820",
+          "accent": "#facc15",
+          "secondary": "#38bdf8"
+        },
+        "motif": "default"
+      }
+    },
+    {
+      "id": "visual-0002",
+      "type": "script-visual",
+      "trackId": "script-visuals",
+      "start": 3.65,
+      "duration": 2.57,
+      "scene": {
+        "id": "visual-0002",
+        "start": 3.65,
+        "end": 6.22,
+        "title": "Tumhare + Ghatiya",
+        "subtitle": "karne ke alawa kuch nahi aata Ye tumhare ghatiya se",
+        "keywords": [
+          "Tumhare",
+          "Ghatiya",
+          "Karne"
+        ],
+        "palette": {
+          "background": "#172554",
+          "accent": "#2dd4bf",
+          "secondary": "#f8fafc"
+        },
+        "motif": "default"
+      }
+    },
+    {
+      "id": "visual-0003",
+      "type": "script-visual",
+      "trackId": "script-visuals",
+      "start": 6.22,
+      "duration": 2.62,
+      "scene": {
+        "id": "visual-0003",
+        "start": 6.22,
+        "end": 8.84,
+        "title": "Business + Ghatiya",
+        "subtitle": "ghatiya business idea pe bhi tumhari tareef hi karega aur",
+        "keywords": [
+          "Business",
+          "Ghatiya",
+          "Tumhari"
+        ],
+        "palette": {
+          "background": "#1f2937",
+          "accent": "#fb7185",
+          "secondary": "#fbbf24"
+        },
+        "motif": "idea"
+      }
+    },
+    {
+      "id": "visual-0004",
+      "type": "script-visual",
+      "trackId": "script-visuals",
+      "start": 8.84,
+      "duration": 2.06,
+      "scene": {
+        "id": "visual-0004",
+        "start": 8.84,
+        "end": 10.9,
+        "title": "Batayega + Balki",
+        "subtitle": "balki ye bhi batayega that why this is such a",
+        "keywords": [
+          "Batayega",
+          "Balki",
+          "Such"
+        ],
+        "palette": {
+          "background": "#052e2b",
+          "accent": "#a7f3d0",
+          "secondary": "#60a5fa"
+        },
+        "motif": "default"
+      }
+    },
+    {
+      "id": "visual-0005",
+      "type": "script-visual",
+      "trackId": "script-visuals",
+      "start": 10.9,
+      "duration": 3.33,
+      "scene": {
+        "id": "visual-0005",
+        "start": 10.9,
+        "end": 14.23,
+        "title": "Instruction + Settings",
+        "subtitle": "great idea Isliye maine settings mein jaake instruction prompt daal",
+        "keywords": [
+          "Instruction",
+          "Settings",
+          "Isliye"
+        ],
+        "palette": {
+          "background": "#111827",
+          "accent": "#c084fc",
+          "secondary": "#f97316"
+        },
+        "motif": "tech"
+      }
+    },
+    {
+      "id": "visual-0006",
+      "type": "script-visual",
+      "trackId": "script-visuals",
+      "start": 14.23,
+      "duration": 2.73,
+      "scene": {
+        "id": "visual-0006",
+        "start": 14.23,
+        "end": 16.96,
+        "title": "Argument + Counter",
+        "subtitle": "diya Ab na ki ye mere ideas pe counter argument",
+        "keywords": [
+          "Argument",
+          "Counter",
+          "Ideas"
+        ],
+        "palette": {
+          "background": "#101820",
+          "accent": "#facc15",
+          "secondary": "#38bdf8"
+        },
+        "motif": "idea"
+      }
+    },
+    {
+      "id": "visual-0007",
+      "type": "script-visual",
+      "trackId": "script-visuals",
+      "start": 16.96,
+      "duration": 3.02,
+      "scene": {
+        "id": "visual-0007",
+        "start": 16.96,
+        "end": 19.98,
+        "title": "Assumptions + Kharaab",
+        "subtitle": "karega balki kharaab logic aur weak assumptions ko bhi call",
+        "keywords": [
+          "Assumptions",
+          "Kharaab",
+          "Karega"
+        ],
+        "palette": {
+          "background": "#172554",
+          "accent": "#2dd4bf",
+          "secondary": "#f8fafc"
+        },
+        "motif": "default"
+      }
+    },
+    {
+      "id": "visual-0008",
+      "type": "script-visual",
+      "trackId": "script-visuals",
+      "start": 19.98,
+      "duration": 3.72,
+      "scene": {
+        "id": "visual-0008",
+        "start": 19.98,
+        "end": 23.7,
+        "title": "Comment + Karega",
+        "subtitle": "out karega If you want this prompt kuch bhi comment kar do aur main saari",
+        "keywords": [
+          "Comment",
+          "Karega",
+          "Prompt"
+        ],
+        "palette": {
+          "background": "#1f2937",
+          "accent": "#fb7185",
+          "secondary": "#fbbf24"
+        },
+        "motif": "tech"
+      }
+    },
+    {
+      "id": "visual-0009",
+      "type": "script-visual",
+      "trackId": "script-visuals",
+      "start": 23.7,
+      "duration": 1.01,
+      "scene": {
+        "id": "visual-0009",
+        "start": 23.7,
+        "end": 24.71,
+        "title": "Details + Dunga",
+        "subtitle": "details bhej dunga",
+        "keywords": [
+          "Details",
+          "Dunga",
+          "Bhej"
+        ],
+        "palette": {
+          "background": "#052e2b",
+          "accent": "#a7f3d0",
+          "secondary": "#60a5fa"
+        },
+        "motif": "tech"
+      }
+    },
+    {
+      "id": "caption-0001",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 0.01,
+      "duration": 1.81,
+      "text": "Chat GPT use karna band",
+      "confidence": 0.966,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0002",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 1.83,
+      "duration": 1.82,
+      "text": "karo kyunki ise tumhari tareef",
+      "confidence": 0.964,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0003",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 3.65,
+      "duration": 1.14,
+      "text": "karne ke alawa kuch nahi",
+      "confidence": 0.96,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0004",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 4.79,
+      "duration": 1.43,
+      "text": "aata Ye tumhare ghatiya se",
+      "confidence": 0.95,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0005",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 6.22,
+      "duration": 1.34,
+      "text": "ghatiya business idea pe bhi",
+      "confidence": 0.956,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0006",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 7.56,
+      "duration": 1.28,
+      "text": "tumhari tareef hi karega aur",
+      "confidence": 0.956,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0007",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 8.84,
+      "duration": 1.21,
+      "text": "balki ye bhi batayega that",
+      "confidence": 0.966,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0008",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 10.05,
+      "duration": 0.85,
+      "text": "why this is such a",
+      "confidence": 0.974,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0009",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 10.9,
+      "duration": 1.77,
+      "text": "great idea Isliye maine settings",
+      "confidence": 0.968,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0010",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 12.67,
+      "duration": 1.56,
+      "text": "mein jaake instruction prompt daal",
+      "confidence": 0.964,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0011",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 14.23,
+      "duration": 1.05,
+      "text": "diya Ab na ki ye",
+      "confidence": 0.964,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0012",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 15.28,
+      "duration": 1.68,
+      "text": "mere ideas pe counter argument",
+      "confidence": 0.966,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0013",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 16.96,
+      "duration": 1.51,
+      "text": "karega balki kharaab logic aur",
+      "confidence": 0.96,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0014",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 18.47,
+      "duration": 1.51,
+      "text": "weak assumptions ko bhi call",
+      "confidence": 0.966,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0015",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 19.98,
+      "duration": 1.22,
+      "text": "out karega If you want",
+      "confidence": 0.964,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0016",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 21.2,
+      "duration": 1.64,
+      "text": "this prompt kuch bhi comment",
+      "confidence": 0.968,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0017",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 22.84,
+      "duration": 0.86,
+      "text": "kar do aur main saari",
+      "confidence": 0.958,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0018",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 23.7,
+      "duration": 1.01,
+      "text": "details bhej dunga",
+      "confidence": 0.963,
+      "script": "roman"
+    }
+  ],
+  "notes": [
+    "Generated from the current CaptionAI project state."
+  ],
+  "createdAt": "2026-05-02T20:25:27.579Z",
+  "updatedAt": "2026-05-02T20:25:27.579Z"
+}

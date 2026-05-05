@@ -1,0 +1,1192 @@
+{
+  "version": 1,
+  "projectId": "998ae09c-47c7-4fe4-b72c-8fdcc11c0887",
+  "duration": 66.106,
+  "fps": 30,
+  "width": 1080,
+  "height": 1920,
+  "quality": "1080p",
+  "settings": {
+    "style": "creator-pop",
+    "fontFamily": "Avenir Next",
+    "fontWeight": 800,
+    "fontScale": 1,
+    "layout": "bottom",
+    "positionX": 0.5,
+    "positionY": 0.82,
+    "maxWordsPerLine": 4,
+    "maxLines": 3,
+    "effectPreset": "shadow",
+    "animation": "fade",
+    "animationSpeed": 1,
+    "transition": "smooth",
+    "language": "english",
+    "defaultScript": "roman",
+    "capitalization": "normal",
+    "textColor": "#ffffff",
+    "textOpacity": 1,
+    "backgroundColor": "#000000",
+    "backgroundOpacity": 0,
+    "emphasisColor": "#facc15",
+    "activeWordColor": "#facc15",
+    "activeWordBackground": "#000000",
+    "activeWordBackgroundOpacity": 0.72,
+    "strokeColor": "#000000",
+    "strokeWidth": 2,
+    "letterSpacing": 0,
+    "lineHeight": 1.2,
+    "shadowStrength": 0.6,
+    "highlightEnabled": false,
+    "videoEffect": "none",
+    "motionPreset": "none",
+    "effectIntensity": 0.65
+  },
+  "tracks": [
+    {
+      "id": "video-main",
+      "name": "A-Roll",
+      "kind": "video",
+      "index": 0
+    },
+    {
+      "id": "script-visuals",
+      "name": "Script Visuals",
+      "kind": "overlay",
+      "index": 2
+    },
+    {
+      "id": "video-effects",
+      "name": "Video Effects",
+      "kind": "effect",
+      "index": 1
+    },
+    {
+      "id": "captions-main",
+      "name": "Captions",
+      "kind": "caption",
+      "index": 4
+    },
+    {
+      "id": "overlays-main",
+      "name": "Overlays",
+      "kind": "overlay",
+      "index": 5
+    },
+    {
+      "id": "audio-main",
+      "name": "Source Audio",
+      "kind": "audio",
+      "index": 0
+    },
+    {
+      "id": "sfx-main",
+      "name": "SFX",
+      "kind": "sfx",
+      "index": 3
+    },
+    {
+      "id": "transitions-main",
+      "name": "Transitions",
+      "kind": "transition",
+      "index": 6
+    }
+  ],
+  "clips": [
+    {
+      "id": "video-0001",
+      "type": "video",
+      "trackId": "video-main",
+      "start": 0,
+      "duration": 66.106,
+      "src": "/uploads/1777832917520-emergnet.MOV",
+      "volume": 1
+    },
+    {
+      "id": "effect-base-grade",
+      "type": "effect",
+      "trackId": "video-effects",
+      "start": 0,
+      "duration": 66.106,
+      "effect": "none",
+      "intensity": 0.65
+    },
+    {
+      "id": "visual-0001",
+      "type": "script-visual",
+      "trackId": "script-visuals",
+      "start": 0.08,
+      "duration": 1.46,
+      "scene": {
+        "id": "visual-0001",
+        "start": 0.08,
+        "end": 1.54,
+        "title": "Kamaana + Chahte",
+        "subtitle": "AI se paise kamaana chahte ho",
+        "keywords": [
+          "Kamaana",
+          "Chahte",
+          "Paise"
+        ],
+        "palette": {
+          "background": "#101820",
+          "accent": "#facc15",
+          "secondary": "#38bdf8"
+        },
+        "motif": "money"
+      }
+    },
+    {
+      "id": "visual-0002",
+      "type": "script-visual",
+      "trackId": "script-visuals",
+      "start": 2.06,
+      "duration": 3.4,
+      "scene": {
+        "id": "visual-0002",
+        "start": 2.06,
+        "end": 5.46,
+        "title": "Businesses + Karodo",
+        "subtitle": "India mein karodo small businesses hain but bahut saare local",
+        "keywords": [
+          "Businesses",
+          "Karodo",
+          "India"
+        ],
+        "palette": {
+          "background": "#172554",
+          "accent": "#2dd4bf",
+          "secondary": "#f8fafc"
+        },
+        "motif": "money"
+      }
+    },
+    {
+      "id": "visual-0003",
+      "type": "script-visual",
+      "trackId": "script-visuals",
+      "start": 5.46,
+      "duration": 2.39,
+      "scene": {
+        "id": "visual-0003",
+        "start": 5.46,
+        "end": 7.85,
+        "title": "Presence + Online",
+        "subtitle": "shops ke paas apna koi online presence hi nahi hai",
+        "keywords": [
+          "Presence",
+          "Online",
+          "Shops"
+        ],
+        "palette": {
+          "background": "#1f2937",
+          "accent": "#fb7185",
+          "secondary": "#fbbf24"
+        },
+        "motif": "growth"
+      }
+    },
+    {
+      "id": "visual-0004",
+      "type": "script-visual",
+      "trackId": "script-visuals",
+      "start": 8.16,
+      "duration": 3.19,
+      "scene": {
+        "id": "visual-0004",
+        "start": 8.16,
+        "end": 11.35,
+        "title": "Emergent + Isiliye",
+        "subtitle": "Isiliye maine Emergent pe ek simple app banaya jo unke",
+        "keywords": [
+          "Emergent",
+          "Isiliye",
+          "Simple"
+        ],
+        "palette": {
+          "background": "#052e2b",
+          "accent": "#a7f3d0",
+          "secondary": "#60a5fa"
+        },
+        "motif": "tech"
+      }
+    },
+    {
+      "id": "visual-0005",
+      "type": "script-visual",
+      "trackId": "script-visuals",
+      "start": 11.35,
+      "duration": 3.12,
+      "scene": {
+        "id": "visual-0005",
+        "start": 11.35,
+        "end": 14.47,
+        "title": "Instantly + Emergent",
+        "subtitle": "liye instantly landing pages bana deta hai Main Emergent pe",
+        "keywords": [
+          "Instantly",
+          "Emergent",
+          "Landing"
+        ],
+        "palette": {
+          "background": "#111827",
+          "accent": "#c084fc",
+          "secondary": "#f97316"
+        },
+        "motif": "growth"
+      }
+    },
+    {
+      "id": "visual-0006",
+      "type": "script-visual",
+      "trackId": "script-visuals",
+      "start": 14.47,
+      "duration": 3.18,
+      "scene": {
+        "id": "visual-0006",
+        "start": 14.47,
+        "end": 17.65,
+        "title": "Likhi + Build",
+        "subtitle": "gaya aur sirf ek line likhi Build me an app where",
+        "keywords": [
+          "Likhi",
+          "Build",
+          "Where"
+        ],
+        "palette": {
+          "background": "#101820",
+          "accent": "#facc15",
+          "secondary": "#38bdf8"
+        },
+        "motif": "tech"
+      }
+    },
+    {
+      "id": "visual-0007",
+      "type": "script-visual",
+      "trackId": "script-visuals",
+      "start": 17.65,
+      "duration": 3.28,
+      "scene": {
+        "id": "visual-0007",
+        "start": 17.65,
+        "end": 20.93,
+        "title": "Landing + Owner",
+        "subtitle": "any shop owner can fill a form and get their own landing page",
+        "keywords": [
+          "Landing",
+          "Owner",
+          "Their"
+        ],
+        "palette": {
+          "background": "#172554",
+          "accent": "#2dd4bf",
+          "secondary": "#f8fafc"
+        },
+        "motif": "growth"
+      }
+    },
+    {
+      "id": "visual-0008",
+      "type": "script-visual",
+      "trackId": "script-visuals",
+      "start": 21.41,
+      "duration": 2.75,
+      "scene": {
+        "id": "visual-0008",
+        "start": 21.41,
+        "end": 24.16,
+        "title": "Minutes + Without",
+        "subtitle": "20 minutes mein app live tha without writing a single",
+        "keywords": [
+          "Minutes",
+          "Without",
+          "Writing"
+        ],
+        "palette": {
+          "background": "#1f2937",
+          "accent": "#fb7185",
+          "secondary": "#fbbf24"
+        },
+        "motif": "warning"
+      }
+    },
+    {
+      "id": "visual-0009",
+      "type": "script-visual",
+      "trackId": "script-visuals",
+      "start": 24.16,
+      "duration": 2.27,
+      "scene": {
+        "id": "visual-0009",
+        "start": 24.16,
+        "end": 26.43,
+        "title": "Saloon + Line",
+        "subtitle": "line of code Fir main apne area ke ek saloon",
+        "keywords": [
+          "Saloon",
+          "Line",
+          "Code"
+        ],
+        "palette": {
+          "background": "#052e2b",
+          "accent": "#a7f3d0",
+          "secondary": "#60a5fa"
+        },
+        "motif": "tech"
+      }
+    },
+    {
+      "id": "visual-0010",
+      "type": "script-visual",
+      "trackId": "script-visuals",
+      "start": 26.43,
+      "duration": 3.31,
+      "scene": {
+        "id": "visual-0010",
+        "start": 26.43,
+        "end": 29.74,
+        "title": "Services + Location",
+        "subtitle": "mein gaya unka naam services phone number aur location form",
+        "keywords": [
+          "Services",
+          "Location",
+          "Number"
+        ],
+        "palette": {
+          "background": "#111827",
+          "accent": "#c084fc",
+          "secondary": "#f97316"
+        },
+        "motif": "tech"
+      }
+    },
+    {
+      "id": "visual-0011",
+      "type": "script-visual",
+      "trackId": "script-visuals",
+      "start": 29.74,
+      "duration": 2.66,
+      "scene": {
+        "id": "visual-0011",
+        "start": 29.74,
+        "end": 32.4,
+        "title": "Landing + Paanch",
+        "subtitle": "mein dala aur paanch minute ke andar unka landing page",
+        "keywords": [
+          "Landing",
+          "Paanch",
+          "Minute"
+        ],
+        "palette": {
+          "background": "#101820",
+          "accent": "#facc15",
+          "secondary": "#38bdf8"
+        },
+        "motif": "growth"
+      }
+    },
+    {
+      "id": "visual-0012",
+      "type": "script-visual",
+      "trackId": "script-visuals",
+      "start": 32.4,
+      "duration": 2.59,
+      "scene": {
+        "id": "visual-0012",
+        "start": 32.4,
+        "end": 34.99,
+        "title": "Dikhaya + Ready",
+        "subtitle": "ready tha Jab maine unko yeh live page dikhaya they",
+        "keywords": [
+          "Dikhaya",
+          "Ready",
+          "Maine"
+        ],
+        "palette": {
+          "background": "#172554",
+          "accent": "#2dd4bf",
+          "secondary": "#f8fafc"
+        },
+        "motif": "growth"
+      }
+    },
+    {
+      "id": "visual-0013",
+      "type": "script-visual",
+      "trackId": "script-visuals",
+      "start": 34.99,
+      "duration": 3.17,
+      "scene": {
+        "id": "visual-0013",
+        "start": 34.99,
+        "end": 38.16,
+        "title": "Completely + Shocked",
+        "subtitle": "were completely shocked Ab yeh kaam aap kisi bhi local",
+        "keywords": [
+          "Completely",
+          "Shocked",
+          "Local"
+        ],
+        "palette": {
+          "background": "#1f2937",
+          "accent": "#fb7185",
+          "secondary": "#fbbf24"
+        },
+        "motif": "warning"
+      }
+    },
+    {
+      "id": "visual-0014",
+      "type": "script-visual",
+      "trackId": "script-visuals",
+      "start": 38.16,
+      "duration": 2.51,
+      "scene": {
+        "id": "visual-0014",
+        "start": 38.16,
+        "end": 40.67,
+        "title": "Business + Saloon",
+        "subtitle": "business ke liye kar sakte ho be it a saloon",
+        "keywords": [
+          "Business",
+          "Saloon",
+          "Sakte"
+        ],
+        "palette": {
+          "background": "#052e2b",
+          "accent": "#a7f3d0",
+          "secondary": "#60a5fa"
+        },
+        "motif": "growth"
+      }
+    },
+    {
+      "id": "visual-0015",
+      "type": "script-visual",
+      "trackId": "script-visuals",
+      "start": 40.78,
+      "duration": 2.07,
+      "scene": {
+        "id": "visual-0015",
+        "start": 40.78,
+        "end": 42.85,
+        "title": "Boutique + Coaching",
+        "subtitle": "dhaba boutique coaching center",
+        "keywords": [
+          "Boutique",
+          "Coaching",
+          "Center"
+        ],
+        "palette": {
+          "background": "#111827",
+          "accent": "#c084fc",
+          "secondary": "#f97316"
+        },
+        "motif": "people"
+      }
+    },
+    {
+      "id": "visual-0016",
+      "type": "script-visual",
+      "trackId": "script-visuals",
+      "start": 43.19,
+      "duration": 3.54,
+      "scene": {
+        "id": "visual-0016",
+        "start": 43.19,
+        "end": 46.73,
+        "title": "Bhi + Dikhao",
+        "subtitle": "koi bhi Live demo dikhao setup ke 500 bhi charge",
+        "keywords": [
+          "Bhi",
+          "Dikhao",
+          "Charge"
+        ],
+        "palette": {
+          "background": "#101820",
+          "accent": "#facc15",
+          "secondary": "#38bdf8"
+        },
+        "motif": "money"
+      }
+    },
+    {
+      "id": "visual-0017",
+      "type": "script-visual",
+      "trackId": "script-visuals",
+      "start": 46.73,
+      "duration": 2.3,
+      "scene": {
+        "id": "visual-0017",
+        "start": 46.73,
+        "end": 49.03,
+        "title": "Karo + Shop",
+        "subtitle": "karo to 10 shop bhi mil jaye to 5000 ho",
+        "keywords": [
+          "Karo",
+          "Shop",
+          "Jaye"
+        ],
+        "palette": {
+          "background": "#172554",
+          "accent": "#2dd4bf",
+          "secondary": "#f8fafc"
+        },
+        "motif": "money"
+      }
+    },
+    {
+      "id": "visual-0018",
+      "type": "script-visual",
+      "trackId": "script-visuals",
+      "start": 49.03,
+      "duration": 3.26,
+      "scene": {
+        "id": "visual-0018",
+        "start": 49.03,
+        "end": 52.29,
+        "title": "App + Simple",
+        "subtitle": "gaye with ek simple app Ye sirf ek app nahi",
+        "keywords": [
+          "App",
+          "Simple",
+          "Gaye"
+        ],
+        "palette": {
+          "background": "#1f2937",
+          "accent": "#fb7185",
+          "secondary": "#fbbf24"
+        },
+        "motif": "warning"
+      }
+    },
+    {
+      "id": "visual-0019",
+      "type": "script-visual",
+      "trackId": "script-visuals",
+      "start": 52.29,
+      "duration": 3.01,
+      "scene": {
+        "id": "visual-0019",
+        "start": 52.29,
+        "end": 55.3,
+        "title": "Sellable + Emergent",
+        "subtitle": "hai yeh ek sellable product hai Emergent ne front end",
+        "keywords": [
+          "Sellable",
+          "Emergent",
+          "Product"
+        ],
+        "palette": {
+          "background": "#052e2b",
+          "accent": "#a7f3d0",
+          "secondary": "#60a5fa"
+        },
+        "motif": "growth"
+      }
+    },
+    {
+      "id": "visual-0020",
+      "type": "script-visual",
+      "trackId": "script-visuals",
+      "start": 55.44,
+      "duration": 2.82,
+      "scene": {
+        "id": "visual-0020",
+        "start": 55.44,
+        "end": 58.26,
+        "title": "Database + Backend",
+        "subtitle": "backend database aur hosting sab ek jagah bana diya hai",
+        "keywords": [
+          "Database",
+          "Backend",
+          "Hosting"
+        ],
+        "palette": {
+          "background": "#111827",
+          "accent": "#c084fc",
+          "secondary": "#f97316"
+        },
+        "motif": "tech"
+      }
+    },
+    {
+      "id": "visual-0021",
+      "type": "script-visual",
+      "trackId": "script-visuals",
+      "start": 58.55,
+      "duration": 3.69,
+      "scene": {
+        "id": "visual-0021",
+        "start": 58.55,
+        "end": 62.24,
+        "title": "English + Plain",
+        "subtitle": "Bas plain English mein bolo aur app ban jaata hai Link in bio ya fir",
+        "keywords": [
+          "English",
+          "Plain",
+          "Jaata"
+        ],
+        "palette": {
+          "background": "#101820",
+          "accent": "#facc15",
+          "secondary": "#38bdf8"
+        },
+        "motif": "tech"
+      }
+    },
+    {
+      "id": "visual-0022",
+      "type": "script-visual",
+      "trackId": "script-visuals",
+      "start": 62.24,
+      "duration": 2.93,
+      "scene": {
+        "id": "visual-0022",
+        "start": 62.24,
+        "end": 65.17,
+        "title": "Emergent + Comment",
+        "subtitle": "comment kar do Try Emergent for free today and build",
+        "keywords": [
+          "Emergent",
+          "Comment",
+          "Today"
+        ],
+        "palette": {
+          "background": "#172554",
+          "accent": "#2dd4bf",
+          "secondary": "#f8fafc"
+        },
+        "motif": "tech"
+      }
+    },
+    {
+      "id": "visual-0023",
+      "type": "script-visual",
+      "trackId": "script-visuals",
+      "start": 65.17,
+      "duration": 1.35,
+      "scene": {
+        "id": "visual-0023",
+        "start": 65.17,
+        "end": 66.52,
+        "title": "Something + Actually",
+        "subtitle": "something you can actually sell",
+        "keywords": [
+          "Something",
+          "Actually",
+          "Sell"
+        ],
+        "palette": {
+          "background": "#1f2937",
+          "accent": "#fb7185",
+          "secondary": "#fbbf24"
+        },
+        "motif": "growth"
+      }
+    },
+    {
+      "id": "caption-0001",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 0.08,
+      "duration": 1.26,
+      "text": "AI se paise kamaana chahte",
+      "confidence": 0.984,
+      "script": "roman",
+      "positionX": 0.485,
+      "positionY": 0.56
+    },
+    {
+      "id": "caption-0002",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 1.34,
+      "duration": 0.2,
+      "text": "ho",
+      "confidence": 0.99,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0003",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 2.06,
+      "duration": 1.96,
+      "text": "India mein karodo small businesses",
+      "confidence": 0.988,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0004",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 4.02,
+      "duration": 1.44,
+      "text": "hain but bahut saare local",
+      "confidence": 0.988,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0005",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 5.46,
+      "duration": 1.08,
+      "text": "shops ke paas apna koi",
+      "confidence": 0.99,
+      "script": "roman",
+      "positionX": 0.487,
+      "positionY": 0.497
+    },
+    {
+      "id": "caption-0006",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 6.54,
+      "duration": 1.31,
+      "text": "online presence hi nahi hai",
+      "confidence": 0.99,
+      "script": "roman",
+      "positionX": 0.473,
+      "positionY": 0.454
+    },
+    {
+      "id": "caption-0007",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 8.16,
+      "duration": 1.61,
+      "text": "Isiliye maine Emergent pe ek",
+      "confidence": 0.99,
+      "script": "roman",
+      "positionX": 0.46,
+      "positionY": 0.529
+    },
+    {
+      "id": "caption-0008",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 9.77,
+      "duration": 1.58,
+      "text": "simple app banaya jo unke",
+      "confidence": 0.99,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0009",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 11.35,
+      "duration": 1.79,
+      "text": "liye instantly landing pages bana",
+      "confidence": 0.99,
+      "script": "roman",
+      "positionX": 0.492,
+      "positionY": 0.497
+    },
+    {
+      "id": "caption-0010",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 13.14,
+      "duration": 1.33,
+      "text": "deta hai Main Emergent pe",
+      "confidence": 0.99,
+      "script": "roman",
+      "positionX": 0.446,
+      "positionY": 0.489
+    },
+    {
+      "id": "caption-0011",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 14.47,
+      "duration": 1.24,
+      "text": "gaya aur sirf ek line",
+      "confidence": 0.99,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0012",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 15.71,
+      "duration": 0.32,
+      "text": "likhi",
+      "confidence": 0.99,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0013",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 16.51,
+      "duration": 1.14,
+      "text": "Build me an app where",
+      "confidence": 0.99,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0014",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 17.65,
+      "duration": 1.19,
+      "text": "any shop owner can fill",
+      "confidence": 0.99,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0015",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 18.84,
+      "duration": 1.18,
+      "text": "a form and get their",
+      "confidence": 0.99,
+      "script": "roman",
+      "positionX": 0.466,
+      "positionY": 0.5
+    },
+    {
+      "id": "caption-0016",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 20.02,
+      "duration": 0.91,
+      "text": "own landing page",
+      "confidence": 0.99,
+      "script": "roman",
+      "positionX": 0.286,
+      "positionY": 0.486
+    },
+    {
+      "id": "caption-0017",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 21.41,
+      "duration": 1.34,
+      "text": "20 minutes mein app live",
+      "confidence": 0.99,
+      "script": "roman",
+      "positionX": 0.461,
+      "positionY": 0.5
+    },
+    {
+      "id": "caption-0018",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 22.75,
+      "duration": 1.41,
+      "text": "tha without writing a single",
+      "confidence": 0.99,
+      "script": "roman",
+      "positionX": 0.492,
+      "positionY": 0.5
+    },
+    {
+      "id": "caption-0019",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 24.16,
+      "duration": 1.1,
+      "text": "line of code Fir main",
+      "confidence": 0.99,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0020",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 25.26,
+      "duration": 1.17,
+      "text": "apne area ke ek saloon",
+      "confidence": 0.99,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0021",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 26.43,
+      "duration": 1.73,
+      "text": "mein gaya unka naam services",
+      "confidence": 0.99,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0022",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 28.16,
+      "duration": 1.58,
+      "text": "phone number aur location form",
+      "confidence": 0.99,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0023",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 29.74,
+      "duration": 1.41,
+      "text": "mein dala aur paanch minute",
+      "confidence": 0.99,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0024",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 31.15,
+      "duration": 1.25,
+      "text": "ke andar unka landing page",
+      "confidence": 0.99,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0025",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 32.4,
+      "duration": 1.28,
+      "text": "ready tha Jab maine unko",
+      "confidence": 0.99,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0026",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 33.68,
+      "duration": 1.31,
+      "text": "yeh live page dikhaya they",
+      "confidence": 0.99,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0027",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 34.99,
+      "duration": 1.7,
+      "text": "were completely shocked Ab yeh",
+      "confidence": 0.99,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0028",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 36.69,
+      "duration": 1.47,
+      "text": "kaam aap kisi bhi local",
+      "confidence": 0.99,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0029",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 38.16,
+      "duration": 1.21,
+      "text": "business ke liye kar sakte",
+      "confidence": 0.99,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0030",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 39.37,
+      "duration": 1.3,
+      "text": "ho be it a saloon",
+      "confidence": 0.99,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0031",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 40.78,
+      "duration": 2.07,
+      "text": "dhaba boutique coaching center",
+      "confidence": 0.99,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0032",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 43.19,
+      "duration": 1.9,
+      "text": "koi bhi Live demo dikhao",
+      "confidence": 0.99,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0033",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 45.28,
+      "duration": 1.45,
+      "text": "setup ke 500 bhi charge",
+      "confidence": 0.99,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0034",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 46.73,
+      "duration": 1.12,
+      "text": "karo to 10 shop bhi",
+      "confidence": 0.99,
+      "script": "roman",
+      "positionX": 0.479,
+      "positionY": 0.733
+    },
+    {
+      "id": "caption-0035",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 47.85,
+      "duration": 1.18,
+      "text": "mil jaye to 5000 ho",
+      "confidence": 0.99,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0036",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 49.03,
+      "duration": 1.72,
+      "text": "gaye with ek simple app",
+      "confidence": 0.99,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0037",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 51.13,
+      "duration": 1.16,
+      "text": "Ye sirf ek app nahi",
+      "confidence": 0.99,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0038",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 52.29,
+      "duration": 1.22,
+      "text": "hai yeh ek sellable product",
+      "confidence": 0.99,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0039",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 53.51,
+      "duration": 1.79,
+      "text": "hai Emergent ne front end",
+      "confidence": 0.99,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0040",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 55.44,
+      "duration": 1.85,
+      "text": "backend database aur hosting sab",
+      "confidence": 0.99,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0041",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 57.29,
+      "duration": 0.97,
+      "text": "ek jagah bana diya hai",
+      "confidence": 0.99,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0042",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 58.55,
+      "duration": 1.32,
+      "text": "Bas plain English mein bolo",
+      "confidence": 0.99,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0043",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 59.94,
+      "duration": 0.91,
+      "text": "aur app ban jaata hai",
+      "confidence": 0.99,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0044",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 61.12,
+      "duration": 1.12,
+      "text": "Link in bio ya fir",
+      "confidence": 0.99,
+      "script": "roman"
+    },
+    {
+      "id": "caption-0045",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 62.24,
+      "duration": 1.68,
+      "text": "comment kar do Try Emergent",
+      "confidence": 0.99,
+      "script": "roman",
+      "positionX": 0.392,
+      "positionY": 0.5
+    },
+    {
+      "id": "caption-0046",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 63.92,
+      "duration": 1.25,
+      "text": "for free today and build",
+      "confidence": 0.99,
+      "script": "roman",
+      "positionX": 0.397,
+      "positionY": 0.503
+    },
+    {
+      "id": "caption-0047",
+      "type": "caption",
+      "trackId": "captions-main",
+      "start": 65.17,
+      "duration": 1.35,
+      "text": "something you can actually sell",
+      "confidence": 0.99,
+      "script": "roman",
+      "positionX": 0.454,
+      "positionY": 0.503
+    }
+  ],
+  "notes": [
+    "Generated from the current CaptionAI project state."
+  ],
+  "createdAt": "2026-05-05T08:39:46.509Z",
+  "updatedAt": "2026-05-05T08:39:46.509Z"
+}
