@@ -1,0 +1,39 @@
+name: Deploy AI Video Editor to Azure VM
+
+on:
+  push:
+    branches:
+      - master
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy to Azure VM via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.AZURE_VM_HOST }}
+          username: ${{ secrets.AZURE_VM_USERNAME }}
+          key: ${{ secrets.AZURE_VM_SSH_KEY }}
+          port: 22
+          script: |
+            echo "🚀 Deploying latest build on Azure VM..."
+            if [ ! -d "ai-video-editor" ]; then
+              git clone https://github.com/prateek3112/ai-video-editor.git
+              cd ai-video-editor
+            else
+              cd ai-video-editor
+              git pull origin master
+            fi
+
+            if [ ! -f ".env.production" ]; then
+              cp .env.production.example .env.production
+            fi
+
+            echo "🛠️ Rebuilding Docker containers..."
+            sudo docker-compose --env-file .env.production up -d --build
+            echo "✅ Deployment complete!"
