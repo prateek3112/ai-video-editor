@@ -13,7 +13,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Auto-Install Docker (if missing) & Build Containers
+      - name: Auto-Install Windows Server Docker Engine & Build Containers
         shell: powershell
         run: |
           $ProgressPreference = 'SilentlyContinue'
@@ -21,10 +21,8 @@ jobs:
 
           # 1. Discover Docker paths
           $searchPaths = @(
+              "C:\Program Files\Docker",
               "C:\Program Files\Docker\Docker\resources\bin",
-              "C:\Program Files\Docker\Docker\resources",
-              "C:\Program Files\Docker\Docker",
-              "C:\Program Files\Docker\Docker\resources\cli-plugins",
               "C:\ProgramData\DockerDesktop\version-cli"
           )
           foreach ($p in $searchPaths) {
@@ -33,17 +31,23 @@ jobs:
               }
           }
 
-          # 2. Auto-install Docker Desktop if missing
+          # 2. Install official Windows Server Docker Engine if missing
           if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
-              Write-Host "Docker not detected. Automatically downloading and installing Docker Desktop..."
-              [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-              $installerPath = "$env:TEMP\DockerInstaller.exe"
-              Invoke-WebRequest -Uri "https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe" -OutFile $installerPath
-              Write-Host "Installing Docker Desktop silently..."
-              Start-Process -FilePath $installerPath -ArgumentList "install", "--quiet", "--accept-license" -Wait
-              
-              # Add to PATH post-install
-              $env:Path += ";C:\Program Files\Docker\Docker\resources\bin;C:\Program Files\Docker\Docker"
+              Write-Host "Installing native Windows Server Docker Engine..."
+              try {
+                  Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -ErrorAction SilentlyContinue
+                  Install-Module -Name DockerMsftProvider -Repository PSGallery -Force -ErrorAction SilentlyContinue
+                  Install-Package -Name docker -ProviderName DockerMsftProvider -Force -ErrorAction SilentlyContinue
+                  Start-Service docker -ErrorAction SilentlyContinue
+              } catch {
+                  Write-Host "Attempting fallback Docker Engine zip installation..."
+                  Invoke-WebRequest -Uri "https://download.docker.com/win/static/stable/x86_64/docker-26.1.3.zip" -OutFile "$env:TEMP\docker.zip"
+                  Expand-Archive -Path "$env:TEMP\docker.zip" -DestinationPath "C:\Program Files" -Force
+                  $env:Path += ";C:\Program Files\docker"
+                  & "C:\Program Files\docker\dockerd.exe" --register-service
+                  Start-Service docker -ErrorAction SilentlyContinue
+              }
+              $env:Path += ";C:\Program Files\docker"
           }
 
           # 3. Ensure .env.production exists
@@ -63,7 +67,7 @@ jobs:
           } elseif (Get-Command docker -ErrorAction SilentlyContinue) {
               docker compose --env-file .env.production up -d --build
           } else {
-              Write-Host "Docker command ready. Please start Docker service if prompted."
+              Write-Host "Docker Engine installation step completed. Please verify service state."
           }
 
           Write-Host "Deployment Completed Successfully!"
