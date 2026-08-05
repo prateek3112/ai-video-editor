@@ -17,7 +17,7 @@ jobs:
         shell: powershell
         run: |
           $ProgressPreference = 'SilentlyContinue'
-          Write-Host "🚀 Starting AI Video Editor deployment..."
+          Write-Host "Starting AI Video Editor deployment..."
 
           # 1. Discover Docker paths
           $searchPaths = @(
@@ -35,7 +35,7 @@ jobs:
 
           # 2. Auto-install Docker Desktop if missing
           if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
-              Write-Host "📦 Docker not detected. Automatically downloading and installing Docker Desktop..."
+              Write-Host "Docker not detected. Automatically downloading and installing Docker Desktop..."
               [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
               $installerPath = "$env:TEMP\DockerInstaller.exe"
               Invoke-WebRequest -Uri "https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe" -OutFile $installerPath
@@ -53,7 +53,7 @@ jobs:
               } elseif (Test-Path ".env.example") {
                   Copy-Item .env.example .env.production
               } else {
-                  Set-Content -Path ".env.production" -Value "GEMINI_API_KEY=`"YOUR_KEY`"`n"
+                  Set-Content -Path ".env.production" -Value "GEMINI_API_KEY=YOUR_KEY"
               }
           }
 
@@ -63,7 +63,7 @@ jobs:
           } elseif (Get-Command docker -ErrorAction SilentlyContinue) {
               docker compose --env-file .env.production up -d --build
           } else {
-              Write-Host "⚠️ Docker command ready. Please start Docker service if prompted."
+              Write-Host "Docker command ready. Please start Docker service if prompted."
           }
 
-          Write-Host "✅ Deployment Completed Successfully!"
+          Write-Host "Deployment Completed Successfully!"
