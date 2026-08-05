@@ -13,33 +13,58 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Update & Rebuild Docker Containers
+      - name: Self-Healing Update & Rebuild Docker Containers
         shell: powershell
         run: |
-          Write-Host "🚀 Updating AI Video Editor build..."
-          
-          # Add Git and Docker paths to environment
-          $paths = @(
+          $ProgressPreference = 'SilentlyContinue'
+          Write-Host "🚀 Starting AI Video Editor deployment on self-hosted runner..."
+
+          # 1. Discover and add Git & Docker to PATH dynamically
+          $searchPaths = @(
               "C:\Program Files\Git\cmd",
+              "C:\Program Files\Git\bin",
               "C:\Program Files\Docker\Docker\resources\bin",
-              "C:\Program Files\Docker\Docker\resources"
+              "C:\Program Files\Docker\Docker\resources",
+              "C:\Program Files\Docker\Docker\resources\cli-plugins",
+              "C:\ProgramData\DockerDesktop\version-cli"
           )
-          foreach ($p in $paths) {
+          foreach ($p in $searchPaths) {
               if ((Test-Path $p) -and ($env:Path -notlike "*$p*")) {
-                  $env:Path += ";$p"
+                  $env:Path = "$p;$env:Path"
               }
           }
 
-          if (-not (Test-Path "C:\ai-video-editor")) {
-              cd C:\
-              git clone https://github.com/prateek3112/ai-video-editor.git
+          # 2. Locate git.exe if not in PATH
+          if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
+              $gitExe = Get-ChildItem -Path "C:\Program Files", "C:\Program Files (x86)" -Filter "git.exe" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+              if ($gitExe) {
+                  $env:Path = "$($gitExe.DirectoryName);$env:Path"
+              }
           }
-          
-          cd C:\ai-video-editor
-          git fetch origin master
-          git reset --hard origin/master
-          git pull origin master
-          
+
+          # 3. Clean clone or update C:\ai-video-editor
+          $targetDir = "C:\ai-video-editor"
+          if (Test-Path $targetDir) {
+              Set-Location -Path $targetDir
+              try {
+                  git fetch --all
+                  git reset --hard
+                  git checkout -B master origin/master
+                  git pull origin master
+              } catch {
+                  Write-Host "⚠️ Git update failed, performing clean clone..."
+                  Set-Location -Path "C:\"
+                  Remove-Item -Path $targetDir -Recurse -Force -ErrorAction SilentlyContinue
+                  git clone https://github.com/prateek3112/ai-video-editor.git $targetDir
+                  Set-Location -Path $targetDir
+              }
+          } else {
+              Set-Location -Path "C:\"
+              git clone https://github.com/prateek3112/ai-video-editor.git $targetDir
+              Set-Location -Path $targetDir
+          }
+
+          # 4. Ensure .env.production exists
           if (-not (Test-Path ".env.production")) {
               if (Test-Path ".env.production.example") {
                   Copy-Item .env.production.example .env.production
@@ -50,10 +75,20 @@ jobs:
               }
           }
 
+          # 5. Discover docker or docker-compose
+          if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
+              $dockerExe = Get-ChildItem -Path "C:\Program Files", "C:\Program Files (x86)" -Filter "docker.exe" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+              if ($dockerExe) {
+                  $env:Path = "$($dockerExe.DirectoryName);$env:Path"
+              }
+          }
+
           if (Get-Command docker-compose -ErrorAction SilentlyContinue) {
               docker-compose --env-file .env.production up -d --build
-          } else {
+          } elseif (Get-Command docker -ErrorAction SilentlyContinue) {
               docker compose --env-file .env.production up -d --build
+          } else {
+              Write-Host "⚠️ Docker binary not found in PATH. Please install Docker Desktop or Docker Engine on Windows VM."
           }
-          
-          Write-Host "✅ Deployment Complete!"
+
+          Write-Host "✅ Deployment Pipeline Execution Finished!"
