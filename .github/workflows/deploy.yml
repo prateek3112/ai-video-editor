@@ -20,7 +20,7 @@ jobs:
           $ProgressPreference = 'SilentlyContinue'
           Write-Host "Starting AI Video Editor deployment..."
 
-          # 1. Discover Node.js, Git, & npm global paths
+          # 1. Discover Node.js & Git paths
           $searchPaths = @(
               "C:\Program Files\nodejs",
               "C:\Program Files\Git\cmd",
@@ -32,9 +32,10 @@ jobs:
               }
           }
 
-          # 2. Ensure Windows Firewall ports 3000 & 8000 are open
+          # 2. Ensure Windows Firewall ports 3000 & 8000 & 9999 are open
           New-NetFirewallRule -DisplayName "AI-Video-Editor-3000" -Direction Inbound -LocalPort 3000 -Protocol TCP -Action Allow -ErrorAction SilentlyContinue
           New-NetFirewallRule -DisplayName "AI-Video-Editor-8000" -Direction Inbound -LocalPort 8000 -Protocol TCP -Action Allow -ErrorAction SilentlyContinue
+          New-NetFirewallRule -DisplayName "AI-Video-Editor-9999" -Direction Inbound -LocalPort 9999 -Protocol TCP -Action Allow -ErrorAction SilentlyContinue
 
           # 3. Ensure .env.production exists
           if (-not (Test-Path ".env.production")) {
@@ -64,7 +65,7 @@ jobs:
           Write-Host "Building production Next.js bundle..."
           npm run build
 
-          # Copy static files to standalone directory for Next.js standalone server
+          # 6. Copy static assets to Next.js standalone directory
           if (Test-Path ".next\standalone") {
               if (Test-Path "public") {
                   Copy-Item -Path "public" -Destination ".next\standalone\public" -Recurse -Force -ErrorAction SilentlyContinue
@@ -75,22 +76,33 @@ jobs:
               }
           }
 
-          # 6. Install PM2 globally if missing and add npm bin to PATH
+          # 7. Install PM2 globally if missing
           if (-not (Get-Command pm2 -ErrorAction SilentlyContinue)) {
               Write-Host "Installing PM2 process manager..."
               npm install -g pm2
               $env:Path += ";$env:APPDATA\npm"
           }
 
-          # 7. Start Next.js Server bound to 0.0.0.0 on Port 9999 (Allowed in NSG Rule 200)
-          Write-Host "Launching Next.js production server bound to 0.0.0.0:9999..."
+          # 8. Start Standalone server directly with node (Prevents npm.cmd batch script exit)
+          Write-Host "Launching Next.js production server on 0.0.0.0:9999..."
           
-          # Stop existing PM2 process if running
-          npx pm2 delete ai-video-editor -s -ErrorAction SilentlyContinue
+          # Clean existing Node/PM2 processes
+          npx pm2 delete all -s -ErrorAction SilentlyContinue
+          Get-Process -Name node -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
 
-          # Start Next.js server with explicit 0.0.0.0 host and 9999 port binding
-          npx pm2 start npm --name "ai-video-editor" -- start -- -H 0.0.0.0 -p 9999
+          # Set environment for 0.0.0.0 binding on Port 9999
+          $env:PORT = "9999"
+          $env:HOSTNAME = "0.0.0.0"
+          $env:NODE_ENV = "production"
 
+          $standaloneDir = Join-Path $env:GITHUB_WORKSPACE ".next\standalone"
+          Set-Location -Path $standaloneDir
+
+          # Launch standalone server.js directly with node in PM2
+          npx pm2 start server.js --name "ai-video-editor" --update-env
           npx pm2 save -s
+
+          # Also launch direct background Node process as robust backup
+          Start-Process -FilePath "node" -ArgumentList "server.js" -WorkingDirectory $standaloneDir -WindowStyle Hidden
 
           Write-Host "Deployment Completed Successfully! Server active on http://0.0.0.0:9999"
