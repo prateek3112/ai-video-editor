@@ -37,9 +37,11 @@ jobs:
           New-NetFirewallRule -DisplayName "AI-Video-Editor-8000" -Direction Inbound -LocalPort 8000 -Protocol TCP -Action Allow -ErrorAction SilentlyContinue
           New-NetFirewallRule -DisplayName "AI-Video-Editor-9999" -Direction Inbound -LocalPort 9999 -Protocol TCP -Action Allow -ErrorAction SilentlyContinue
 
-          # Configure Windows kernel portproxy to route public traffic to local server
-          netsh interface portproxy add v4tov4 listenport=9999 listenaddress=0.0.0.0 connectport=9999 connectaddress=127.0.0.1
-          netsh interface portproxy add v4tov4 listenport=3000 listenaddress=0.0.0.0 connectport=9999 connectaddress=127.0.0.1
+          # Clear existing portproxy rules & set up clean kernel forwarding from 9999/8000 to local port 3000
+          netsh interface portproxy reset
+          netsh interface portproxy add v4tov4 listenport=9999 listenaddress=0.0.0.0 connectport=3000 connectaddress=127.0.0.1
+          netsh interface portproxy add v4tov4 listenport=8000 listenaddress=0.0.0.0 connectport=3000 connectaddress=127.0.0.1
+          netsh interface portproxy add v4tov4 listenport=3000 listenaddress=0.0.0.0 connectport=3000 connectaddress=127.0.0.1
 
           # 3. Ensure .env.production exists
           if (-not (Test-Path ".env.production")) {
@@ -69,39 +71,28 @@ jobs:
           Write-Host "Building production Next.js bundle..."
           npm run build
 
-          # 6. Copy static assets to Next.js standalone directory
-          if (Test-Path ".next\standalone") {
-              if (Test-Path "public") {
-                  Copy-Item -Path "public" -Destination ".next\standalone\public" -Recurse -Force -ErrorAction SilentlyContinue
-              }
-              if (Test-Path ".next\static") {
-                  New-Item -ItemType Directory -Path ".next\standalone\.next\static" -Force -ErrorAction SilentlyContinue
-                  Copy-Item -Path ".next\static\*" -Destination ".next\standalone\.next\static" -Recurse -Force -ErrorAction SilentlyContinue
-              }
-          }
-
-          # 7. Register & Start Permanent Windows Background Service (Task Scheduler)
+          # 6. Register & Start Permanent Windows Background Service (Task Scheduler)
           Write-Host "Registering permanent 24/7 Windows Background Task..."
           
-          # Clean existing Node processes & tasks
+          # Stop existing Node processes & tasks
           Unregister-ScheduledTask -TaskName "AIVideoEditor" -Confirm:$false -ErrorAction SilentlyContinue
           Get-Process -Name node -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
 
-          $standaloneDir = Join-Path $env:GITHUB_WORKSPACE ".next\standalone"
-          $serverJs = Join-Path $standaloneDir "server.js"
+          $workDir = $env:GITHUB_WORKSPACE
+          $runnerBat = Join-Path $workDir "run-server.bat"
           $nodeExe = "C:\Program Files\nodejs\node.exe"
+          $nextCli = Join-Path $workDir "node_modules\next\dist\bin\next"
 
-          # Create wrapper script to set PORT=9999 and HOSTNAME=0.0.0.0
-          $runnerBat = Join-Path $standaloneDir "run-server.bat"
-          $batContent = "@echo off`r`nset PORT=9999`r`nset HOSTNAME=0.0.0.0`r`nset NODE_ENV=production`r`n`"$nodeExe`" `"$serverJs`""
+          # Create wrapper script that launches next start on 0.0.0.0:3000
+          $batContent = "@echo off`r`nset PORT=3000`r`nset HOSTNAME=0.0.0.0`r`nset NODE_ENV=production`r`n`"$nodeExe`" `"$nextCli`" start -H 0.0.0.0 -p 3000"
           Set-Content -Path $runnerBat -Value $batContent
 
           # Register Windows Task Scheduler task that runs on boot and persists 24/7
-          $action = New-ScheduledTaskAction -Execute "cmd.exe" -Argument "/c `"$runnerBat`"" -WorkingDirectory $standaloneDir
+          $action = New-ScheduledTaskAction -Execute "cmd.exe" -Argument "/c `"$runnerBat`"" -WorkingDirectory $workDir
           $trigger = New-ScheduledTaskTrigger -AtStartup
           Register-ScheduledTask -TaskName "AIVideoEditor" -Action $action -Trigger $trigger -User "SYSTEM" -RunLevel Highest -Force
           Start-ScheduledTask -TaskName "AIVideoEditor"
 
-          Start-Sleep -Seconds 3
+          Start-Sleep -Seconds 5
 
-          Write-Host "Deployment Completed Successfully! Windows Service active on http://0.0.0.0:9999"
+          Write-Host "Deployment Completed Successfully! Server active on http://0.0.0.0:3000 (Forwarded to 9999 & 8000)"
