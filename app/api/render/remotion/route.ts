@@ -5,6 +5,8 @@ import { getProjectById } from "@/lib/local-store";
 import { createEditPlanFromProject, applyEditCommands, type EditCommand } from "@/lib/edit-plan";
 import { DEFAULT_CAPTION_SETTINGS, QUALITY_CONFIG, type CaptionSettings, type ExportQuality } from "@/lib/caption-config";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(req: Request) {
   try {
     const payload = await req.json();
