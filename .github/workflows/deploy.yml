@@ -56,23 +56,47 @@ jobs:
               $env:Path += ";C:\Program Files\nodejs"
           }
 
-          # 5. Install dependencies
+          # 5. Install dependencies & build Next.js
           Write-Host "Installing npm packages..."
           npm install --legacy-peer-deps
 
-          # 6. Build Next.js production bundle
           Write-Host "Building production Next.js bundle..."
           npm run build
 
-          # 7. Start application on Port 8000
-          Write-Host "Launching Next.js server on Port 8000..."
-          $env:PORT = "8000"
+          # Copy static files to standalone directory for Next.js standalone server
+          if (Test-Path ".next\standalone") {
+              if (Test-Path "public") {
+                  Copy-Item -Path "public" -Destination ".next\standalone\public" -Recurse -Force -ErrorAction SilentlyContinue
+              }
+              if (Test-Path ".next\static") {
+                  New-Item -ItemType Directory -Path ".next\standalone\.next\static" -Force -ErrorAction SilentlyContinue
+                  Copy-Item -Path ".next\static\*" -Destination ".next\standalone\.next\static" -Recurse -Force -ErrorAction SilentlyContinue
+              }
+          }
+
+          # 6. Install PM2 for robust background process management
+          if (-not (Get-Command pm2 -ErrorAction SilentlyContinue)) {
+              Write-Host "Installing PM2 process manager..."
+              npm install -g pm2
+          }
+
+          # 7. Start Standalone Next.js Server bound to 0.0.0.0 (All IP Interfaces) on Port 3000 and 8000
+          Write-Host "Launching production Next.js server bound to 0.0.0.0:3000..."
+          
+          # Delete previous PM2 instances
+          pm2 delete ai-video-editor -s -ErrorAction SilentlyContinue
+
+          # Set environment for 0.0.0.0 binding
+          $env:HOSTNAME = "0.0.0.0"
+          $env:PORT = "3000"
           $env:NODE_ENV = "production"
 
-          # Stop existing node processes if running
-          Get-Process -Name node -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+          if (Test-Path ".next\standalone\server.js") {
+              pm2 start ".next\standalone\server.js" --name "ai-video-editor" --update-env
+          } else {
+              pm2 start npm --name "ai-video-editor" -- start -- -H 0.0.0.0 -p 3000
+          }
 
-          # Start Next.js server in background
-          Start-Process -FilePath "npx" -ArgumentList "next", "start", "-p", "8000" -WindowStyle Hidden
+          pm2 save -s
 
-          Write-Host "Deployment Completed Successfully! AI Video Editor is listening on Port 8000."
+          Write-Host "Deployment Completed Successfully! Server active on http://0.0.0.0:3000 (Accessible via Public IP)"
