@@ -57,6 +57,10 @@ jobs:
               }
           }
 
+          # Ensure Windows Firewall ports 3000 and 8000 are open
+          New-NetFirewallRule -DisplayName "AI-Video-Editor-3000" -Direction Inbound -LocalPort 3000 -Protocol TCP -Action Allow -ErrorAction SilentlyContinue
+          New-NetFirewallRule -DisplayName "AI-Video-Editor-8000" -Direction Inbound -LocalPort 8000 -Protocol TCP -Action Allow -ErrorAction SilentlyContinue
+
           # 4. Run docker-compose up -d --build
           $env:DOCKER_DEFAULT_PLATFORM = "linux"
           Write-Host "Launching Docker Compose build..."
