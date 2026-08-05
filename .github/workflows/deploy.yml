@@ -58,6 +58,7 @@ jobs:
           }
 
           # 4. Run docker-compose up -d --build
+          $env:DOCKER_DEFAULT_PLATFORM = "linux"
           Write-Host "Launching Docker Compose build..."
           if (Test-Path "C:\Program Files\Docker\docker-compose.exe") {
               & "C:\Program Files\Docker\docker-compose.exe" --env-file .env.production up -d --build
