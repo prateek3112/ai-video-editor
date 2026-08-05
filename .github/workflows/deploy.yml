@@ -13,7 +13,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Deploy & Start AI Video Editor
+      - name: Deploy Native Node.js Application on Windows Server
         shell: powershell
         run: |
           $ProgressPreference = 'SilentlyContinue'
@@ -22,8 +22,7 @@ jobs:
           # 1. Discover Node.js & Git paths
           $searchPaths = @(
               "C:\Program Files\nodejs",
-              "C:\Program Files\Git\cmd",
-              "C:\Program Files\Docker"
+              "C:\Program Files\Git\cmd"
           )
           foreach ($p in $searchPaths) {
               if ((Test-Path $p) -and ($env:Path -notlike "*$p*")) {
@@ -46,47 +45,33 @@ jobs:
               }
           }
 
-          # 4. Try Docker Compose first
-          $env:DOCKER_DEFAULT_PLATFORM = "linux"
-          $dockerSuccess = $false
-
-          if (Test-Path "C:\Program Files\Docker\docker-compose.exe") {
-              try {
-                  & "C:\Program Files\Docker\docker-compose.exe" --env-file .env.production up -d --build
-                  $dockerSuccess = $true
-              } catch {
-                  Write-Host "Docker Linux container build unavailable on Windows Server mode."
-              }
+          # 4. Auto-install Node.js v20 if missing
+          if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
+              Write-Host "Installing Node.js v20 on Windows Server..."
+              [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+              $nodeMsi = "$env:TEMP\node-v20.13.1-x64.msi"
+              Invoke-WebRequest -Uri "https://nodejs.org/dist/v20.13.1/node-v20.13.1-x64.msi" -OutFile $nodeMsi
+              Start-Process msiexec.exe -ArgumentList "/i", "`"$nodeMsi`"", "/quiet", "/norestart" -Wait
+              $env:Path += ";C:\Program Files\nodejs"
           }
 
-          # 5. Native Windows Server fallback (Node.js / Next.js server on Port 8000)
-          if (-not $dockerSuccess) {
-              Write-Host "Deploying natively on Windows Server..."
-              
-              # Auto-install Node.js if missing
-              if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
-                  Write-Host "Installing Node.js v20 on Windows Server..."
-                  [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-                  Invoke-WebRequest -Uri "https://nodejs.org/dist/v20.13.1/node-v20.13.1-x64.msi" -OutFile "$env:TEMP\node.msi"
-                  Start-Process msiexec.exe -ArgumentList "/i", "$env:TEMP\node.msi", "/quiet", "/norestart" -Wait
-                  $env:Path += ";C:\Program Files\nodejs"
-              }
+          # 5. Install dependencies
+          Write-Host "Installing npm packages..."
+          npm install --legacy-peer-deps
 
-              Write-Host "Installing npm dependencies..."
-              npm install --legacy-peer-deps
+          # 6. Build Next.js production bundle
+          Write-Host "Building production Next.js bundle..."
+          npm run build
 
-              Write-Host "Building production Next.js bundle..."
-              npm run build
+          # 7. Start application on Port 8000
+          Write-Host "Launching Next.js server on Port 8000..."
+          $env:PORT = "8000"
+          $env:NODE_ENV = "production"
 
-              Write-Host "Launching Next.js server on Port 8000..."
-              $env:PORT = "8000"
-              $env:NODE_ENV = "production"
+          # Stop existing node processes if running
+          Get-Process -Name node -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
 
-              # Stop any existing Next.js node process
-              Get-Process -Name node -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowTitle -like "*next*" -or $_.CommandLine -like "*next*" } | Stop-Process -Force -ErrorAction SilentlyContinue
+          # Start Next.js server in background
+          Start-Process -FilePath "npx" -ArgumentList "next", "start", "-p", "8000" -WindowStyle Hidden
 
-              # Start Next.js server in background
-              Start-Process -FilePath "npx" -ArgumentList "next", "start", "-p", "8000" -WindowStyle Hidden
-          }
-
-          Write-Host "Deployment Completed Successfully! App listening on Port 8000."
+          Write-Host "Deployment Completed Successfully! AI Video Editor is listening on Port 8000."
