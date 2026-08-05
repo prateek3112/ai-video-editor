@@ -82,22 +82,14 @@ jobs:
               $env:Path += ";$env:APPDATA\npm"
           }
 
-          # 7. Start Standalone Next.js Server bound to 0.0.0.0 on Port 9999 (Allowed in NSG Rule 200)
-          Write-Host "Launching production Next.js server bound to 0.0.0.0:9999..."
+          # 7. Start Next.js Server bound to 0.0.0.0 on Port 9999 (Allowed in NSG Rule 200)
+          Write-Host "Launching Next.js production server bound to 0.0.0.0:9999..."
           
-          # Set environment variables for 0.0.0.0 binding on Port 9999
-          $env:HOSTNAME = "0.0.0.0"
-          $env:PORT = "9999"
-          $env:NODE_ENV = "production"
-
           # Stop existing PM2 process if running
           npx pm2 delete ai-video-editor -s -ErrorAction SilentlyContinue
 
-          if (Test-Path ".next\standalone\server.js") {
-              npx pm2 start ".next\standalone\server.js" --name "ai-video-editor" --update-env
-          } else {
-              npx pm2 start npm --name "ai-video-editor" -- start -- -H 0.0.0.0 -p 9999
-          }
+          # Start Next.js server with explicit 0.0.0.0 host and 9999 port binding
+          npx pm2 start npm --name "ai-video-editor" -- start -- -H 0.0.0.0 -p 9999
 
           npx pm2 save -s
 
