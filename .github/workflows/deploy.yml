@@ -18,12 +18,16 @@ jobs:
         run: |
           Write-Host "🚀 Updating AI Video Editor build..."
           
-          # Add Git and Docker paths to environment if not present
-          if (Test-Path "C:\Program Files\Git\cmd") {
-              $env:Path += ";C:\Program Files\Git\cmd"
-          }
-          if (Test-Path "C:\Program Files\Docker\Docker\resources\bin") {
-              $env:Path += ";C:\Program Files\Docker\Docker\resources\bin"
+          # Add Git and Docker paths to environment
+          $paths = @(
+              "C:\Program Files\Git\cmd",
+              "C:\Program Files\Docker\Docker\resources\bin",
+              "C:\Program Files\Docker\Docker\resources"
+          )
+          foreach ($p in $paths) {
+              if ((Test-Path $p) -and ($env:Path -notlike "*$p*")) {
+                  $env:Path += ";$p"
+              }
           }
 
           if (-not (Test-Path "C:\ai-video-editor")) {
@@ -32,6 +36,8 @@ jobs:
           }
           
           cd C:\ai-video-editor
+          git fetch origin master
+          git reset --hard origin/master
           git pull origin master
           
           if (-not (Test-Path ".env.production")) {
@@ -44,5 +50,10 @@ jobs:
               }
           }
 
-          docker-compose --env-file .env.production up -d --build
+          if (Get-Command docker-compose -ErrorAction SilentlyContinue) {
+              docker-compose --env-file .env.production up -d --build
+          } else {
+              docker compose --env-file .env.production up -d --build
+          }
+          
           Write-Host "✅ Deployment Complete!"
