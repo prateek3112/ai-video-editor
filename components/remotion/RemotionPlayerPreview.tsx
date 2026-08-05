@@ -31,7 +31,7 @@ export const RemotionPlayerPreview: React.FC<RemotionPlayerPreviewProps> = ({ pl
           maxHeight: "100%",
           objectFit: "contain",
         }}
-        showVolumeControl={false}
+        showVolumeControls={false}
       />
     </div>
   );
