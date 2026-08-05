@@ -34,3 +34,5 @@ Deploy automatically to your Azure VM using GitHub Actions or manually via Docke
 ```bash
 docker-compose --env-file .env.production up -d --build
 ```
+
+Status: Deployed to Windows Server VM via Self-Hosted GitHub Actions Runner.
