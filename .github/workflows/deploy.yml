@@ -17,14 +17,26 @@ jobs:
         shell: powershell
         run: |
           Write-Host "🚀 Updating AI Video Editor build..."
-          if (-not (Test-Path "C:\ai-video-editor")) {
-            cd C:\
-            git clone https://github.com/prateek3112/ai-video-editor.git
+          
+          # Add Git and Docker paths to environment if not present
+          if (Test-Path "C:\Program Files\Git\cmd") {
+              $env:Path += ";C:\Program Files\Git\cmd"
           }
+          if (Test-Path "C:\Program Files\Docker\Docker\resources\bin") {
+              $env:Path += ";C:\Program Files\Docker\Docker\resources\bin"
+          }
+
+          if (-not (Test-Path "C:\ai-video-editor")) {
+              cd C:\
+              git clone https://github.com/prateek3112/ai-video-editor.git
+          }
+          
           cd C:\ai-video-editor
           git pull origin master
+          
           if (-not (Test-Path ".env.production")) {
-            Copy-Item .env.production.example .env.production
+              Copy-Item .env.production.example .env.production
           }
+
           docker-compose --env-file .env.production up -d --build
           Write-Host "✅ Deployment Complete!"
