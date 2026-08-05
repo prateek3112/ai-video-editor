@@ -13,17 +13,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Rebuild & Start Application via Docker Compose
+      - name: Deploy & Start AI Video Editor
         shell: powershell
         run: |
           $ProgressPreference = 'SilentlyContinue'
           Write-Host "Starting AI Video Editor deployment..."
 
-          # 1. Discover Docker paths
+          # 1. Discover Node.js & Git paths
           $searchPaths = @(
-              "C:\Program Files\Docker",
-              "C:\Program Files\Docker\Docker\resources\bin",
-              "C:\ProgramData\DockerDesktop\version-cli"
+              "C:\Program Files\nodejs",
+              "C:\Program Files\Git\cmd",
+              "C:\Program Files\Docker"
           )
           foreach ($p in $searchPaths) {
               if ((Test-Path $p) -and ($env:Path -notlike "*$p*")) {
@@ -31,20 +31,9 @@ jobs:
               }
           }
 
-          # 2. Ensure docker-compose.exe exists on Windows Server
-          if (-not (Get-Command docker-compose -ErrorAction SilentlyContinue) -and -not (Test-Path "C:\Program Files\Docker\docker-compose.exe")) {
-              Write-Host "Downloading docker-compose standalone binary for Windows Server..."
-              [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-              if (-not (Test-Path "C:\Program Files\Docker")) {
-                  New-Item -ItemType Directory -Path "C:\Program Files\Docker" -Force
-              }
-              Invoke-WebRequest -Uri "https://github.com/docker/compose/releases/download/v2.27.0/docker-compose-windows-x86_64.exe" -OutFile "C:\Program Files\Docker\docker-compose.exe"
-          }
-
-          # Add docker folder to PATH
-          if (Test-Path "C:\Program Files\Docker") {
-              $env:Path += ";C:\Program Files\Docker"
-          }
+          # 2. Ensure Windows Firewall ports 3000 & 8000 are open
+          New-NetFirewallRule -DisplayName "AI-Video-Editor-3000" -Direction Inbound -LocalPort 3000 -Protocol TCP -Action Allow -ErrorAction SilentlyContinue
+          New-NetFirewallRule -DisplayName "AI-Video-Editor-8000" -Direction Inbound -LocalPort 8000 -Protocol TCP -Action Allow -ErrorAction SilentlyContinue
 
           # 3. Ensure .env.production exists
           if (-not (Test-Path ".env.production")) {
@@ -57,17 +46,47 @@ jobs:
               }
           }
 
-          # Ensure Windows Firewall ports 3000 and 8000 are open
-          New-NetFirewallRule -DisplayName "AI-Video-Editor-3000" -Direction Inbound -LocalPort 3000 -Protocol TCP -Action Allow -ErrorAction SilentlyContinue
-          New-NetFirewallRule -DisplayName "AI-Video-Editor-8000" -Direction Inbound -LocalPort 8000 -Protocol TCP -Action Allow -ErrorAction SilentlyContinue
-
-          # 4. Run docker-compose up -d --build
+          # 4. Try Docker Compose first
           $env:DOCKER_DEFAULT_PLATFORM = "linux"
-          Write-Host "Launching Docker Compose build..."
+          $dockerSuccess = $false
+
           if (Test-Path "C:\Program Files\Docker\docker-compose.exe") {
-              & "C:\Program Files\Docker\docker-compose.exe" --env-file .env.production up -d --build
-          } else {
-              docker-compose --env-file .env.production up -d --build
+              try {
+                  & "C:\Program Files\Docker\docker-compose.exe" --env-file .env.production up -d --build
+                  $dockerSuccess = $true
+              } catch {
+                  Write-Host "Docker Linux container build unavailable on Windows Server mode."
+              }
           }
 
-          Write-Host "Deployment Completed Successfully!"
+          # 5. Native Windows Server fallback (Node.js / Next.js server on Port 8000)
+          if (-not $dockerSuccess) {
+              Write-Host "Deploying natively on Windows Server..."
+              
+              # Auto-install Node.js if missing
+              if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
+                  Write-Host "Installing Node.js v20 on Windows Server..."
+                  [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+                  Invoke-WebRequest -Uri "https://nodejs.org/dist/v20.13.1/node-v20.13.1-x64.msi" -OutFile "$env:TEMP\node.msi"
+                  Start-Process msiexec.exe -ArgumentList "/i", "$env:TEMP\node.msi", "/quiet", "/norestart" -Wait
+                  $env:Path += ";C:\Program Files\nodejs"
+              }
+
+              Write-Host "Installing npm dependencies..."
+              npm install --legacy-peer-deps
+
+              Write-Host "Building production Next.js bundle..."
+              npm run build
+
+              Write-Host "Launching Next.js server on Port 8000..."
+              $env:PORT = "8000"
+              $env:NODE_ENV = "production"
+
+              # Stop any existing Next.js node process
+              Get-Process -Name node -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowTitle -like "*next*" -or $_.CommandLine -like "*next*" } | Stop-Process -Force -ErrorAction SilentlyContinue
+
+              # Start Next.js server in background
+              Start-Process -FilePath "npx" -ArgumentList "next", "start", "-p", "8000" -WindowStyle Hidden
+          }
+
+          Write-Host "Deployment Completed Successfully! App listening on Port 8000."
