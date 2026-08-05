@@ -19,11 +19,18 @@ View your app in AI Studio: https://ai.studio/apps/9aab0b61-cf3c-4e76-91db-acb50
 3. Run the app:
    `npm run dev`
 
-## Local Real AI Notes
+## Features
 
-- Uploads are stored locally in `public/uploads`.
-- Rendered outputs are written to `public/renders`.
-- Transcription uses Gemini (`gemini-2.5-flash`) when `GEMINI_API_KEY` is set.
-- Export rendering uses local FFmpeg via `@ffmpeg-installer/ffmpeg`.
+- **Dual Rendering Engines**: Render compositions with **Remotion** (React-based canvas) or **Hyperframes** (HTML/CSS keyframe timeline).
+- **BYOB (Bring Your Own Key)**: Pass custom Gemini API keys directly from the UI header without server dependencies.
+- **AI Create Mode**: Enter a text prompt to generate complete scripts, scene layouts, word-level timings, and video compositions.
+- **AI Editor Mode**: Natural language video editing ("Make captions Hormozi style with yellow pop").
+- **Automated CI/CD**: Automatic zero-downtime deployment to Azure VM via GitHub Actions on every push to `master`.
 
-If Gemini fails or key is missing, the app falls back to deterministic local captions so editing still works.
+## Deployment
+
+Deploy automatically to your Azure VM using GitHub Actions or manually via Docker Compose:
+
+```bash
+docker-compose --env-file .env.production up -d --build
+```
