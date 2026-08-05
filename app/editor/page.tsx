@@ -31,6 +31,11 @@ import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent as R
 import { Progress } from "@/components/ui/progress";
 import { useDropzone } from "react-dropzone";
 import { toast } from "sonner";
+import { ByobKeyDialog } from "@/components/byob-key-dialog";
+import { AiCreateDialog } from "@/components/ai-create-dialog";
+import { RemotionPlayerPreview } from "@/components/remotion/RemotionPlayerPreview";
+import { getAuthHeaders } from "@/lib/byob-client";
+import { createEditPlanFromProject } from "@/lib/edit-plan";
 import {
   FONT_FAMILIES,
   LANGUAGE_SAMPLE_TEXT,
@@ -379,6 +384,8 @@ export default function EditorPage() {
   const [localPreviewUrl, setLocalPreviewUrl] = useState<string | null>(null);
   const [selectedCaptionIndex, setSelectedCaptionIndex] = useState<number | null>(null);
   const [isSavingCaptions, setIsSavingCaptions] = useState(false);
+  const [engineMode, setEngineMode] = useState<"remotion" | "hyperframes" | "canvas">("remotion");
+  const [isRenderingRemotion, setIsRenderingRemotion] = useState(false);
   const [dragState, setDragState] = useState<{
     index: number;
     mode: "move" | "resize-start" | "resize-end";
@@ -1048,7 +1055,7 @@ export default function EditorPage() {
     try {
       const res = await fetch("/api/ai-edit", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders({ "Content-Type": "application/json" }),
         body: JSON.stringify({
           prompt,
           currentStyle: selectedStyle,
@@ -1252,6 +1259,69 @@ export default function EditorPage() {
     }
   };
 
+  const handleRemotionRender = async () => {
+    if (!project) {
+      toast.error("Upload or create a video before rendering with Remotion");
+      return;
+    }
+
+    setIsRenderingRemotion(true);
+    try {
+      const response = await fetch("/api/render/remotion", {
+        method: "POST",
+        headers: getAuthHeaders({ "Content-Type": "application/json" }),
+        body: JSON.stringify({
+          projectId: project.id,
+          quality: exportQuality,
+          settings: captionSettings,
+          fps: 30,
+        }),
+      });
+      const data = await response.json();
+      if (!data.success) throw new Error(data.error ?? "Remotion render failed");
+
+      toast.success(`Remotion render initiated! Video path: ${data.videoUrl}`);
+    } catch (err: any) {
+      toast.error(err.message || "Failed to render Remotion composition");
+    } finally {
+      setIsRenderingRemotion(false);
+    }
+  };
+
+  const localProjectForPlan = useMemo(() => {
+    if (!project) return null;
+    return {
+      id: project.id,
+      videoUrl: project.videoUrl ?? "",
+      sourceVideoUrl: project.videoUrl ?? "",
+      duration: project.duration,
+      status: (project.status ?? "ready") as any,
+      createdAt: new Date().toISOString(),
+      captions: (project.transcription ?? []).map((c, i) => ({
+        id: `cap-${i}`,
+        projectId: project.id,
+        start: c.start,
+        end: c.end,
+        text: c.word,
+        confidence: c.confidence,
+        script: c.script,
+        highlightWords: c.highlightWords,
+      })),
+    };
+  }, [project]);
+
+  const activeEditPlan = useMemo(() => {
+    if (!localProjectForPlan) return null;
+    return createEditPlanFromProject({
+      project: localProjectForPlan,
+      settings: captionSettings,
+      quality: exportQuality,
+      fps: 30,
+      width: 1080,
+      height: 1920,
+    });
+  }, [localProjectForPlan, captionSettings, exportQuality]);
+
   const localizedTimelineCaptions = useMemo(
     () =>
       (project?.transcription ?? []).map((caption) => ({
@@ -1300,59 +1370,29 @@ export default function EditorPage() {
       scriptVisualScenes.find((scene) => currentTime < scene.start) ??
       scriptVisualScenes[scriptVisualScenes.length - 1]
     );
-              {project && activeScriptVisualScene ? (
-                <div
-                  className="absolute inset-x-0 top-0 z-10 flex h-1/2 flex-col justify-center gap-3 overflow-hidden px-7 py-6 text-white"
-                  style={{
-                    background: `radial-gradient(circle at 72% 24%, ${toRgba(activeScriptVisualScene.palette.accent, 0.42)}, transparent 34%), radial-gradient(circle at 16% 78%, ${toRgba(activeScriptVisualScene.palette.secondary, 0.28)}, transparent 32%), linear-gradient(135deg, ${activeScriptVisualScene.palette.background}, #050505)`,
-                  }}
-                >
-                  <div
-                    className="absolute inset-4 border"
-                    style={{ borderColor: toRgba(activeScriptVisualScene.palette.accent, 0.35) }}
-                  />
-                  <div
-                    className="absolute -right-10 top-8 h-28 w-28 rounded-full border-[12px]"
-                    style={{
-                      borderTopColor: activeScriptVisualScene.palette.accent,
-                      borderRightColor: activeScriptVisualScene.palette.accent,
-                      borderBottomColor: activeScriptVisualScene.palette.accent,
-                      borderLeftColor: "transparent",
-                    }}
-                  />
-                  {activeScriptVisualScene.motif === "warning" ? (
-                    <div
-                      className="absolute left-[16%] top-[20%] h-[58%] w-[68%]"
-                      style={{
-                        border: `16px solid ${activeScriptVisualScene.palette.accent}`,
-                        clipPath: "polygon(50% 0, 100% 100%, 0 100%)",
-                        filter: `drop-shadow(0 0 20px ${toRgba(activeScriptVisualScene.palette.accent, 0.5)})`,
-                      }}
-                    />
-                  ) : activeScriptVisualScene.motif === "money" ? (
-                    <>
-                      <div className="absolute left-[14%] top-[24%] h-[46%] w-[72%] rounded-2xl" style={{ backgroundColor: toRgba(activeScriptVisualScene.palette.accent, 0.24) }} />
-                      <div className="absolute left-[24%] top-[34%] h-[25%] w-[52%] rounded-xl bg-transparent" style={{ border: `8px solid ${activeScriptVisualScene.palette.secondary}` }} />
-                      <div className="absolute left-[44%] top-[30%] h-[34%] w-[12%] rounded-full" style={{ backgroundColor: activeScriptVisualScene.palette.accent }} />
-                    </>
-                  ) : activeScriptVisualScene.motif === "growth" ? (
-                    <>
-                      {[0.18, 0.36, 0.54, 0.72].map((left, index) => (
-                        <div
-                          key={left}
-                          className="absolute bottom-[17%] w-[11%] rounded-t-md"
-                          style={{
-                            left: `${left * 100}%`,
-                            height: `${[25, 39, 55, 68][index]}%`,
-                            backgroundColor: index % 2 ? activeScriptVisualScene.palette.accent : activeScriptVisualScene.palette.secondary,
-                            opacity: 0.76,
-                          }}
-                        />
-                      ))}
-                    </>
-                  ) : null}
-                </div>
-              ) : null}
+  }, [currentTime, scriptVisualScenes]);
+
+  const visibleCaptions = useMemo(() => {
+    if (!project) return previewTimelineCaptions;
+    return previewTimelineCaptions.filter(
+      (caption) =>
+        shouldShowSamplePreview ||
+        (currentTime + CAPTION_SYNC_TOLERANCE >= caption.start &&
+          currentTime - CAPTION_SYNC_TOLERANCE <= caption.end),
+    );
+  }, [currentTime, previewTimelineCaptions, project, shouldShowSamplePreview]);
+
+  const activeCaption = visibleCaptions[0] ?? null;
+  const activeCaptionProgress = useMemo(() => {
+    if (!activeCaption) return 0;
+    const duration = Math.max(0.05, activeCaption.end - activeCaption.start);
+    return Math.min(1, Math.max(0, (currentTime - activeCaption.start) / duration));
+  }, [activeCaption, currentTime]);
+
+  const maxWordsPerLine = captionSettings.maxWordsPerLine;
+  const maxLines = captionSettings.maxLines;
+  const maxVisibleWords = maxWordsPerLine * maxLines;
+
   const displayTokens = useMemo(() => {
     const tokens: PreviewCaptionToken[] = [];
 
@@ -1845,21 +1885,42 @@ export default function EditorPage() {
   return (
     <div className="h-screen flex flex-col bg-[#050505] text-white">
       <header className="h-14 border-b border-white/10 flex items-center justify-between px-4 bg-[#0A0A0A]">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           <Link href="/">
             <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white hover:bg-white/10">
               <ChevronLeft className="h-4 w-4" />
             </Button>
           </Link>
-          <span className="font-medium text-sm text-gray-300">New Project</span>
+          <span className="font-semibold text-sm text-gray-200">AI Studio</span>
+
+          {/* Engine Selector */}
+          <div className="flex rounded-lg border border-white/10 overflow-hidden bg-black/40 p-0.5 ml-2">
+            {(["remotion", "hyperframes", "canvas"] as const).map((mode) => (
+              <button
+                key={mode}
+                onClick={() => setEngineMode(mode)}
+                className={`px-2.5 py-1 text-xs font-medium rounded-md capitalize transition-colors ${
+                  engineMode === mode ? "bg-blue-600 text-white shadow-sm" : "text-gray-400 hover:text-white hover:bg-white/5"
+                }`}
+              >
+                {mode === "remotion" ? "Remotion Engine" : mode === "hyperframes" ? "Hyperframes HTML" : "Canvas Player"}
+              </button>
+            ))}
+          </div>
         </div>
+
         <div className="flex items-center gap-2">
+          {/* BYOB & AI Create */}
+          <ByobKeyDialog />
+          <AiCreateDialog />
+
+          {/* Qualities */}
           <div className="flex rounded-md border border-white/10 overflow-hidden">
             {QUALITIES.map((quality) => (
               <button
                 key={quality}
                 onClick={() => setExportQuality(quality)}
-                className={`px-3 py-1.5 text-xs font-medium transition-colors ${
+                className={`px-2.5 py-1 text-xs font-medium transition-colors ${
                   exportQuality === quality ? "bg-blue-500 text-white" : "bg-white/5 text-gray-400 hover:bg-white/10"
                 }`}
               >
@@ -1867,65 +1928,38 @@ export default function EditorPage() {
               </button>
             ))}
           </div>
-          <div className="flex rounded-md border border-white/10 overflow-hidden">
-            {EXPORT_FORMATS.map((format) => (
-              <button
-                key={format}
-                onClick={() => setSubtitleFormat(format)}
-                className={`px-2.5 py-1.5 text-[11px] font-medium transition-colors uppercase ${
-                  subtitleFormat === format ? "bg-yellow-500/20 text-yellow-300" : "bg-white/5 text-gray-400 hover:bg-white/10"
-                }`}
-              >
-                {format}
-              </button>
-            ))}
-          </div>
+
+          {/* Remotion Render */}
           <Button
             variant="outline"
             size="sm"
-            className="bg-white/5 border-white/10 hover:bg-white/10 text-white shadow-none"
-            onClick={handleSubtitleExport}
-            disabled={isSubtitleExporting || !project}
+            className="bg-indigo-600/20 border-indigo-500/30 hover:bg-indigo-600/30 text-indigo-200 shadow-none gap-1.5"
+            onClick={handleRemotionRender}
+            disabled={isRenderingRemotion || !project}
           >
-            {isSubtitleExporting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Download className="h-4 w-4 mr-2" />}
-            {subtitleFormat.toUpperCase()}
+            {isRenderingRemotion ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Film className="h-3.5 w-3.5 text-indigo-400" />}
+            Render Remotion
           </Button>
+
+          {/* Hyperframes Render */}
           <Button
             variant="outline"
             size="sm"
-            className="bg-white/5 border-white/10 hover:bg-white/10 text-white shadow-none"
-            onClick={applyInstantPolish}
-            disabled={!project}
-          >
-            <Wand2 className="h-4 w-4 mr-2 text-blue-400" />
-            AI Polish
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            className="bg-white/5 border-white/10 hover:bg-white/10 text-white shadow-none"
+            className="bg-emerald-600/20 border-emerald-500/30 hover:bg-emerald-600/30 text-emerald-200 shadow-none gap-1.5"
             onClick={handleHyperframesCompile}
             disabled={isCompilingHyperframes || !project}
           >
-            {isCompilingHyperframes ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <ExternalLink className="h-4 w-4 mr-2 text-emerald-300" />}
+            {isCompilingHyperframes ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <ExternalLink className="h-3.5 w-3.5 text-emerald-400" />}
             Hyperframes
           </Button>
-          {compositionUrl ? (
-            <Link
-              href={compositionUrl}
-              target="_blank"
-              className="rounded-md border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1.5 text-[11px] font-medium text-emerald-200 hover:bg-emerald-500/20"
-            >
-              Open
-            </Link>
-          ) : null}
+
           <Button
             size="sm"
-            className="bg-white text-black hover:bg-white/90 font-medium"
+            className="bg-white text-black hover:bg-white/90 font-medium ml-1"
             onClick={handleExport}
             disabled={isExporting || !project}
           >
-            {isExporting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Download className="h-4 w-4 mr-2" />}
+            {isExporting ? <Loader2 className="h-4 w-4 mr-1.5 animate-spin" /> : <Download className="h-4 w-4 mr-1.5" />}
             Export {exportQuality.toUpperCase()}
           </Button>
         </div>
@@ -2918,7 +2952,11 @@ export default function EditorPage() {
               ref={previewFrameRef}
               className="aspect-[9/16] h-full max-h-[70vh] bg-gray-900 rounded-lg overflow-hidden relative shadow-2xl border border-white/10"
             >
-              {activeVideoSrc ? (
+              {engineMode === "remotion" && activeEditPlan ? (
+                <RemotionPlayerPreview plan={activeEditPlan} />
+              ) : engineMode === "hyperframes" && compositionUrl ? (
+                <iframe src={compositionUrl} className="w-full h-full border-0 bg-black" title="Hyperframes Preview" />
+              ) : activeVideoSrc ? (
                 <video
                   ref={videoRef}
                   src={activeVideoSrc}
@@ -2949,7 +2987,9 @@ export default function EditorPage() {
                   }}
                 />
               ) : (
-                <div className="absolute inset-0" />
+                <div className="absolute inset-0 flex items-center justify-center text-gray-500 text-sm">
+                  <span>No video loaded</span>
+                </div>
               )}
 
               {activeScriptVisualScene ? (
@@ -3013,7 +3053,7 @@ export default function EditorPage() {
               ) : null}
 
               <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10" />
-              {project && displayLines.length > 0 && (
+              {engineMode === "canvas" && project && displayLines.length > 0 && (
                 <div
                   className={`absolute z-20 px-4 text-center select-none ${previewInteraction?.mode === "move" ? "cursor-grabbing" : "cursor-grab"}`}
                   onMouseDown={(event) => beginPreviewInteraction(event, "move")}

@@ -6,6 +6,8 @@ import { usePathname } from "next/navigation";
 import { motion } from "motion/react";
 import { Play } from "lucide-react";
 
+import { ByobKeyDialog } from "@/components/byob-key-dialog";
+
 export function MainNav() {
   const pathname = usePathname();
   const isEditor = pathname?.startsWith('/editor');
@@ -31,10 +33,8 @@ export function MainNav() {
         <Link href="#pricing" className="hover:text-black transition-colors">Pricing</Link>
       </nav>
 
-      <div className="flex items-center gap-4">
-        <Link href="/login" className="text-sm font-medium text-gray-600 hover:text-black hidden sm:block">
-          Log in
-        </Link>
+      <div className="flex items-center gap-3">
+        <ByobKeyDialog />
         <Link href="/editor">
           <Button className="rounded-full px-6">Get Started</Button>
         </Link>

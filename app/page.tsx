@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Scissors, Wand2, Zap, Play } from "lucide-react";
 import Link from "next/link";
 import { MainNav } from "@/components/main-nav";
+import { AiCreateDialog } from "@/components/ai-create-dialog";
 
 export default function Home() {
   return (
@@ -49,18 +50,15 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="flex flex-col sm:flex-row gap-4"
+            className="flex flex-col sm:flex-row items-center gap-4"
           >
+            <AiCreateDialog />
             <Link href="/editor">
-              <Button size="lg" className="h-14 px-8 text-base rounded-full shadow-lg hover:shadow-xl transition-all">
-                Try it for free
+              <Button size="lg" variant="outline" className="h-14 px-8 text-base rounded-full bg-white shadow-sm hover:shadow-md">
+                Open AI Editor Mode
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
-            <Button size="lg" variant="outline" className="h-14 px-8 text-base rounded-full bg-white">
-              <Play className="mr-2 h-5 w-5" />
-              Watch demo
-            </Button>
           </motion.div>
         </div>
 

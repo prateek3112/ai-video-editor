@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ai-video-editor
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - NEXT_PUBLIC_GEMINI_API_KEY=${NEXT_PUBLIC_GEMINI_API_KEY}
+      - REDIS_URL=redis://redis:6379
+      - DATABASE_URL=${DATABASE_URL:-file:./dev.db}
+    depends_on:
+      - redis
+    volumes:
+      - uploads_data:/app/public/uploads
+      - renders_data:/app/public/renders
+      - compositions_data:/app/public/compositions
+
+  redis:
+    image: redis:7-alpine
+    container_name: ai-video-editor-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  uploads_data:
+  renders_data:
+  compositions_data:
+  redis_data:

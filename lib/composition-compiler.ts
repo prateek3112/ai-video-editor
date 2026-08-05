@@ -42,15 +42,26 @@ function compileVideoClip(clip: TimelineClip): string {
 function compileCaptionClip(plan: EditPlan, clip: TimelineClip): string {
   if (clip.type !== "caption") return "";
 
-  const text = escapeHtml(captionText(plan, clip));
+  const words = clip.text.split(/\s+/).filter(Boolean).map((word) =>
+    renderCaptionWord(word, plan.settings.language, clip.script, plan.settings.defaultScript)
+  );
+  const wordCount = words.length;
+  const wordDuration = wordCount > 0 ? clip.duration / wordCount : clip.duration;
+
   const x = toPercent(plan.settings.positionX, plan.settings.positionX);
   const y = toPercent(plan.settings.positionY, plan.settings.positionY);
   const lowConfidence = typeof clip.confidence === "number" && clip.confidence < 0.76 ? " low-confidence" : "";
   const highlightWords = clip.highlightWords?.length ? ` data-highlight-words="${escapeAttr(clip.highlightWords.join(","))}"` : "";
 
+  const wordSpans = words.map((word, idx) => {
+    const wordStart = (clip.start + idx * wordDuration).toFixed(3);
+    const wordEnd = (clip.start + (idx + 1) * wordDuration).toFixed(3);
+    return `<span class="caption-word" data-start="${wordStart}" data-end="${wordEnd}">${escapeHtml(word)}</span>`;
+  }).join(" ");
+
   return [
-    `    <div id="${escapeAttr(clip.id)}" class="clip caption caption-${escapeAttr(plan.settings.animation)} effect-${escapeAttr(plan.settings.effectPreset)}${lowConfidence}" data-start="${clip.start}" data-duration="${clip.duration}" data-track-index="4"${highlightWords} style="left:${x}; top:${y};">`,
-    `      <span>${text}</span>`,
+    `    <div id="${escapeAttr(clip.id)}" class="clip caption caption-${escapeAttr(plan.settings.animation)} style-${escapeAttr(plan.settings.style)} effect-${escapeAttr(plan.settings.effectPreset)}${lowConfidence}" data-start="${clip.start}" data-duration="${clip.duration}" data-track-index="4"${highlightWords} style="left:${x}; top:${y};">`,
+    `      <div class="caption-inner">${wordSpans}</div>`,
     "    </div>",
   ].join("\n");
 }
