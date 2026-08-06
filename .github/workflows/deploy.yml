@@ -95,4 +95,25 @@ jobs:
 
           Start-Sleep -Seconds 5
 
-          Write-Host "Deployment Completed Successfully! Server active on http://0.0.0.0:3000 (Forwarded to 9999 & 8000)"
+          Write-Host "=== EMPIRICAL DIAGNOSTIC AUDIT ==="
+          Write-Host "--- Task Scheduler Status ---"
+          Get-ScheduledTask -TaskName "AIVideoEditor" -ErrorAction SilentlyContinue | Format-List
+          Get-ScheduledTaskInfo -TaskName "AIVideoEditor" -ErrorAction SilentlyContinue | Format-List
+
+          Write-Host "--- Active Node Processes ---"
+          Get-Process -Name node -ErrorAction SilentlyContinue | Format-Table Id, ProcessName, CPU, WorkingSet
+
+          Write-Host "--- Active Port Bindings (3000, 8000, 9999) ---"
+          Get-NetTCPConnection -LocalPort 3000,8000,9999 -ErrorAction SilentlyContinue | Format-Table LocalAddress, LocalPort, State, OwningProcess
+
+          Write-Host "--- Server Log Output (C:\ai-video-editor-server.log) ---"
+          if (Test-Path "C:\ai-video-editor-server.log") {
+              Get-Content "C:\ai-video-editor-server.log" -Tail 50
+          } else {
+              Write-Host "Log file C:\ai-video-editor-server.log does not exist."
+          }
+
+          Write-Host "--- Netsh Portproxy Configuration ---"
+          netsh interface portproxy show all
+
+          Write-Host "Deployment Audit Completed!"
