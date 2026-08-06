@@ -22,6 +22,7 @@ export function AiCreateDialog() {
   const [language, setLanguage] = useState<"hinglish" | "english" | "hindi">("hinglish");
   const [style, setStyle] = useState("hormozi");
   const [duration, setDuration] = useState(15);
+  const [engine, setEngine] = useState<"remotion" | "hyperframes">("remotion");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleGenerate = async () => {
@@ -45,6 +46,7 @@ export function AiCreateDialog() {
           language,
           style,
           targetDuration: duration,
+          engine,
         }),
       });
 
@@ -53,9 +55,9 @@ export function AiCreateDialog() {
         throw new Error(data.error || "Failed to generate video");
       }
 
-      toast.success("AI Video generated successfully!");
+      toast.success(`AI Video generated successfully using ${engine.toUpperCase()} engine!`);
       setOpen(false);
-      router.push(`/editor?id=${data.projectId}`);
+      router.push(`/editor?id=${data.projectId}&engine=${engine}`);
     } catch (err: any) {
       toast.error(err.message || "Failed to generate video project");
     } finally {
@@ -102,7 +104,20 @@ export function AiCreateDialog() {
           </div>
 
           {/* Controls grid */}
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {/* Engine Selection */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-gray-600">Video Engine</label>
+              <select
+                value={engine}
+                onChange={(e) => setEngine(e.target.value as any)}
+                className="w-full p-2.5 text-xs font-semibold text-blue-700 bg-blue-50/70 border border-blue-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="remotion">Remotion (React)</option>
+                <option value="hyperframes">Hyperframes (HTML)</option>
+              </select>
+            </div>
+
             {/* Language */}
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-gray-600">Language</label>
@@ -111,7 +126,7 @@ export function AiCreateDialog() {
                 onChange={(e) => setLanguage(e.target.value as any)}
                 className="w-full p-2.5 text-xs font-medium bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                <option value="hinglish">Hinglish (Primary)</option>
+                <option value="hinglish">Hinglish</option>
                 <option value="english">English</option>
                 <option value="hindi">Hindi</option>
               </select>
@@ -152,7 +167,7 @@ export function AiCreateDialog() {
           {/* Engine note */}
           <div className="flex items-center gap-2 p-3 rounded-xl bg-blue-50/70 border border-blue-100 text-xs text-blue-800">
             <Layers className="h-4 w-4 text-blue-600 shrink-0" />
-            <span>Generates both <strong>Remotion React Composition</strong> & <strong>Hyperframes HTML Timeline</strong> instantly.</span>
+            <span>Target Engine: <strong>{engine === "remotion" ? "Remotion React Canvas Composition" : "Hyperframes HTML Keyframe Timeline"}</strong>.</span>
           </div>
         </div>
 

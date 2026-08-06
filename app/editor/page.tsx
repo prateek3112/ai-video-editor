@@ -384,7 +384,11 @@ export default function EditorPage() {
   const [localPreviewUrl, setLocalPreviewUrl] = useState<string | null>(null);
   const [selectedCaptionIndex, setSelectedCaptionIndex] = useState<number | null>(null);
   const [isSavingCaptions, setIsSavingCaptions] = useState(false);
-  const [engineMode, setEngineMode] = useState<"remotion" | "hyperframes" | "canvas">("remotion");
+  const searchParams = useSearchParams();
+  const requestedEngine = searchParams.get("engine");
+  const [engineMode, setEngineMode] = useState<"remotion" | "hyperframes" | "canvas">(
+    requestedEngine === "hyperframes" ? "hyperframes" : "remotion"
+  );
   const [isRenderingRemotion, setIsRenderingRemotion] = useState(false);
   const [dragState, setDragState] = useState<{
     index: number;
