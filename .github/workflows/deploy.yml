@@ -84,7 +84,7 @@ jobs:
           $nextCli = Join-Path $workDir "node_modules\next\dist\bin\next"
 
           # Create wrapper script that launches next start on 0.0.0.0:3000
-          $batContent = "@echo off`r`nset PORT=3000`r`nset HOSTNAME=0.0.0.0`r`nset NODE_ENV=production`r`n`"$nodeExe`" `"$nextCli`" start -H 0.0.0.0 -p 3000"
+          $batContent = "@echo off`r`ncd /d `"$workDir`"`r`nset PORT=3000`r`nset HOSTNAME=0.0.0.0`r`nset NODE_ENV=production`r`ncall npx.cmd next start -H 0.0.0.0 -p 3000 > C:\ai-video-editor-server.log 2>&1"
           Set-Content -Path $runnerBat -Value $batContent
 
           # Register Windows Task Scheduler task that runs on boot and persists 24/7
