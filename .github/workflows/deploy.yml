@@ -83,7 +83,7 @@ jobs:
           $runnerBat = Join-Path $workDir "run-server.bat"
           $nodeCmd = Get-Command node.exe -ErrorAction SilentlyContinue
           $nodeExe = if ($nodeCmd) { $nodeCmd.Source } else { Join-Path $env:SystemDrive "Program Files\nodejs\node.exe" }
-          $nextCli = Join-Path $workDir "node_modules\next\dist\bin\next"
+          $nextCli = Join-Path $workDir "node_modules/next/dist/bin/next"
 
           # Create wrapper script that launches next start on 0.0.0.0:3000
           $batContent = "@echo off`r`ncd /d `"$workDir`"`r`nset PORT=3000`r`nset HOSTNAME=0.0.0.0`r`nset NODE_ENV=production`r`ncall npx.cmd next start -H 0.0.0.0 -p 3000 > C:\ai-video-editor-server.log 2>&1"
