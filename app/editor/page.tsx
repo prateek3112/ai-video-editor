@@ -33,6 +33,7 @@ import { useDropzone } from "react-dropzone";
 import { toast } from "sonner";
 import { ByobKeyDialog } from "@/components/byob-key-dialog";
 import { AiCreateDialog } from "@/components/ai-create-dialog";
+import { useSearchParams } from "next/navigation";
 import { RemotionPlayerPreview } from "@/components/remotion/RemotionPlayerPreview";
 import { getAuthHeaders } from "@/lib/byob-client";
 import { createEditPlanFromProject } from "@/lib/edit-plan";
@@ -384,11 +385,17 @@ export default function EditorPage() {
   const [localPreviewUrl, setLocalPreviewUrl] = useState<string | null>(null);
   const [selectedCaptionIndex, setSelectedCaptionIndex] = useState<number | null>(null);
   const [isSavingCaptions, setIsSavingCaptions] = useState(false);
-  const searchParams = useSearchParams();
-  const requestedEngine = searchParams.get("engine");
-  const [engineMode, setEngineMode] = useState<"remotion" | "hyperframes" | "canvas">(
-    requestedEngine === "hyperframes" ? "hyperframes" : "remotion"
-  );
+  const [engineMode, setEngineMode] = useState<"remotion" | "hyperframes" | "canvas">("remotion");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const requested = params.get("engine");
+      if (requested === "hyperframes" || requested === "remotion") {
+        setEngineMode(requested);
+      }
+    }
+  }, []);
   const [isRenderingRemotion, setIsRenderingRemotion] = useState(false);
   const [dragState, setDragState] = useState<{
     index: number;
