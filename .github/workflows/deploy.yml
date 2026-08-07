@@ -19,7 +19,7 @@ jobs:
         shell: powershell
         run: |
           $ProgressPreference = 'SilentlyContinue'
-          Write-Host "Starting AI Video Editor deployment..."
+          Write-Host "Starting 24/7 AI Video Editor deployment..."
 
           # 1. Discover Node.js & Git paths
           $searchPaths = @(
@@ -33,16 +33,12 @@ jobs:
               }
           }
 
-          # 2. Ensure Windows Firewall ports & netsh portproxy bridge are configured
-          New-NetFirewallRule -DisplayName "AI-Video-Editor-3000" -Direction Inbound -LocalPort 3000 -Protocol TCP -Action Allow -ErrorAction SilentlyContinue
-          New-NetFirewallRule -DisplayName "AI-Video-Editor-8000" -Direction Inbound -LocalPort 8000 -Protocol TCP -Action Allow -ErrorAction SilentlyContinue
+          # 2. Open Firewall Ports 9999 & 3000
           New-NetFirewallRule -DisplayName "AI-Video-Editor-9999" -Direction Inbound -LocalPort 9999 -Protocol TCP -Action Allow -ErrorAction SilentlyContinue
+          New-NetFirewallRule -DisplayName "AI-Video-Editor-3000" -Direction Inbound -LocalPort 3000 -Protocol TCP -Action Allow -ErrorAction SilentlyContinue
 
-          # Clear existing portproxy rules & set up clean kernel forwarding from 9999/8000 to local port 3000
+          # Reset netsh portproxy so Node binds directly to 0.0.0.0:9999
           netsh interface portproxy reset
-          netsh interface portproxy add v4tov4 listenport=9999 listenaddress=0.0.0.0 connectport=3000 connectaddress=127.0.0.1
-          netsh interface portproxy add v4tov4 listenport=8000 listenaddress=0.0.0.0 connectport=3000 connectaddress=127.0.0.1
-          netsh interface portproxy add v4tov4 listenport=3000 listenaddress=0.0.0.0 connectport=3000 connectaddress=127.0.0.1
 
           # 3. Ensure .env.production exists
           if (-not (Test-Path ".env.production")) {
@@ -72,50 +68,62 @@ jobs:
           Write-Host "Building production Next.js bundle..."
           npm run build
 
-          # 6. Register & Start Permanent Windows Background Service (Task Scheduler)
-          Write-Host "Registering permanent 24/7 Windows Background Task..."
+          # 6. Copy static assets to Next.js standalone directory
+          if (Test-Path ".next\standalone") {
+              if (Test-Path "public") {
+                  Copy-Item -Path "public" -Destination ".next\standalone\public" -Recurse -Force -ErrorAction SilentlyContinue
+              }
+              if (Test-Path ".next\static") {
+                  New-Item -ItemType Directory -Path ".next\standalone\.next\static" -Force -ErrorAction SilentlyContinue
+                  Copy-Item -Path ".next\static\*" -Destination ".next\standalone\.next\static" -Recurse -Force -ErrorAction SilentlyContinue
+              }
+          }
+
+          # 7. Register & Start Permanent 24/7 Un-killable Windows Service
+          Write-Host "Registering permanent 24/7 Windows Service..."
           
           # Stop existing Node processes & tasks
+          Unregister-ScheduledTask -TaskName "AIVideoEditor247" -Confirm:$false -ErrorAction SilentlyContinue
+          Unregister-ScheduledTask -TaskName "AIVideoEditorService" -Confirm:$false -ErrorAction SilentlyContinue
           Unregister-ScheduledTask -TaskName "AIVideoEditor" -Confirm:$false -ErrorAction SilentlyContinue
           Get-Process -Name node -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
 
           $workDir = $env:GITHUB_WORKSPACE
-          $runnerBat = Join-Path $workDir "run-server.bat"
+          $standaloneDir = Join-Path $workDir ".next\standalone"
           $nodeCmd = Get-Command node.exe -ErrorAction SilentlyContinue
           $nodeExe = if ($nodeCmd) { $nodeCmd.Source } else { Join-Path $env:SystemDrive "Program Files\nodejs\node.exe" }
-          $nextCli = Join-Path $workDir "node_modules/next/dist/bin/next"
-
-          # Create wrapper script that launches next start on 0.0.0.0:3000
-          $batContent = "@echo off`r`ncd /d `"$workDir`"`r`nset PORT=3000`r`nset HOSTNAME=0.0.0.0`r`nset NODE_ENV=production`r`ncall npx.cmd next start -H 0.0.0.0 -p 3000 > C:\ai-video-editor-server.log 2>&1"
+          
+          # Create launcher batch script
+          $runnerBat = Join-Path $standaloneDir "run-247-server.bat"
+          $batContent = "@echo off`r`ncd /d `"$standaloneDir`"`r`nset PORT=9999`r`nset HOSTNAME=0.0.0.0`r`nset NODE_ENV=production`r`n`"$nodeExe`" server.js > C:\ai-video-editor-247.log 2>&1"
           Set-Content -Path $runnerBat -Value $batContent
 
-          # Register Windows Task Scheduler task that runs on boot and persists 24/7
-          $action = New-ScheduledTaskAction -Execute "cmd.exe" -Argument "/c `"$runnerBat`"" -WorkingDirectory $workDir
+          # Register Scheduled Task with PT0S (Infinite Time Limit) running under SYSTEM
+          $action = New-ScheduledTaskAction -Execute "cmd.exe" -Argument "/c `"$runnerBat`"" -WorkingDirectory $standaloneDir
           $trigger = New-ScheduledTaskTrigger -AtStartup
-          Register-ScheduledTask -TaskName "AIVideoEditor" -Action $action -Trigger $trigger -User "SYSTEM" -RunLevel Highest -Force
-          Start-ScheduledTask -TaskName "AIVideoEditor"
+          $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -ExecutionTimeLimit (New-TimeSpan -Days 9999) -RestartCount 999 -RestartInterval (New-TimeSpan -Minutes 1)
 
-          Start-Sleep -Seconds 5
+          Register-ScheduledTask -TaskName "AIVideoEditor247" -Action $action -Trigger $trigger -User "NT AUTHORITY\SYSTEM" -RunLevel Highest -Settings $settings -Force
+          Start-ScheduledTask -TaskName "AIVideoEditor247"
+
+          Start-Sleep -Seconds 6
 
           Write-Host "=== EMPIRICAL DIAGNOSTIC AUDIT ==="
           Write-Host "--- Task Scheduler Status ---"
-          Get-ScheduledTask -TaskName "AIVideoEditor" -ErrorAction SilentlyContinue | Format-List
-          Get-ScheduledTaskInfo -TaskName "AIVideoEditor" -ErrorAction SilentlyContinue | Format-List
+          Get-ScheduledTask -TaskName "AIVideoEditor247" -ErrorAction SilentlyContinue | Format-List
+          Get-ScheduledTaskInfo -TaskName "AIVideoEditor247" -ErrorAction SilentlyContinue | Format-List
 
           Write-Host "--- Active Node Processes ---"
           Get-Process -Name node -ErrorAction SilentlyContinue | Format-Table Id, ProcessName, CPU, WorkingSet
 
-          Write-Host "--- Active Port Bindings (3000, 8000, 9999) ---"
-          Get-NetTCPConnection -LocalPort 3000,8000,9999 -ErrorAction SilentlyContinue | Format-Table LocalAddress, LocalPort, State, OwningProcess
+          Write-Host "--- Active Port Bindings (9999) ---"
+          Get-NetTCPConnection -LocalPort 9999 -ErrorAction SilentlyContinue | Format-Table LocalAddress, LocalPort, State, OwningProcess
 
-          Write-Host "--- Server Log Output (C:\ai-video-editor-server.log) ---"
-          if (Test-Path "C:\ai-video-editor-server.log") {
-              Get-Content "C:\ai-video-editor-server.log" -Tail 50
+          Write-Host "--- Server Log Output (C:\ai-video-editor-247.log) ---"
+          if (Test-Path "C:\ai-video-editor-247.log") {
+              Get-Content "C:\ai-video-editor-247.log" -Tail 50
           } else {
-              Write-Host "Log file C:\ai-video-editor-server.log does not exist."
+              Write-Host "Log file C:\ai-video-editor-247.log does not exist."
           }
-
-          Write-Host "--- Netsh Portproxy Configuration ---"
-          netsh interface portproxy show all
 
           Write-Host "Deployment Audit Completed!"
