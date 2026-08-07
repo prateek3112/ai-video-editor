@@ -93,10 +93,9 @@ jobs:
           $nodeCmd = Get-Command node.exe -ErrorAction SilentlyContinue
           $nodeExe = if ($nodeCmd) { $nodeCmd.Source } else { Join-Path $env:SystemDrive "Program Files\nodejs\node.exe" }
           
-          # Create launcher batch script
-          $runnerBat = Join-Path $workDir "run-247-server.bat"
-          $nextCli = Join-Path $workDir "node_modules/next/dist/bin/next"
-          $batContent = "@echo off`r`ncd /d `"$workDir`"`r`nset PORT=9999`r`nset HOSTNAME=0.0.0.0`r`nset NODE_ENV=production`r`n`"$nodeExe`" `"$nextCli`" start -H 0.0.0.0 -p 9999 > C:\ai-video-editor-247.log 2>&1"
+          # Create launcher batch script using standalone server.js
+          $runnerBat = Join-Path $standaloneDir "run-247-server.bat"
+          $batContent = "@echo off`r`ncd /d `"$standaloneDir`"`r`nset PORT=9999`r`nset HOSTNAME=0.0.0.0`r`nset NODE_ENV=production`r`n`"$nodeExe`" server.js > C:\ai-video-editor-247.log 2>&1"
           Set-Content -Path $runnerBat -Value $batContent
 
           # Register Scheduled Task with PT0S (Infinite Time Limit) running under SYSTEM
