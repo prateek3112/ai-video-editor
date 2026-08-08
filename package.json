@@ -48,7 +48,6 @@
     "@floating-ui/core": "^1.6.9",
     "@floating-ui/dom": "^1.6.13",
     "@floating-ui/react-dom": "^2.1.2",
-    "@next/swc-win32-x64-msvc": "15.4.9",
     "tailwind-merge": "^3.5.0",
     "tailwindcss-animate": "^1.0.7",
     "zustand": "^5.0.12"
