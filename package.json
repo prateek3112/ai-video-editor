@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "node node_modules/next/dist/bin/next dev",
-    "build": "prisma generate && node node_modules/next/dist/bin/next build",
+    "build": "npx --yes prisma generate && node node_modules/next/dist/bin/next build",
     "start": "node node_modules/next/dist/bin/next start",
-    "postinstall": "prisma generate",
+    "postinstall": "npx --yes prisma generate",
     "lint": "eslint .",
     "clean": "next clean"
   },
