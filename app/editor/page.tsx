@@ -394,8 +394,19 @@ export default function EditorPage() {
       if (requested === "hyperframes" || requested === "remotion") {
         setEngineMode(requested);
       }
+      const projectId = params.get("id");
+      if (projectId) {
+        fetch(`/api/projects/${projectId}`)
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.success && data.project) {
+              applyApiProject(data.project, "hormozi");
+            }
+          })
+          .catch((err) => console.error("Failed to load project from URL ID:", err));
+      }
     }
-  }, []);
+  }, [applyApiProject]);
   const [isRenderingRemotion, setIsRenderingRemotion] = useState(false);
   const [dragState, setDragState] = useState<{
     index: number;
@@ -2932,7 +2943,7 @@ export default function EditorPage() {
         </div>
 
         <div className="flex-1 flex flex-col relative bg-black">
-          {!project && (
+          {!project && !activeVideoSrc && !compositionUrl && !activeEditPlan && (
             <div
               {...getRootProps()}
               className={`absolute inset-0 z-10 flex flex-col items-center justify-center p-8 transition-colors ${isDragActive ? "bg-blue-900/10" : ""}`}

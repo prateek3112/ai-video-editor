@@ -57,7 +57,7 @@ export function AiCreateDialog() {
 
       toast.success(`AI Video generated successfully using ${engine.toUpperCase()} engine!`);
       setOpen(false);
-      router.push(`/editor?id=${data.projectId}&engine=${engine}`);
+      window.location.href = `/editor?id=${data.projectId}&engine=${engine}`;
     } catch (err: any) {
       toast.error(err.message || "Failed to generate video project");
     } finally {
