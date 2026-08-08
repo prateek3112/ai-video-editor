@@ -387,53 +387,6 @@ export default function EditorPage() {
   const [isSavingCaptions, setIsSavingCaptions] = useState(false);
   const [engineMode, setEngineMode] = useState<"remotion" | "hyperframes" | "canvas">("remotion");
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      const requested = params.get("engine");
-      if (requested === "hyperframes" || requested === "remotion") {
-        setEngineMode(requested);
-      }
-      const projectId = params.get("id");
-      if (projectId) {
-        fetch(`/api/projects/${projectId}`)
-          .then((res) => res.json())
-          .then((data) => {
-            if (data.success && data.project) {
-              applyApiProject(data.project, "hormozi");
-            }
-          })
-          .catch((err) => console.error("Failed to load project from URL ID:", err));
-      }
-    }
-  }, [applyApiProject]);
-  const [isRenderingRemotion, setIsRenderingRemotion] = useState(false);
-  const [dragState, setDragState] = useState<{
-    index: number;
-    mode: "move" | "resize-start" | "resize-end";
-    originX: number;
-    originStart: number;
-    originEnd: number;
-  } | null>(null);
-  const [previewInteraction, setPreviewInteraction] = useState<{
-    mode: "move" | "resize";
-    originClientX: number;
-    originClientY: number;
-    originX: number;
-    originY: number;
-    originScale: number;
-  } | null>(null);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-  const timelineTrackRef = useRef<HTMLDivElement | null>(null);
-  const previewFrameRef = useRef<HTMLDivElement | null>(null);
-  const undoHistoryRef = useRef<TimelineCaption[][]>([]);
-  const redoHistoryRef = useRef<TimelineCaption[][]>([]);
-
-  const activeVideoSrc = useMemo(() => {
-    if (localPreviewUrl) return localPreviewUrl;
-    return project?.videoUrl ?? null;
-  }, [localPreviewUrl, project?.videoUrl]);
-
   const applyApiProject = useCallback((
     apiProject: {
       id: string;
@@ -474,6 +427,27 @@ export default function EditorPage() {
       style: currentStyle,
     });
   }, [setProject]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const requested = params.get("engine");
+      if (requested === "hyperframes" || requested === "remotion") {
+        setEngineMode(requested);
+      }
+      const projectId = params.get("id");
+      if (projectId) {
+        fetch(`/api/projects/${projectId}`)
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.success && data.project) {
+              applyApiProject(data.project, "hormozi");
+            }
+          })
+          .catch((err) => console.error("Failed to load project from URL ID:", err));
+      }
+    }
+  }, [applyApiProject]);
 
   const persistCaptionChanges = useCallback(async (nextCaptions: TimelineCaption[], silent = false) => {
     if (!project) return;
