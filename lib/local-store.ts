@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import type { CaptionScript } from './caption-config';
+import type { ScriptVisualScene } from './script-visuals';
 
 export type LocalProjectStatus = 'processing' | 'transcribing' | 'ready' | 'rendering' | 'completed' | 'failed';
 
@@ -24,8 +25,10 @@ export interface LocalProject {
   sourceVideoUrl: string;
   duration: number;
   status: LocalProjectStatus;
+  error?: string;
   createdAt: string;
   captions: LocalCaption[];
+  visualScenes?: ScriptVisualScene[];
 }
 
 interface LocalStoreData {
@@ -198,5 +201,13 @@ export async function setProjectCaptions(
     store.projects[index] = next;
     await writeStore(store);
     return next;
+  });
+}
+
+export async function setProjectVisualScenes(projectId: string, visualScenes: ScriptVisualScene[]): Promise<LocalProject> {
+  return updateProject(projectId, {
+    visualScenes: visualScenes
+      .filter((scene) => scene.end > scene.start && scene.title.trim())
+      .sort((a, b) => a.start - b.start),
   });
 }

@@ -2,7 +2,7 @@
 
 import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Scissors, Wand2, Zap, Play } from "lucide-react";
+import { ArrowRight, Scissors, Wand2, Zap, Film, Sparkles, Languages } from "lucide-react";
 import Link from "next/link";
 import { MainNav } from "@/components/main-nav";
 import { AiCreateDialog } from "@/components/ai-create-dialog";
@@ -21,7 +21,7 @@ export default function Home() {
             className="inline-flex items-center rounded-full border px-4 py-1.5 text-sm font-medium bg-white shadow-sm"
           >
             <span className="flex h-2 w-2 rounded-full bg-blue-600 mr-2"></span>
-            Introducing AI Video Gen 2.0
+            AI Video Editor — BYOB Powered
           </motion.div>
 
           {/* Hero text */}
@@ -31,9 +31,9 @@ export default function Home() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-5xl sm:text-7xl font-semibold tracking-tight leading-[1.1] max-w-4xl"
           >
-            Never miss a viral moment. <br className="hidden sm:inline" />
+            Raw footage in. <br className="hidden sm:inline" />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-              Never lose a viewer.
+              Viral edits out.
             </span>
           </motion.h1>
 
@@ -43,7 +43,7 @@ export default function Home() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-lg sm:text-xl text-gray-500 max-w-2xl"
           >
-            The Apple-quality video editor that automatically turns long boring footage into viral-ready short-form content with one click.
+            AI-powered video editor with dynamic glowing captions, B-roll visuals, zoom effects, transitions, and sound design. Upload raw footage and get viral-ready content in minutes.
           </motion.p>
 
           <motion.div
@@ -55,7 +55,7 @@ export default function Home() {
             <AiCreateDialog />
             <Link href="/editor">
               <Button size="lg" variant="outline" className="h-14 px-8 text-base rounded-full bg-white shadow-sm hover:shadow-md">
-                Open AI Editor Mode
+                Open AI Editor
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
@@ -77,23 +77,40 @@ export default function Home() {
               <div className="w-3 h-3 rounded-full bg-yellow-400" />
               <div className="w-3 h-3 rounded-full bg-green-400" />
               <div className="mx-auto flex h-6 items-center rounded-md bg-gray-100 px-24 text-xs text-gray-500">
-                app.aivideo.com
+                AI Video Editor
               </div>
             </div>
-            {/* Fake UI */}
+            {/* Editor mockup */}
             <div className="grid md:grid-cols-3 h-[500px]">
               <div className="border-r bg-white/50 p-6 flex flex-col gap-4">
                 <div className="h-32 rounded-xl bg-gray-100 flex items-center justify-center border-2 border-dashed border-gray-200">
                   <span className="text-sm font-medium text-gray-400">Drag video here</span>
                 </div>
-                <div className="space-y-3 mt-4">
-                  <div className="h-4 w-2/3 bg-gray-200 rounded-full animate-pulse" />
-                  <div className="h-4 w-full bg-gray-100 rounded-full" />
-                  <div className="h-4 w-4/5 bg-gray-100 rounded-full" />
+                <div className="space-y-3 mt-2">
+                  <div className="flex items-center gap-2">
+                    <div className="h-3 w-3 rounded-full bg-yellow-400" />
+                    <div className="h-4 w-28 bg-gray-200 rounded-full" />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="h-3 w-3 rounded-full bg-blue-400" />
+                    <div className="h-4 w-36 bg-gray-100 rounded-full" />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="h-3 w-3 rounded-full bg-green-400" />
+                    <div className="h-4 w-24 bg-gray-100 rounded-full" />
+                  </div>
+                </div>
+                <div className="mt-auto space-y-2">
+                  <div className="h-8 w-full bg-blue-500 rounded-lg flex items-center justify-center text-xs text-white font-medium">
+                    Export 4K
+                  </div>
+                  <div className="h-8 w-full bg-indigo-500/20 rounded-lg flex items-center justify-center text-xs text-indigo-600 font-medium border border-indigo-200">
+                    Render Remotion
+                  </div>
                 </div>
               </div>
               <div className="md:col-span-2 relative bg-[#050505] overflow-hidden flex flex-col justify-end p-10">
-                <div className="absolute inset-0 opacity-20 bg-[url('https://picsum.photos/800/600')] bg-cover bg-center" />
+                <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/30 via-black/60 to-blue-900/20" />
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -105,21 +122,25 @@ export default function Home() {
                   className="relative z-10 text-center space-y-4"
                 >
                   <span className="text-4xl font-extrabold text-white tracking-tight uppercase" style={{ WebkitTextStroke: '1px black' }}>
-                    <span className="text-yellow-400">Insane</span> AI tool
+                    <span className="text-yellow-400">VIRAL</span> EDITS
                   </span>
                   <br />
                   <span className="text-4xl font-extrabold text-white tracking-tight uppercase" style={{ WebkitTextStroke: '1px black' }}>
-                    for creators
+                    in seconds
                   </span>
                 </motion.div>
                 
                 {/* Timeline UI */}
                 <div className="absolute bottom-4 left-4 right-4 h-16 glass-panel rounded-xl flex items-center p-2 gap-2 border-white/10 bg-white/10">
-                  <div className="h-full w-10 bg-blue-500 rounded-md" />
+                  <div className="h-full w-10 bg-blue-500 rounded-md flex items-center justify-center">
+                    <Film className="h-4 w-4 text-white" />
+                  </div>
                   <div className="h-full flex-1 bg-white/20 rounded-md flex overflow-hidden gap-1 p-1">
-                    <div className="h-full w-1/4 bg-white/50 rounded-sm" />
-                    <div className="h-full w-1/4 bg-yellow-400/80 rounded-sm" />
-                    <div className="h-full w-2/4 bg-white/50 rounded-sm" />
+                    <div className="h-full w-1/5 bg-white/50 rounded-sm" />
+                    <div className="h-full w-1/5 bg-yellow-400/80 rounded-sm" />
+                    <div className="h-full w-1/5 bg-emerald-400/60 rounded-sm" />
+                    <div className="h-full w-1/5 bg-white/50 rounded-sm" />
+                    <div className="h-full w-1/5 bg-indigo-400/60 rounded-sm" />
                   </div>
                 </div>
               </div>
@@ -131,18 +152,33 @@ export default function Home() {
         <div className="mt-32 grid grid-cols-1 md:grid-cols-3 gap-8">
           <FeatureCard 
             icon={<Wand2 className="h-6 w-6 text-blue-600" />}
-            title="Auto Viral Captions"
-            description="Animated word-by-word captions like Hormozi, generated in seconds."
+            title="Dynamic Captions"
+            description="Glowing word-by-word captions with Hormozi, Karaoke, Neon styles — generated from AI transcription."
           />
           <FeatureCard 
-            icon={<Scissors className="h-6 w-6 text-indigo-600" />}
-            title="Silence Removal"
-            description="Our AI engine perfectly snips out dead air and long pauses."
+            icon={<Film className="h-6 w-6 text-indigo-600" />}
+            title="B-Roll & Visuals"
+            description="AI generates contextual visual scenes, split-screen layouts, and overlay graphics automatically."
           />
           <FeatureCard 
             icon={<Zap className="h-6 w-6 text-yellow-500" />}
-            title="LLM-based Editing"
-            description="Prompt your video: 'Make it punchier' or 'Zoom in on laughs'."
+            title="LLM Editing"
+            description="Prompt your video: 'Make captions bounce with yellow glow' or 'Switch to cinematic look'."
+          />
+          <FeatureCard 
+            icon={<Sparkles className="h-6 w-6 text-purple-600" />}
+            title="Zoom & Effects"
+            description="Punch-in zooms, ken-burns, camera shake, and color grading all driven by AI scene analysis."
+          />
+          <FeatureCard 
+            icon={<Languages className="h-6 w-6 text-emerald-600" />}
+            title="Hinglish First"
+            description="First-class Hindi-English code-switching support with Roman ↔ Devanagari script toggle."
+          />
+          <FeatureCard 
+            icon={<Scissors className="h-6 w-6 text-rose-600" />}
+            title="BYOB — Any AI"
+            description="Bring your own API key. Works with Gemini, OpenAI, or Azure OpenAI — no vendor lock-in."
           />
         </div>
       </main>

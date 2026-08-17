@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
-import { GoogleGenAI } from "@google/genai";
-import { resolveGeminiApiKey } from "@/lib/byob-client";
-import { createProject, setProjectCaptions, type LocalProject } from "@/lib/local-store";
+import { resolveByobConfig } from "@/lib/byob-client";
+import { generateStructuredJson } from "@/lib/structured-ai";
+import { createProject, setProjectCaptions, setProjectVisualScenes, type LocalProject } from "@/lib/local-store";
 import { createEditPlanFromProject } from "@/lib/edit-plan";
 import { DEFAULT_CAPTION_SETTINGS, type CaptionLanguage } from "@/lib/caption-config";
+import { directVisualScenes } from "@/lib/visual-director";
 
 export async function POST(req: Request) {
   try {
@@ -15,18 +16,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: false, error: "Prompt is required to create an AI video" }, { status: 400 });
     }
 
-    const apiKey = resolveGeminiApiKey(req, payload);
-    if (!apiKey) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Gemini API Key is required. Please click 'BYOB API Key' at the top to enter your API key.",
-        },
-        { status: 401 }
-      );
-    }
-
-    const ai = new GoogleGenAI({ apiKey });
+    const providerConfig = resolveByobConfig(req, payload);
 
     const systemPrompt = `You are an expert AI Video Creator and Editor specialized in short-form content (Reels/Shorts/TikTok).
 Given a user prompt, generate a complete video project structure.
@@ -63,55 +53,18 @@ Return ONLY a valid JSON object matching this schema:
 
 Generate engaging, high-retention transcript words for a ${targetDuration}s video with word-level timestamps covering 0.0 to ${targetDuration}.0s. For Hinglish, use Romanized Hindi words mixed naturally with English.`;
 
-    let generated: any = null;
-
-    try {
-      const geminiPromise = ai.models.generateContent({
-        model: "gemini-2.5-flash",
-        contents: systemPrompt,
-        config: {
-          responseMimeType: "application/json",
-        },
-      });
-
-      const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error("Gemini API timeout (10s limit)")), 10000)
-      );
-
-      const response: any = await Promise.race([geminiPromise, timeoutPromise]);
-      generated = JSON.parse(response.text || "{}");
-    } catch (apiErr) {
-      console.warn("Gemini call timed out or failed, using synthetic video script fallback:", apiErr);
-      const sampleWords = prompt.trim().split(/\s+/).slice(0, 12);
-      const stepDuration = Math.max(0.5, Number((targetDuration / Math.max(1, sampleWords.length)).toFixed(2)));
-      
-      generated = {
-        title: prompt.trim().slice(0, 30),
-        transcription: sampleWords.map((w: string, i: number) => ({
-          word: w,
-          start: Number((i * stepDuration).toFixed(2)),
-          end: Number(((i + 1) * stepDuration).toFixed(2)),
-          confidence: 0.98,
-          script: "roman",
-        })),
-        captionSettings: {
-          style,
-          animation: "word-pop",
-          language,
-          defaultScript: "roman",
-          textColor: "#FFFFFF",
-          activeWordColor: "#FFE600",
-          positionX: 0.5,
-          positionY: 0.75,
-          capitalization: "uppercase",
-        },
-      };
-    }
+    const generated = await generateStructuredJson<{
+      title?: string;
+      transcription?: Array<{ word?: string; start?: number; end?: number; confidence?: number; script?: string }>;
+      captionSettings?: Record<string, unknown>;
+    }>(providerConfig, systemPrompt);
 
     const rawTranscription = Array.isArray(generated.transcription) ? generated.transcription : [];
-    const duration = rawTranscription.length
-      ? Math.max(targetDuration, Number(rawTranscription[rawTranscription.length - 1].end.toFixed(2)))
-      : targetDuration;
+    if (!rawTranscription.length) {
+      return NextResponse.json({ success: false, error: "The AI provider returned no timed script." }, { status: 502 });
+    }
+    const lastEnd = Number(rawTranscription[rawTranscription.length - 1]?.end ?? targetDuration);
+    const duration = Math.max(targetDuration, Number((Number.isFinite(lastEnd) ? lastEnd : targetDuration).toFixed(2)));
 
     // Create local project in store
     let project: LocalProject = await createProject({
@@ -135,7 +88,16 @@ Generate engaging, high-retention transcript words for a ${targetDuration}s vide
       ...(generated.captionSettings || {}),
       language: (language as CaptionLanguage) || "hinglish",
       style: style || "hormozi",
+      brandThemeId: String(payload.brandThemeId ?? "electric-lime"),
     };
+
+    const visualScenes = await directVisualScenes({
+      captions: project.captions.map((caption) => ({ text: caption.text, start: caption.start, end: caption.end })),
+      duration: project.duration,
+      config: providerConfig,
+      brandThemeId: String(payload.brandThemeId ?? captionSettings.brandThemeId),
+    });
+    project = await setProjectVisualScenes(project.id, visualScenes);
 
     const plan = createEditPlanFromProject({
       project,

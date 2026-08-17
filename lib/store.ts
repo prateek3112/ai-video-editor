@@ -6,6 +6,7 @@ import {
   DEFAULT_CAPTION_SETTINGS,
   type ExportQuality,
 } from './caption-config';
+import type { ScriptVisualScene } from './script-visuals';
 
 export interface TranscriptionToken {
   word: string;
@@ -25,6 +26,7 @@ interface VideoProject {
   status: 'uploading' | 'processing' | 'transcribing' | 'ready' | 'rendering' | 'completed' | 'failed';
   transcription: TranscriptionToken[];
   style: string;
+  visualScenes?: ScriptVisualScene[];
 }
 
 interface EditorState {

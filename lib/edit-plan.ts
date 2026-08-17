@@ -114,6 +114,7 @@ const DEFAULT_TRACKS: TimelineTrack[] = [
   { id: "audio-main", name: "Source Audio", kind: "audio", index: 0 },
   { id: "sfx-main", name: "SFX", kind: "sfx", index: 3 },
   { id: "transitions-main", name: "Transitions", kind: "transition", index: 6 },
+  { id: "motion-main", name: "Motion", kind: "effect", index: 7 },
 ];
 
 function roundTime(value: number): number {
@@ -167,14 +168,18 @@ export function createEditPlanFromProject(input: {
     positionY: caption.positionY,
     highlightWords: caption.highlightWords,
   }));
-  const visualClips: ScriptVisualClip[] = createScriptVisualScenes(
-    input.project.captions.map((caption) => ({
-      text: caption.text,
-      start: caption.start,
-      end: caption.end,
-    })),
-    duration,
-  ).map((scene) => ({
+  const plannedScenes = input.project.visualScenes?.length
+    ? input.project.visualScenes
+    : createScriptVisualScenes(
+        input.project.captions.map((caption) => ({
+          text: caption.text,
+          start: caption.start,
+          end: caption.end,
+        })),
+        duration,
+        settings.brandThemeId,
+      );
+  const visualClips: ScriptVisualClip[] = plannedScenes.map((scene) => ({
     id: scene.id,
     type: "script-visual",
     trackId: "script-visuals",
@@ -182,6 +187,90 @@ export function createEditPlanFromProject(input: {
     duration: clipDuration(scene.start, scene.end),
     scene,
   }));
+  const sfxClips: AudioClip[] = [];
+  visualClips.forEach((clip, index) => {
+    if (clip.start <= 0.15) return;
+    
+    // Skip some for pacing (e.g. every other, except for key moments)
+    const isKeyMoment = clip.scene.layout === "full-visual" || clip.scene.visualType === "meme" || clip.scene.motif === "warning" || clip.scene.layout === "overlay";
+    if (!isKeyMoment && index % 2 !== 0) return;
+
+    const prevClip = visualClips[index - 1];
+    
+    let preset: SfxPreset = "whoosh";
+    if (clip.scene.layout === "full-visual") {
+      preset = "sub-hit"; // For impactful visual reveals
+      
+      // Add a riser *before* the full-visual scene if possible
+      if (clip.start > 1.5) { // Needs some time for a riser
+         sfxClips.push({
+           id: makeId("sfx-riser", index),
+           type: "sfx",
+           trackId: "sfx-main",
+           start: clip.start - 1.0,
+           duration: 1.0,
+           src: "/sfx/riser.wav",
+           preset: "riser",
+           volume: 0.15,
+         });
+      }
+    } else if (clip.scene.layout === "overlay") {
+      preset = "camera-shutter";
+    } else if (prevClip?.scene.layout === "speaker" && clip.scene.layout === "split") {
+      preset = "pop";
+    } else if (clip.scene.visualType === "meme") {
+      preset = "pop";
+    } else if (clip.scene.motif === "warning") {
+      preset = "impact";
+    } else if (clip.scene.motif === "money") {
+      preset = "click";
+    } else {
+      preset = "whoosh";
+    }
+
+    const duration = preset === "impact" ? 0.55 : preset === "whoosh" ? 0.35 : (preset as string) === "notification" ? 0.32 : preset === "click" ? 0.09 : preset === "sub-hit" ? 0.8 : preset === "camera-shutter" ? 0.2 : preset === "pop" ? 0.15 : 0.18;
+    
+    sfxClips.push({
+      id: makeId("sfx", index),
+      type: "sfx",
+      trackId: "sfx-main",
+      start: clip.start,
+      duration,
+      src: `/sfx/${preset}.wav`,
+      preset,
+      volume: preset === "impact" || preset === "sub-hit" ? 0.12 : 0.18,
+    });
+  });
+
+  const transitionClips: TransitionClip[] = [];
+  visualClips.forEach((clip, index) => {
+    if (clip.start <= 0.15) return;
+    const prevClip = visualClips[index - 1];
+    if (prevClip && prevClip.scene.layout === clip.scene.layout) return;
+
+    let transitionPreset: TransitionPreset = "fade";
+    let duration = 0.12;
+
+    if (clip.scene.visualType === "meme") {
+      transitionPreset = "glitch";
+      duration = 0.2;
+    } else if (clip.scene.layout === "full-visual") {
+      transitionPreset = "zoom-cut";
+      duration = 0.15;
+    } else if (["rocket", "fire", "trophy"].includes(clip.scene.motif)) {
+      transitionPreset = "flash-white";
+      duration = 0.18;
+    }
+
+    transitionClips.push({
+      id: makeId("transition", index),
+      type: "transition",
+      trackId: "transitions-main",
+      start: clip.start,
+      duration,
+      transition: transitionPreset,
+    });
+  });
 
   const clips: TimelineClip[] = [
     videoClip,
@@ -195,6 +284,8 @@ export function createEditPlanFromProject(input: {
       intensity: settings.effectIntensity,
     },
     ...visualClips,
+    ...sfxClips,
+    ...transitionClips,
     ...captionClips,
   ];
 
@@ -209,7 +300,10 @@ export function createEditPlanFromProject(input: {
     settings,
     tracks: DEFAULT_TRACKS,
     clips,
-    notes: ["Generated from the current CaptionAI project state."],
+    notes: [
+      "Generated from the current AI Video Editor project state.",
+      "Visual copy is constrained to English and scene layouts alternate between speaker, split, overlay, and full-screen visual moments.",
+    ],
     createdAt: now,
     updatedAt: now,
   };

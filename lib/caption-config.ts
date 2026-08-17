@@ -11,6 +11,7 @@ export type VideoEffect = "none" | "cinematic" | "vibrant" | "noir" | "warm" | "
 export type MotionPreset = "none" | "punch-in" | "drift" | "float" | "handheld";
 
 export interface CaptionSettings {
+  brandThemeId: string;
   style: string;
   fontFamily: string;
   fontWeight: number;
@@ -47,6 +48,7 @@ export interface CaptionSettings {
 }
 
 export const DEFAULT_CAPTION_SETTINGS: CaptionSettings = {
+  brandThemeId: "electric-lime",
   style: "creator-pop",
   fontFamily: "Avenir Next",
   fontWeight: 800,

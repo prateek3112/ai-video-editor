@@ -4,6 +4,7 @@ import fsp from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
 import { GoogleGenAI } from '@google/genai';
+import type { ByobConfig } from './byob-client';
 import {
   type CaptionLanguage,
   DEFAULT_CAPTION_SETTINGS,
@@ -65,8 +66,9 @@ type GeminiWordToken = {
   script: CaptionScript;
 };
 
-const geminiApiKey = process.env.GEMINI_API_KEY ?? process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-const geminiClient = geminiApiKey ? new GoogleGenAI({ apiKey: geminiApiKey }) : null;
+const WHISPER_CPP_VERSION = '1.5.5';
+const LOCAL_WHISPER_MODEL = 'base';
+let localWhisperReady: Promise<string> | null = null;
 
 const HINGLISH_WORD_MAP: Record<string, string> = {
   this: 'ye',
@@ -159,7 +161,24 @@ async function extractAudioForTranscription(inputPath: string): Promise<string> 
       .audioFrequency(16000)
       .output(audioPath)
       .on('end', () => resolve())
-      .on('error', (err) => reject(err))
+      .on('error', (err: Error) => reject(err))
+      .run();
+  });
+  return audioPath;
+}
+
+async function extractWavForLocalWhisper(inputPath: string): Promise<string> {
+  ensureFfmpegPath();
+  const audioPath = path.join(os.tmpdir(), `transcribe-${Date.now()}-${Math.random().toString(36).slice(2)}.wav`);
+  await new Promise<void>((resolve, reject) => {
+    ffmpeg(inputPath)
+      .noVideo()
+      .audioCodec('pcm_s16le')
+      .audioChannels(1)
+      .audioFrequency(16000)
+      .output(audioPath)
+      .on('end', () => resolve())
+      .on('error', (err: Error) => reject(err))
       .run();
   });
   return audioPath;
@@ -201,24 +220,6 @@ function normalizeLanguage(value: unknown): CaptionLanguage {
   return 'hinglish';
 }
 
-function createDeterministicFallback(duration: number): Array<{ word: string; start: number; end: number; confidence: number; script: CaptionScript }> {
-  const phrase = ['This', 'clip', 'is', 'ready', 'for', 'captions'];
-  const safeDuration = Math.max(6, Number.isFinite(duration) ? duration : 12);
-  const slot = Math.max(0.7, safeDuration / phrase.length);
-
-  return phrase.map((word, index) => {
-    const start = Number((index * slot).toFixed(2));
-    const end = Number(Math.min(safeDuration, start + slot - 0.06).toFixed(2));
-    return {
-      word,
-      start,
-      end,
-      confidence: 0.42,
-      script: 'roman',
-    };
-  });
-}
-
 function isRetryableGeminiError(error: unknown): boolean {
   if (!error || typeof error !== 'object') return false;
 
@@ -249,11 +250,10 @@ async function wait(ms: number): Promise<void> {
 }
 
 async function requestGeminiSegments(
+  geminiClient: GoogleGenAI,
   audioBase64: string,
   duration: number,
 ): Promise<GeminiTranscriptionResult> {
-  if (!geminiClient) throw new Error('Gemini API key not configured');
-
   const models = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
   const failures: string[] = [];
 
@@ -317,15 +317,17 @@ Rules:
 async function transcribeWithGemini(
   inputPath: string,
   duration: number,
+  apiKey: string,
 ): Promise<Array<{ word: string; start: number; end: number; confidence?: number; script?: CaptionScript }>> {
-  if (!geminiClient) throw new Error('Gemini API key not configured');
+  if (!apiKey) throw new Error('Gemini API key is required');
+  const geminiClient = new GoogleGenAI({ apiKey });
 
   const audioPath = await extractAudioForTranscription(inputPath);
   const audioBuffer = await fsp.readFile(audioPath);
   await fsp.unlink(audioPath).catch(() => undefined);
 
   const audioBase64 = audioBuffer.toString('base64');
-  const parsed = await requestGeminiSegments(audioBase64, duration);
+  const parsed = await requestGeminiSegments(geminiClient, audioBase64, duration);
 
   const mappedWords: Array<GeminiWordToken | null> = Array.isArray(parsed.words)
     ? parsed.words.map((entry) => {
@@ -392,7 +394,130 @@ async function transcribeWithGemini(
   }));
 }
 
-export async function processTranscription(projectId: string) {
+async function ensureLocalWhisper(): Promise<string> {
+  if (localWhisperReady) return localWhisperReady;
+
+  localWhisperReady = (async () => {
+    const whisperPath = path.join(process.cwd(), '.cache', 'whisper.cpp');
+    // installWhisperCpp expects the destination itself not to exist on first install.
+    await fsp.mkdir(path.dirname(whisperPath), { recursive: true });
+    const { downloadWhisperModel, installWhisperCpp } = await import('@remotion/install-whisper-cpp');
+
+    await installWhisperCpp({ to: whisperPath, version: WHISPER_CPP_VERSION });
+    await downloadWhisperModel({ model: LOCAL_WHISPER_MODEL, folder: whisperPath });
+    return whisperPath;
+  })().catch((error) => {
+    localWhisperReady = null;
+    throw error;
+  });
+
+  return localWhisperReady;
+}
+
+async function transcribeWithLocalWhisper(
+  inputPath: string,
+): Promise<Array<{ word: string; start: number; end: number; confidence?: number; script?: CaptionScript }>> {
+  const wavPath = await extractWavForLocalWhisper(inputPath);
+
+  try {
+    const whisperPath = await ensureLocalWhisper();
+    const { toCaptions, transcribe } = await import('@remotion/install-whisper-cpp');
+    const whisperCppOutput = await transcribe({
+      model: LOCAL_WHISPER_MODEL,
+      whisperPath,
+      whisperCppVersion: WHISPER_CPP_VERSION,
+      inputPath: wavPath,
+      tokenLevelTimestamps: true,
+      language: 'auto',
+      // Remotion 4.0.509's splitOnWord option serializes an extra "true" CLI
+      // argument for whisper.cpp 1.5.5. Pass the valueless flag directly.
+      additionalArgs: ['--split-on-word'],
+    });
+    const { captions } = toCaptions({ whisperCppOutput });
+    const words = captions
+      .map((caption) => ({
+        word: caption.text.trim(),
+        start: Number((caption.startMs / 1000).toFixed(3)),
+        end: Number((caption.endMs / 1000).toFixed(3)),
+        confidence: clampConfidence(caption.confidence),
+        script: 'roman' as CaptionScript,
+      }))
+      .filter((caption) => caption.word && caption.end > caption.start);
+
+    if (!words.length) throw new Error('Local Whisper returned no usable words');
+    return words;
+  } finally {
+    await fsp.unlink(wavPath).catch(() => undefined);
+  }
+}
+
+function resolveOpenAiTranscriptionEndpoint(config: ByobConfig): { url: string; headers: Record<string, string>; model: string } {
+  if (!config.apiKey) throw new Error(`${config.provider === 'azure-openai' ? 'Azure OpenAI' : 'OpenAI'} API key is required`);
+
+  if (config.provider === 'azure-openai') {
+    if (!config.endpoint || !config.transcriptionDeployment) {
+      throw new Error('Azure endpoint and Whisper transcription deployment are required');
+    }
+
+    const endpoint = new URL(config.endpoint);
+    const allowedAzureHost = endpoint.hostname.endsWith('.openai.azure.com') || endpoint.hostname.endsWith('.services.ai.azure.com');
+    if (!allowedAzureHost) throw new Error('Azure endpoint must use an official openai.azure.com or services.ai.azure.com host');
+
+    const deployment = encodeURIComponent(config.transcriptionDeployment);
+    const apiVersion = encodeURIComponent(config.apiVersion || '2024-10-21');
+    return {
+      url: `${endpoint.origin}/openai/deployments/${deployment}/audio/transcriptions?api-version=${apiVersion}`,
+      headers: { 'api-key': config.apiKey },
+      model: config.transcriptionDeployment,
+    };
+  }
+
+  return {
+    url: 'https://api.openai.com/v1/audio/transcriptions',
+    headers: { Authorization: `Bearer ${config.apiKey}` },
+    model: 'whisper-1',
+  };
+}
+
+async function transcribeWithOpenAi(
+  inputPath: string,
+  config: ByobConfig,
+): Promise<Array<{ word: string; start: number; end: number; confidence?: number; script?: CaptionScript }>> {
+  const audioPath = await extractAudioForTranscription(inputPath);
+
+  try {
+    const audioBuffer = await fsp.readFile(audioPath);
+    const endpoint = resolveOpenAiTranscriptionEndpoint(config);
+    const form = new FormData();
+    form.append('file', new Blob([audioBuffer], { type: 'audio/mpeg' }), 'audio.mp3');
+    form.append('model', endpoint.model);
+    form.append('response_format', 'verbose_json');
+    form.append('timestamp_granularities[]', 'word');
+
+    const response = await fetch(endpoint.url, { method: 'POST', headers: endpoint.headers, body: form });
+    if (!response.ok) {
+      const message = (await response.text()).slice(0, 500);
+      throw new Error(`Transcription provider returned ${response.status}: ${message}`);
+    }
+
+    const result = (await response.json()) as { words?: Array<{ word?: string; start?: number; end?: number }> };
+    const words = (result.words ?? [])
+      .map((entry) => ({
+        word: String(entry.word ?? '').trim(),
+        start: Number(Number(entry.start).toFixed(3)),
+        end: Number(Number(entry.end).toFixed(3)),
+        script: 'roman' as CaptionScript,
+      }))
+      .filter((entry) => entry.word && Number.isFinite(entry.start) && Number.isFinite(entry.end) && entry.end > entry.start);
+
+    if (!words.length) throw new Error('Transcription provider returned no word timestamps');
+    return words;
+  } finally {
+    await fsp.unlink(audioPath).catch(() => undefined);
+  }
+}
+
+export async function processTranscription(projectId: string, providerConfig: ByobConfig) {
   const project = await getProjectById(projectId);
   if (!project) throw new Error('Project not found');
 
@@ -401,16 +526,11 @@ export async function processTranscription(projectId: string) {
     throw new Error('Local video file not found for transcription');
   }
 
-  if (!geminiClient) {
-    return createDeterministicFallback(project.duration);
+  if (providerConfig.provider === 'local-whisper') return transcribeWithLocalWhisper(inputPath);
+  if (providerConfig.provider === 'openai' || providerConfig.provider === 'azure-openai') {
+    return transcribeWithOpenAi(inputPath, providerConfig);
   }
-
-  try {
-    return await transcribeWithGemini(inputPath, project.duration);
-  } catch (error) {
-    console.error('Gemini transcription failed, falling back to deterministic captions', error);
-    return createDeterministicFallback(project.duration);
-  }
+  return transcribeWithGemini(inputPath, project.duration, providerConfig.apiKey);
 }
 
 function resolvePosition(settings: CaptionSettings, override?: { positionX?: number; positionY?: number }): { x: number; y: number } {
@@ -886,7 +1006,7 @@ async function renderWithFfmpeg(
         '-shortest',
       ])
       .on('end', () => resolve())
-      .on('error', (err, _stdout, stderr) => {
+      .on('error', (err: Error, _stdout: string, stderr: string) => {
         const stderrTail = stderr ? stderr.split('\n').slice(-12).join('\n') : '';
         reject(new Error(`${err.message}${stderrTail ? `\n${stderrTail}` : ''}`));
       });

@@ -8,6 +8,14 @@ export interface SubtitleCaption {
   script?: CaptionScript;
 }
 
+export type ParsedSubtitleCaption = {
+  text: string;
+  start: number;
+  end: number;
+  confidence?: number;
+  script?: CaptionScript;
+};
+
 const HINGLISH_DICTIONARY: Record<string, string> = {
   acha: "अच्छा",
   accha: "अच्छा",
@@ -180,6 +188,60 @@ function formatTimeVtt(totalSeconds: number): string {
     .padStart(3, "0");
 
   return `${hours}:${minutes}:${seconds}.${millis}`;
+}
+
+function parseTimestamp(value: string): number | null {
+  const normalized = value.trim().replace(",", ".");
+  const parts = normalized.split(":").map(Number);
+  if (parts.some((part) => !Number.isFinite(part))) return null;
+
+  if (parts.length === 3) {
+    return parts[0] * 3600 + parts[1] * 60 + parts[2];
+  }
+
+  if (parts.length === 2) {
+    return parts[0] * 60 + parts[1];
+  }
+
+  return parts.length === 1 ? parts[0] : null;
+}
+
+/**
+ * Parse creator-supplied SRT or WebVTT captions without guessing timings.
+ * TXT is intentionally rejected because it contains no synchronization data.
+ */
+export function parseSubtitleText(input: string): ParsedSubtitleCaption[] {
+  const normalized = input.replace(/^\uFEFF/, "").replace(/\r\n/g, "\n").trim();
+  if (!normalized) return [];
+
+  const withoutHeader = normalized.replace(/^WEBVTT(?:[^\n]*)\n+/i, "");
+  const blocks = withoutHeader.split(/\n{2,}/);
+  const captions: ParsedSubtitleCaption[] = [];
+
+  for (const block of blocks) {
+    const lines = block
+      .split("\n")
+      .map((line) => line.trim())
+      .filter(Boolean);
+    const timingIndex = lines.findIndex((line) => line.includes("-->"));
+    if (timingIndex === -1) continue;
+
+    const [rawStart, rawEndWithSettings] = lines[timingIndex].split("-->");
+    const rawEnd = rawEndWithSettings?.trim().split(/\s+/)[0];
+    const start = parseTimestamp(rawStart ?? "");
+    const end = parseTimestamp(rawEnd ?? "");
+    const text = lines
+      .slice(timingIndex + 1)
+      .join(" ")
+      .replace(/<[^>]+>/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+    if (start === null || end === null || end <= start || !text) continue;
+    captions.push({ text, start: Number(start.toFixed(3)), end: Number(end.toFixed(3)), confidence: 1 });
+  }
+
+  return captions.sort((a, b) => a.start - b.start);
 }
 
 function normalizeCaptions(captions: SubtitleCaption[]): SubtitleCaption[] {

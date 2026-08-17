@@ -50,14 +50,12 @@ export async function POST(req: Request) {
     const outputFilename = `${projectId}-remotion.mp4`;
     const outputPath = path.join(rendersDir, outputFilename);
 
-    let renderedViaRenderer = false;
-
     try {
       // Dynamic import to allow server runtime execution
       const { bundle } = await import("@remotion/bundler");
       const { renderMedia, selectComposition } = await import("@remotion/renderer");
 
-      const entryPoint = path.join(process.cwd(), "components", "remotion", "Composition.tsx");
+      const entryPoint = path.join(process.cwd(), "components", "remotion", "index.ts");
       const bundled = await bundle({
         entryPoint,
         webpackOverride: (config: any) => config,
@@ -75,20 +73,27 @@ export async function POST(req: Request) {
         outputLocation: outputPath,
         inputProps: { plan },
         codec: "h264",
+        audioCodec: "aac",
+        audioBitrate: "192k",
       });
-
-      renderedViaRenderer = true;
     } catch (renderError) {
-      console.warn("Direct @remotion/renderer call fell back to CLI command format:", renderError);
+      console.error("Direct @remotion/renderer render failed:", renderError);
+      await fs.unlink(outputPath).catch(() => undefined);
+      return NextResponse.json(
+        {
+          success: false,
+          error: renderError instanceof Error ? renderError.message : "Remotion render failed",
+          editPlanUrl: `/compositions/${projectId}/remotion-plan.json`,
+        },
+        { status: 500 },
+      );
     }
 
     return NextResponse.json({
       success: true,
       engine: "remotion",
-      renderedViaRenderer,
       videoUrl: `/renders/${outputFilename}`,
       editPlanUrl: `/compositions/${projectId}/remotion-plan.json`,
-      cliCommand: `npx remotion render components/remotion/Composition.tsx RemotionComposition public/renders/${outputFilename} --props='${JSON.stringify({ plan })}'`,
       plan,
     });
   } catch (error) {

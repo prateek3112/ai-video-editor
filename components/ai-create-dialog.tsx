@@ -11,9 +11,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { getByobApiKey, getAuthHeaders } from "@/lib/byob-client";
+import { getByobConfig, getAuthHeaders } from "@/lib/byob-client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { BRAND_THEMES } from "@/lib/brand-themes";
 
 export function AiCreateDialog() {
   const router = useRouter();
@@ -23,6 +24,7 @@ export function AiCreateDialog() {
   const [style, setStyle] = useState("hormozi");
   const [duration, setDuration] = useState(15);
   const [engine, setEngine] = useState<"remotion" | "hyperframes">("remotion");
+  const [brandThemeId, setBrandThemeId] = useState("electric-lime");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleGenerate = async () => {
@@ -31,9 +33,14 @@ export function AiCreateDialog() {
       return;
     }
 
-    const key = getByobApiKey();
-    if (!key) {
-      toast.warning("Please click 'BYOB API Key' in the top right to enter your Gemini API Key first!");
+    const provider = getByobConfig();
+    if (provider.provider === "local-whisper") {
+      toast.error("AI Create needs Gemini, OpenAI, or Azure OpenAI. Local Whisper only transcribes uploads.");
+      return;
+    }
+    if (!provider.apiKey) {
+      toast.warning("Add an API key in AI Provider before using AI Create.");
+      return;
     }
 
     setIsLoading(true);
@@ -47,6 +54,7 @@ export function AiCreateDialog() {
           style,
           targetDuration: duration,
           engine,
+          brandThemeId,
         }),
       });
 
@@ -57,7 +65,11 @@ export function AiCreateDialog() {
 
       toast.success(`AI Video generated successfully using ${engine.toUpperCase()} engine!`);
       setOpen(false);
-      window.location.href = `/editor?id=${data.projectId}&engine=${engine}`;
+      const editorUrl = new URL("/editor", window.location.origin);
+      editorUrl.searchParams.set("id", data.projectId);
+      editorUrl.searchParams.set("engine", engine);
+      editorUrl.searchParams.set("theme", brandThemeId);
+      window.location.href = editorUrl.toString();
     } catch (err: any) {
       toast.error(err.message || "Failed to generate video project");
     } finally {
@@ -84,7 +96,7 @@ export function AiCreateDialog() {
             <div>
               <DialogTitle className="text-2xl font-bold text-gray-900">AI Create Mode</DialogTitle>
               <DialogDescription className="text-sm text-gray-500">
-                Describe your video concept. Gemini will write the script, synthesize word timings, generate scenes & motifs, and compile Remotion + Hyperframes compositions.
+                Describe your video concept. Your selected AI provider writes the script, timings, scenes, and Remotion or Hyperframes composition plan.
               </DialogDescription>
             </div>
           </div>
@@ -163,6 +175,19 @@ export function AiCreateDialog() {
               </select>
             </div>
           </div>
+
+          <label className="block space-y-1.5">
+            <span className="text-xs font-semibold text-gray-600">Brand theme</span>
+            <select
+              value={brandThemeId}
+              onChange={(event) => setBrandThemeId(event.target.value)}
+              className="w-full rounded-xl border border-gray-200 bg-gray-50 p-2.5 text-xs font-medium text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              {BRAND_THEMES.map((theme) => (
+                <option key={theme.id} value={theme.id}>{theme.name} — {theme.description}</option>
+              ))}
+            </select>
+          </label>
 
           {/* Engine note */}
           <div className="flex items-center gap-2 p-3 rounded-xl bg-blue-50/70 border border-blue-100 text-xs text-blue-800">

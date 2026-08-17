@@ -8831,6 +8831,396 @@
           "positionY": 0.503
         }
       ]
+    },
+    {
+      "id": "61fc5b09-3fda-4d41-aa48-affe6bdbbc5e",
+      "videoUrl": "/uploads/1786642030917-edit.MOV",
+      "sourceVideoUrl": "/uploads/1786642030917-edit.MOV",
+      "duration": 24.002,
+      "status": "rendering",
+      "createdAt": "2026-08-13T17:27:12.085Z",
+      "captions": [
+        {
+          "id": "dd97461b-f2d8-40b5-b645-17038da9a91f",
+          "projectId": "61fc5b09-3fda-4d41-aa48-affe6bdbbc5e",
+          "start": 0.05,
+          "end": 1.78,
+          "text": "Sirf tii second smei apni",
+          "confidence": 0.27,
+          "script": "roman",
+          "positionX": 0.5,
+          "positionY": 0.5
+        },
+        {
+          "id": "4cb4a64d-8cc2-4e78-a058-c9ebd0d347f1",
+          "projectId": "61fc5b09-3fda-4d41-aa48-affe6bdbbc5e",
+          "start": 1.78,
+          "end": 3.3,
+          "text": "website ko apple level",
+          "confidence": 0.726,
+          "script": "roman",
+          "positionX": 0.5,
+          "positionY": 0.5
+        },
+        {
+          "id": "6a1df5b1-1736-4714-8961-38398fd59179",
+          "projectId": "61fc5b09-3fda-4d41-aa48-affe6bdbbc5e",
+          "start": 3.3,
+          "end": 4.8,
+          "text": "perfection or premium nes desak",
+          "confidence": 0.617,
+          "script": "roman",
+          "positionX": 0.5,
+          "positionY": 0.5
+        },
+        {
+          "id": "e608b8f2-535c-4c80-967a-82d05eb8abde",
+          "projectId": "61fc5b09-3fda-4d41-aa48-affe6bdbbc5e",
+          "start": 4.8,
+          "end": 5.9,
+          "text": "teo Kisin a apple ke",
+          "confidence": 0.417,
+          "script": "roman",
+          "positionX": 0.5,
+          "positionY": 0.5
+        },
+        {
+          "id": "fa185b0a-7dc4-4f76-ad03-7dfb8ba30862",
+          "projectId": "61fc5b09-3fda-4d41-aa48-affe6bdbbc5e",
+          "start": 5.9,
+          "end": 7.33,
+          "text": "design language ko ek skill",
+          "confidence": 0.858,
+          "script": "roman",
+          "positionX": 0.5,
+          "positionY": 0.5
+        },
+        {
+          "id": "d42b85ba-29a6-4ff4-9a2c-9b0d65c7dd8f",
+          "projectId": "61fc5b09-3fda-4d41-aa48-affe6bdbbc5e",
+          "start": 7.33,
+          "end": 8.5,
+          "text": "me convert kar deya Aur",
+          "confidence": 0.351,
+          "script": "roman",
+          "positionX": 0.5,
+          "positionY": 0.5
+        },
+        {
+          "id": "7454fd21-081a-4249-a39c-1db6c052b70a",
+          "projectId": "61fc5b09-3fda-4d41-aa48-affe6bdbbc5e",
+          "start": 8.5,
+          "end": 9.66,
+          "text": "ab tum bhi apple jasi",
+          "confidence": 0.494,
+          "script": "roman",
+          "positionX": 0.5,
+          "positionY": 0.5
+        },
+        {
+          "id": "8bf95986-a8f4-4f28-a2f5-8a122fb95183",
+          "projectId": "61fc5b09-3fda-4d41-aa48-affe6bdbbc5e",
+          "start": 9.66,
+          "end": 11.09,
+          "text": "tekne wali premium website be",
+          "confidence": 0.57,
+          "script": "roman",
+          "positionX": 0.5,
+          "positionY": 0.5
+        },
+        {
+          "id": "c370c189-9c83-40cb-a2a8-4c775e925f51",
+          "projectId": "61fc5b09-3fda-4d41-aa48-affe6bdbbc5e",
+          "start": 11.09,
+          "end": 12.39,
+          "text": "naasak teo In fact apni",
+          "confidence": 0.664,
+          "script": "roman",
+          "positionX": 0.5,
+          "positionY": 0.5
+        },
+        {
+          "id": "d3bd3152-c500-4b06-a928-f92a634a0c90",
+          "projectId": "61fc5b09-3fda-4d41-aa48-affe6bdbbc5e",
+          "start": 12.39,
+          "end": 13.87,
+          "text": "boring websites ko bhi ek",
+          "confidence": 0.666,
+          "script": "roman",
+          "positionX": 0.5,
+          "positionY": 0.5
+        },
+        {
+          "id": "d8e28211-ece7-4350-80e4-dae5970bd2a6",
+          "projectId": "61fc5b09-3fda-4d41-aa48-affe6bdbbc5e",
+          "start": 13.87,
+          "end": 15.3,
+          "text": "apple style premium website me",
+          "confidence": 0.808,
+          "script": "roman",
+          "positionX": 0.5,
+          "positionY": 0.5
+        },
+        {
+          "id": "55e42bd1-3f24-4a8e-abcf-456a3399bcdf",
+          "projectId": "61fc5b09-3fda-4d41-aa48-affe6bdbbc5e",
+          "start": 15.3,
+          "end": 16.44,
+          "text": "convert kar sak teo Basi",
+          "confidence": 0.734,
+          "script": "roman",
+          "positionX": 0.5,
+          "positionY": 0.5
+        },
+        {
+          "id": "bcf02871-c3ca-4d95-ab7b-997064d49028",
+          "projectId": "61fc5b09-3fda-4d41-aa48-affe6bdbbc5e",
+          "start": 16.44,
+          "end": 17.53,
+          "text": "a skill ko Claude me",
+          "confidence": 0.627,
+          "script": "roman",
+          "positionX": 0.5,
+          "positionY": 0.5
+        },
+        {
+          "id": "b6724468-d185-4269-8238-a8b170171049",
+          "projectId": "61fc5b09-3fda-4d41-aa48-affe6bdbbc5e",
+          "start": 17.53,
+          "end": 18.64,
+          "text": "drop karo o rse apni",
+          "confidence": 0.478,
+          "script": "roman",
+          "positionX": 0.5,
+          "positionY": 0.5
+        },
+        {
+          "id": "e0ca003f-832c-45b6-9475-6d2a80c532d6",
+          "projectId": "61fc5b09-3fda-4d41-aa48-affe6bdbbc5e",
+          "start": 18.64,
+          "end": 19.84,
+          "text": "website ko audit kar de",
+          "confidence": 0.825,
+          "script": "roman",
+          "positionX": 0.5,
+          "positionY": 0.5
+        },
+        {
+          "id": "f63324c3-be7a-4924-8d5d-a3807b800f67",
+          "projectId": "61fc5b09-3fda-4d41-aa48-affe6bdbbc5e",
+          "start": 19.84,
+          "end": 21.08,
+          "text": "ko go Niche apple comment",
+          "confidence": 0.494,
+          "script": "roman",
+          "positionX": 0.5,
+          "positionY": 0.5
+        },
+        {
+          "id": "2c360949-8b1c-4e02-8604-9fa66d4c2e94",
+          "projectId": "61fc5b09-3fda-4d41-aa48-affe6bdbbc5e",
+          "start": 21.08,
+          "end": 21.98,
+          "text": "ka to aur mes skill",
+          "confidence": 0.389,
+          "script": "roman",
+          "positionX": 0.5,
+          "positionY": 0.5
+        },
+        {
+          "id": "cb9c99b5-13b5-493b-a2ce-0c7be4410d41",
+          "projectId": "61fc5b09-3fda-4d41-aa48-affe6bdbbc5e",
+          "start": 21.98,
+          "end": 23.09,
+          "text": "or process do no bhees",
+          "confidence": 0.488,
+          "script": "roman",
+          "positionX": 0.5,
+          "positionY": 0.5
+        },
+        {
+          "id": "e49ed937-125e-4c39-883f-5d23a2e3ab64",
+          "projectId": "61fc5b09-3fda-4d41-aa48-affe6bdbbc5e",
+          "start": 23.09,
+          "end": 23.38,
+          "text": "do ma",
+          "confidence": 0.363,
+          "script": "roman",
+          "positionX": 0.5,
+          "positionY": 0.5
+        }
+      ],
+      "visualScenes": [
+        {
+          "id": "visual-0001",
+          "start": 0.05,
+          "end": 3.3,
+          "eyebrow": "HOW IT WORKS",
+          "title": "ONLY",
+          "subtitle": "Connect the pieces, then automate.",
+          "keywords": [
+            "Only"
+          ],
+          "layout": "speaker",
+          "visualType": "diagram",
+          "palette": {
+            "background": "#090B10",
+            "accent": "#D7FF3F",
+            "secondary": "#7C3AED"
+          },
+          "motif": "tech",
+          "zoomTimings": [
+            0.05
+          ]
+        },
+        {
+          "id": "visual-0002",
+          "start": 3.3,
+          "end": 6.26,
+          "eyebrow": "HOW IT WORKS",
+          "title": "SMART SYSTEM",
+          "subtitle": "Connect the pieces, then automate.",
+          "keywords": [],
+          "layout": "split",
+          "visualType": "diagram",
+          "palette": {
+            "background": "#11141A",
+            "accent": "#FF5C35",
+            "secondary": "#FFE8D6"
+          },
+          "motif": "tech",
+          "zoomTimings": [
+            3.3
+          ]
+        },
+        {
+          "id": "visual-0003",
+          "start": 6.26,
+          "end": 9.21,
+          "eyebrow": "WATCH THIS",
+          "title": "BUILD",
+          "subtitle": "Keep it simple and make it land.",
+          "keywords": [
+            "Build"
+          ],
+          "layout": "split",
+          "visualType": "kinetic-type",
+          "palette": {
+            "background": "#0A1020",
+            "accent": "#6EE7FF",
+            "secondary": "#A78BFA"
+          },
+          "motif": "default",
+          "zoomTimings": [
+            6.26
+          ]
+        },
+        {
+          "id": "visual-0004",
+          "start": 9.21,
+          "end": 12.39,
+          "eyebrow": "HOW IT WORKS",
+          "title": "TYPE",
+          "subtitle": "Connect the pieces, then automate.",
+          "keywords": [
+            "Type"
+          ],
+          "layout": "full-visual",
+          "visualType": "diagram",
+          "palette": {
+            "background": "#090B10",
+            "accent": "#D7FF3F",
+            "secondary": "#7C3AED"
+          },
+          "motif": "tech",
+          "zoomTimings": []
+        },
+        {
+          "id": "visual-0005",
+          "start": 12.39,
+          "end": 15.64,
+          "eyebrow": "HOW IT WORKS",
+          "title": "STYLE",
+          "subtitle": "Connect the pieces, then automate.",
+          "keywords": [
+            "Style"
+          ],
+          "layout": "split",
+          "visualType": "diagram",
+          "palette": {
+            "background": "#0B0D10",
+            "accent": "#D7FF3F",
+            "secondary": "#FFFFFF"
+          },
+          "motif": "tech",
+          "zoomTimings": [
+            12.39
+          ]
+        },
+        {
+          "id": "visual-0006",
+          "start": 15.64,
+          "end": 18.22,
+          "eyebrow": "WATCH THIS",
+          "title": "BUILD",
+          "subtitle": "Keep it simple and make it land.",
+          "callout": "WAIT FOR IT",
+          "keywords": [
+            "Build"
+          ],
+          "layout": "split",
+          "visualType": "meme",
+          "palette": {
+            "background": "#11141A",
+            "accent": "#FF5C35",
+            "secondary": "#FFE8D6"
+          },
+          "motif": "default",
+          "zoomTimings": [
+            15.64
+          ]
+        },
+        {
+          "id": "visual-0007",
+          "start": 18.22,
+          "end": 21.08,
+          "eyebrow": "HOW IT WORKS",
+          "title": "BUILD",
+          "subtitle": "Connect the pieces, then automate.",
+          "keywords": [
+            "Build"
+          ],
+          "layout": "speaker",
+          "visualType": "diagram",
+          "palette": {
+            "background": "#090B10",
+            "accent": "#D7FF3F",
+            "secondary": "#7C3AED"
+          },
+          "motif": "tech",
+          "zoomTimings": [
+            18.22
+          ]
+        },
+        {
+          "id": "visual-0008",
+          "start": 21.08,
+          "end": 24.002,
+          "eyebrow": "WATCH THIS",
+          "title": "THE MOVE",
+          "subtitle": "Keep it simple and make it land.",
+          "keywords": [],
+          "layout": "full-visual",
+          "visualType": "kinetic-type",
+          "palette": {
+            "background": "#16110B",
+            "accent": "#FFD43B",
+            "secondary": "#FB7185"
+          },
+          "motif": "default",
+          "zoomTimings": []
+        }
+      ]
     }
   ]
 }

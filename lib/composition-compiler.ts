@@ -18,6 +18,11 @@ function clipEnd(clip: TimelineClip): number {
   return Number((clip.start + clip.duration).toFixed(3));
 }
 
+function hyperframesAssetPath(src: string): string {
+  if (/^https?:\/\//i.test(src) || src.startsWith("data:")) return src;
+  return src.startsWith("/") ? `../..${src}` : src;
+}
+
 function toPercent(value: number | undefined, fallback: number): string {
   const safe = Number.isFinite(value) ? Number(value) : fallback;
   return `${Math.min(95, Math.max(5, safe * 100)).toFixed(3)}%`;
@@ -36,7 +41,11 @@ function compileVideoClip(clip: TimelineClip): string {
 
   const mediaStart = clip.mediaStart ? ` data-media-start="${clip.mediaStart}"` : "";
   const volume = typeof clip.volume === "number" ? ` data-volume="${clip.volume}"` : "";
-  return `    <video id="${escapeAttr(clip.id)}" class="clip video-layer" data-start="${clip.start}" data-duration="${clip.duration}" data-track-index="0"${mediaStart}${volume} src="${escapeAttr(clip.src)}" muted playsinline></video>`;
+  const src = hyperframesAssetPath(clip.src);
+  return [
+    `    <video id="${escapeAttr(clip.id)}" class="clip video-layer" data-start="${clip.start}" data-duration="${clip.duration}" data-track-index="0" data-has-audio="true"${mediaStart} src="${escapeAttr(src)}" muted playsinline></video>`,
+    `    <audio id="${escapeAttr(clip.id)}-audio" class="clip source-audio" data-start="${clip.start}" data-duration="${clip.duration}" data-track-index="1"${mediaStart}${volume} src="${escapeAttr(src)}"></audio>`,
+  ].join("\n");
 }
 
 function compileCaptionClip(plan: EditPlan, clip: TimelineClip): string {
@@ -75,7 +84,7 @@ function compileOverlayClip(clip: TimelineClip): string {
   const scale = typeof clip.scale === "number" ? clip.scale : 1;
 
   if (clip.src) {
-    return `    <img id="${escapeAttr(clip.id)}" class="clip overlay overlay-${escapeAttr(clip.kind)}" data-start="${clip.start}" data-duration="${clip.duration}" data-track-index="5" src="${escapeAttr(clip.src)}" style="left:${x}; top:${y}; opacity:${opacity}; transform:translate(-50%, -50%) scale(${scale});" />`;
+    return `    <img id="${escapeAttr(clip.id)}" class="clip overlay overlay-${escapeAttr(clip.kind)}" data-start="${clip.start}" data-duration="${clip.duration}" data-track-index="5" src="${escapeAttr(hyperframesAssetPath(clip.src))}" style="left:${x}; top:${y}; opacity:${opacity}; transform:translate(-50%, -50%) scale(${scale});" />`;
   }
 
   return [
@@ -192,10 +201,23 @@ function compileScriptVisualClip(clip: TimelineClip): string {
   const ariaLabel = `${scene.motif} visual for ${scene.title}`;
 
   return [
-    `    <section id="${escapeAttr(clip.id)}" class="clip script-visual motif-${escapeAttr(scene.motif)}" data-start="${clip.start}" data-duration="${clip.duration}" data-track-index="2"${keywordData} aria-label="${escapeAttr(ariaLabel)}" style="--bg:${escapeAttr(scene.palette.background)}; --accent:${escapeAttr(scene.palette.accent)}; --secondary:${escapeAttr(scene.palette.secondary)};">`,
+    `    <section id="${escapeAttr(clip.id)}" class="clip script-visual layout-${escapeAttr(scene.layout)} motif-${escapeAttr(scene.motif)}" data-start="${clip.start}" data-duration="${clip.duration}" data-track-index="2"${keywordData} aria-label="${escapeAttr(ariaLabel)}" style="--bg:${escapeAttr(scene.palette.background)}; --accent:${escapeAttr(scene.palette.accent)}; --secondary:${escapeAttr(scene.palette.secondary)};">`,
     '      <div class="visual-grid"></div>',
     '      <div class="visual-orbit"></div>',
+    scene.mediaUrl
+      ? scene.mediaType === "video"
+        ? `      <video class="visual-media" src="${escapeAttr(hyperframesAssetPath(scene.mediaUrl))}" muted loop playsinline></video>`
+        : `      <img class="visual-media" src="${escapeAttr(hyperframesAssetPath(scene.mediaUrl))}" alt="" />`
+      : "",
+    scene.mediaUrl ? '      <div class="visual-media-shade"></div>' : "",
+    '      <div class="visual-copy">',
+    `        <div class="visual-eyebrow">${escapeHtml(scene.eyebrow)}</div>`,
+    `        <div class="visual-title">${escapeHtml(scene.title)}</div>`,
+    `        <div class="visual-subtitle">${escapeHtml(scene.subtitle)}</div>`,
+    scene.callout ? `        <div class="visual-callout">${escapeHtml(scene.callout)}</div>` : "",
+    '      </div>',
     ...compileVisualGlyphs(clip),
+    scene.mediaCredit ? `      <div class="visual-credit">${escapeHtml(scene.mediaCredit)}</div>` : "",
     "    </section>",
   ].join("\n");
 }
@@ -204,7 +226,7 @@ function compileAudioClip(clip: TimelineClip): string {
   if (clip.type !== "audio" && clip.type !== "sfx") return "";
 
   const mediaStart = clip.mediaStart ? ` data-media-start="${clip.mediaStart}"` : "";
-  return `    <audio id="${escapeAttr(clip.id)}" class="clip ${clip.type}" data-start="${clip.start}" data-duration="${clip.duration}" data-track-index="3" data-volume="${clip.volume}"${mediaStart} src="${escapeAttr(clip.src)}"></audio>`;
+  return `    <audio id="${escapeAttr(clip.id)}" class="clip ${clip.type}" data-start="${clip.start}" data-duration="${clip.duration}" data-track-index="3" data-volume="${clip.volume}"${mediaStart} src="${escapeAttr(hyperframesAssetPath(clip.src))}"></audio>`;
 }
 
 function compileTransitionClip(clip: TimelineClip): string {
@@ -260,9 +282,9 @@ function compileStyles(plan: EditPlan): string {
 
     .video-layer {
       left: 0;
-      bottom: 0;
+      top: 0;
       width: 100%;
-      height: 50%;
+      height: 100%;
       object-fit: cover;
     }
 
@@ -287,7 +309,7 @@ function compileStyles(plan: EditPlan): string {
       left: 0;
       top: 0;
       width: 100%;
-      height: 50%;
+      height: 100%;
       box-sizing: border-box;
       overflow: hidden;
       color: #fff;
@@ -296,6 +318,33 @@ function compileStyles(plan: EditPlan): string {
         radial-gradient(circle at 16% 78%, color-mix(in srgb, var(--secondary) 28%, transparent), transparent 32%),
         linear-gradient(135deg, var(--bg), #050505);
     }
+
+    .layout-speaker { display: none; }
+    .layout-split { height: 50%; }
+    .layout-overlay { left: 7%; top: 6%; width: 86%; height: 36%; border-radius: 34px; }
+
+    .visual-copy {
+      position: absolute;
+      z-index: 8;
+      left: 8%;
+      top: 16%;
+      max-width: 66%;
+      text-transform: uppercase;
+    }
+
+    .visual-media { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .72; }
+    .visual-media-shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,.86), rgba(0,0,0,.18)); }
+    .visual-credit { position: absolute; z-index: 10; right: 22px; bottom: 16px; color: rgba(255,255,255,.62); font-size: 16px; font-weight: 650; }
+
+    .visual-eyebrow { color: var(--accent); font-size: 28px; font-weight: 900; letter-spacing: 4px; }
+    .visual-title { margin-top: 18px; font-size: 94px; line-height: .92; letter-spacing: -4px; font-weight: 950; }
+    .visual-subtitle { margin-top: 24px; color: rgba(255,255,255,.72); font-size: 32px; line-height: 1.18; font-weight: 650; text-transform: none; }
+    .visual-callout { display: inline-block; margin-top: 26px; padding: 12px 18px; background: white; color: black; font-size: 28px; font-weight: 950; transform: rotate(-2deg); }
+    .layout-overlay .visual-copy { top: 18%; max-width: 62%; }
+    .layout-overlay .visual-title { font-size: 58px; }
+    .layout-overlay .visual-subtitle { display: none; }
+    .layout-split .visual-title { font-size: 68px; }
+    .layout-split .visual-subtitle { font-size: 25px; }
 
     .script-visual::after {
       content: "";
@@ -597,7 +646,17 @@ function compileStyles(plan: EditPlan): string {
       background: color-mix(in srgb, var(--accent) 58%, transparent);
     }
 
-    .caption > span {
+    .caption-inner {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.18em;
+      width: 100%;
+    }
+
+    .caption-word {
+      display: inline-block;
       display: inline-block;
       padding: ${backgroundOpacity > 0 ? "0.12em 0.34em" : "0"};
       background: rgba(0, 0, 0, ${backgroundOpacity});
@@ -608,7 +667,7 @@ function compileStyles(plan: EditPlan): string {
       -webkit-text-stroke-width: ${Math.max(strokeWidth, 4)}px;
     }
 
-    .low-confidence > span {
+    .low-confidence .caption-word {
       outline: 3px solid rgba(250, 204, 21, 0.65);
     }
 
@@ -664,11 +723,12 @@ export function compileHyperframesHtml(plan: EditPlan): string {
   const maxDuration = Math.max(plan.duration, ...plan.clips.map(clipEnd));
 
   return `<!doctype html>
-<html lang="en">
+<html lang="en" data-resolution="portrait">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>CaptionAI Composition ${escapeHtml(plan.projectId)}</title>
+  <title>AI Video Editor Composition ${escapeHtml(plan.projectId)}</title>
+  <script src="./gsap.min.js"></script>
   <style>${compileStyles(plan)}</style>
   <script type="application/json" id="captionai-edit-plan">${escapeHtml(compileMetadata(plan))}</script>
 </head>
@@ -676,6 +736,37 @@ export function compileHyperframesHtml(plan: EditPlan): string {
   <div id="stage" data-composition-id="captionai-${escapeAttr(plan.projectId)}" data-start="0" data-duration="${maxDuration}" data-width="${plan.width}" data-height="${plan.height}" data-fps="${plan.fps}">
 ${clips}
   </div>
+  <script>
+    window.__timelines = window.__timelines || {};
+    const timeline = gsap.timeline({ paused: true });
+    document.querySelectorAll('.script-visual:not(.layout-speaker)').forEach((element) => {
+      const start = Number(element.dataset.start || 0);
+      timeline.from(element, { opacity: 0, scale: 0.96, duration: 0.28, ease: 'power3.out' }, start + 0.1);
+      timeline.from(element.querySelector('.visual-copy'), { opacity: 0, y: 42, duration: 0.42, ease: 'expo.out' }, start + 0.16);
+      timeline.from(element.querySelectorAll('.visual-copy > *'), { opacity: 0, y: 28, scale: 0.94, duration: 0.34, stagger: 0.08, ease: 'back.out(1.35)' }, start + 0.22);
+      timeline.from(element.querySelectorAll('.visual-media, .visual-grid, .visual-orbit'), { opacity: 0, scale: 0.9, duration: 0.46, stagger: 0.06, ease: 'power2.out' }, start + 0.14);
+    });
+    document.querySelectorAll('.caption').forEach((element) => {
+      const start = Number(element.dataset.start || 0);
+      const end = start + Number(element.dataset.duration || 0);
+      timeline.from(element, { opacity: 0, y: 28, scale: 0.78, duration: 0.16, ease: 'back.out(1.8)' }, start + 0.02);
+      timeline.from(element.querySelectorAll('.caption-word'), { opacity: 0.25, scale: 0.82, duration: 0.12, stagger: 0.045, ease: 'power3.out' }, start + 0.05);
+      timeline.to(element, { opacity: 0, scale: 0.95, duration: 0.1, ease: 'power2.in' }, Math.max(start, end - 0.1));
+      timeline.set(element, { opacity: 0, visibility: 'hidden' }, end);
+    });
+    document.querySelectorAll('.visual-data-node, .graphic').forEach((element, index) => {
+      const scene = element.closest('.script-visual');
+      const start = Number(scene?.dataset.start || 0);
+      timeline.from(element, { opacity: 0, rotation: index % 2 ? 6 : -6, duration: 0.42, ease: 'power2.out' }, start + 0.18);
+    });
+    document.querySelectorAll('.transition').forEach((element) => {
+      const start = Number(element.dataset.start || 0);
+      const duration = Number(element.dataset.duration || 0.16);
+      timeline.fromTo(element, { opacity: 0 }, { opacity: 0.9, duration: duration * 0.45, ease: 'power4.in' }, start);
+      timeline.to(element, { opacity: 0, duration: duration * 0.55, ease: 'power4.out' }, start + duration * 0.45);
+    });
+    window.__timelines['captionai-${escapeAttr(plan.projectId)}'] = timeline;
+  </script>
 </body>
 </html>
 `;

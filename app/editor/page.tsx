@@ -23,6 +23,7 @@ import {
   Type,
   Zap,
   ExternalLink,
+  FileText,
 } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -53,8 +54,10 @@ import {
   type MotionPreset,
   type VideoEffect,
 } from "@/lib/caption-config";
-import { renderCaptionWord } from "@/lib/subtitle-utils";
+import { parseSubtitleText, renderCaptionWord, type ParsedSubtitleCaption } from "@/lib/subtitle-utils";
 import { createScriptVisualScenes } from "@/lib/script-visuals";
+import type { ScriptVisualScene } from "@/lib/script-visuals";
+import { BRAND_THEMES, getBrandTheme } from "@/lib/brand-themes";
 
 const ANIMATIONS: CaptionAnimation[] = ["fade", "slide-up", "zoom", "bounce", "shake", "pulse", "flicker", "typewriter", "karaoke", "word-pop"];
 const EFFECTS: CaptionEffect[] = ["shadow", "outline", "glow", "glass", "sticker", "none"];
@@ -158,6 +161,21 @@ type TimelineCaption = {
   positionY?: number;
 };
 type PreviewCaptionToken = { word: string; active: boolean; highlighted: boolean; lowConfidence: boolean; pop: boolean; fadeAlpha: number };
+type TimelineDragState = {
+  index: number;
+  mode: "move" | "resize-start" | "resize-end";
+  originX: number;
+  originStart: number;
+  originEnd: number;
+};
+type PreviewInteraction = {
+  mode: "move" | "resize";
+  originClientX: number;
+  originClientY: number;
+  originX: number;
+  originY: number;
+  originScale: number;
+};
 
 const CAPCUT_LOOKS: Array<{
   id: string;
@@ -385,7 +403,40 @@ export default function EditorPage() {
   const [localPreviewUrl, setLocalPreviewUrl] = useState<string | null>(null);
   const [selectedCaptionIndex, setSelectedCaptionIndex] = useState<number | null>(null);
   const [isSavingCaptions, setIsSavingCaptions] = useState(false);
-  const [engineMode, setEngineMode] = useState<"remotion" | "hyperframes" | "canvas">("remotion");
+  const [engineMode, setEngineMode] = useState<"remotion" | "hyperframes" | "canvas">(() => {
+    if (typeof window === "undefined") return "canvas";
+    const requested = new URLSearchParams(window.location.search).get("engine");
+    return requested === "hyperframes" ? "hyperframes" : requested === "remotion" ? "remotion" : "canvas";
+  });
+  const [suppliedCaptions, setSuppliedCaptions] = useState<ParsedSubtitleCaption[]>([]);
+  const [suppliedCaptionName, setSuppliedCaptionName] = useState("");
+  const [inlineEditingIndex, setInlineEditingIndex] = useState<number | null>(null);
+  const [isTranscriptOpen, setIsTranscriptOpen] = useState(false);
+  const [dragState, setDragState] = useState<TimelineDragState | null>(null);
+  const [previewInteraction, setPreviewInteraction] = useState<PreviewInteraction | null>(null);
+  const [isRenderingRemotion, setIsRenderingRemotion] = useState(false);
+  const [renderedVideoUrl, setRenderedVideoUrl] = useState<string | null>(null);
+  const undoHistoryRef = useRef<TimelineCaption[][]>([]);
+  const redoHistoryRef = useRef<TimelineCaption[][]>([]);
+  const unmountedRef = useRef(false);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const timelineTrackRef = useRef<HTMLDivElement | null>(null);
+  const previewFrameRef = useRef<HTMLDivElement | null>(null);
+  const activeVideoSrc = localPreviewUrl ?? project?.videoUrl ?? null;
+
+  const visualScenes = project?.visualScenes;
+  const themedVisualScenes = useMemo(() => {
+    if (!visualScenes?.length) return undefined;
+    const theme = getBrandTheme(captionSettings.brandThemeId);
+    return visualScenes.map((scene) => ({
+      ...scene,
+      palette: {
+        background: theme.background,
+        accent: theme.accent,
+        secondary: theme.secondary,
+      },
+    }));
+  }, [captionSettings.brandThemeId, visualScenes]);
 
   const applyApiProject = useCallback((
     apiProject: {
@@ -403,6 +454,7 @@ export default function EditorPage() {
         positionX?: number;
         positionY?: number;
       }>;
+      visualScenes?: ScriptVisualScene[];
     },
     styleFallback: string,
   ) => {
@@ -425,29 +477,37 @@ export default function EditorPage() {
         })),
       ),
       style: currentStyle,
+      visualScenes: apiProject.visualScenes,
     });
   }, [setProject]);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
-      const requested = params.get("engine");
-      if (requested === "hyperframes" || requested === "remotion") {
-        setEngineMode(requested);
-      }
       const projectId = params.get("id");
       if (projectId) {
         fetch(`/api/projects/${projectId}`)
           .then((res) => res.json())
           .then((data) => {
             if (data.success && data.project) {
+              const requestedTheme = params.get("theme");
+              if (requestedTheme) {
+                const theme = getBrandTheme(requestedTheme);
+                updateCaptionSettings({
+                  brandThemeId: theme.id,
+                  emphasisColor: theme.accent,
+                  activeWordColor: theme.accent,
+                  textColor: theme.text,
+                  fontFamily: theme.fontFamily,
+                });
+              }
               applyApiProject(data.project, "hormozi");
             }
           })
           .catch((err) => console.error("Failed to load project from URL ID:", err));
       }
     }
-  }, [applyApiProject]);
+  }, [applyApiProject, updateCaptionSettings]);
 
   const persistCaptionChanges = useCallback(async (nextCaptions: TimelineCaption[], silent = false) => {
     if (!project) return;
@@ -817,7 +877,9 @@ export default function EditorPage() {
   }, [isPlaying, setCurrentTime]);
 
   useEffect(() => {
+    unmountedRef.current = false;
     return () => {
+      unmountedRef.current = true;
       if (localPreviewUrl) {
         URL.revokeObjectURL(localPreviewUrl);
       }
@@ -971,10 +1033,12 @@ export default function EditorPage() {
 
       const projectResponse = await fetch("/api/projects", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders({ "Content-Type": "application/json" }),
         body: JSON.stringify({
           videoUrl: uploadData.publicUrl,
           duration,
+          captions: suppliedCaptions,
+          brandThemeId: captionSettings.brandThemeId,
         }),
       });
 
@@ -994,19 +1058,20 @@ export default function EditorPage() {
       setUploadProgress(75);
 
       const poll = async (attempt = 0): Promise<void> => {
+        if (unmountedRef.current) return;
         if (attempt > 120) {
           toast.error("Caption generation timed out. Please try again.");
           return;
         }
         const res = await fetch(`/api/projects/${projectData.project.id}`);
         const data = await res.json();
-        if (!data.success) return;
+        if (!data.success || unmountedRef.current) return;
 
         applyApiProject(data.project, selectedStyle);
 
         if (data.project.status !== "ready" && data.project.status !== "completed") {
           if (data.project.status === "failed") {
-            toast.error("Caption generation failed");
+            toast.error(data.project.error || "Caption generation failed");
             return;
           }
           setUploadProgress(Math.min(95, 75 + attempt));
@@ -1017,7 +1082,7 @@ export default function EditorPage() {
         }
 
         setUploadProgress(100);
-        toast.success("Video uploaded and captions generated");
+        toast.success(suppliedCaptions.length ? "Video and supplied captions are ready" : "Video uploaded and captions generated");
         setCurrentTime(0);
         setIsPlaying(false);
       };
@@ -1032,6 +1097,20 @@ export default function EditorPage() {
       });
     } finally {
       setIsUploading(false);
+    }
+  };
+
+  const handleSubtitleFile = async (file: File) => {
+    try {
+      const parsed = parseSubtitleText(await file.text());
+      if (!parsed.length) throw new Error("No timed captions found");
+      setSuppliedCaptions(parsed);
+      setSuppliedCaptionName(file.name);
+      toast.success(`${parsed.length} caption cues loaded`);
+    } catch (error) {
+      setSuppliedCaptions([]);
+      setSuppliedCaptionName("");
+      toast.error(error instanceof Error ? error.message : "Could not read captions");
     }
   };
 
@@ -1185,6 +1264,7 @@ export default function EditorPage() {
       if (!data.success) throw new Error(data.error ?? "Failed to queue render");
 
       const pollRender = async (attempt = 0): Promise<void> => {
+        if (unmountedRef.current) return;
         if (attempt > 100) {
           toast.message("Export is still processing in background");
           return;
@@ -1192,7 +1272,7 @@ export default function EditorPage() {
 
         const res = await fetch(`/api/projects/${project.id}`);
         const result = await res.json();
-        if (!result.success) return;
+        if (!result.success || unmountedRef.current) return;
 
         if (result.project.status === "completed") {
           setLocalPreviewUrl((prev) => {
@@ -1200,7 +1280,9 @@ export default function EditorPage() {
             return null;
           });
           applyApiProject(result.project, selectedStyle);
-
+          if (result.project.videoUrl) {
+            setRenderedVideoUrl(result.project.videoUrl);
+          }
           toast.success(`${exportQuality.toUpperCase()} export complete: ${result.project.videoUrl}`);
           return;
         }
@@ -1246,8 +1328,8 @@ export default function EditorPage() {
       if (!data.success) throw new Error(data.error ?? "Hyperframes compile failed");
 
       setCompositionUrl(data.compositionUrl);
-      window.open(data.compositionUrl, "_blank", "noopener,noreferrer");
-      toast.success("Hyperframes composition generated");
+      setEngineMode("hyperframes");
+      toast.success(`HyperFrames render complete: ${data.videoUrl}`);
     } catch {
       toast.error("Failed to generate Hyperframes composition");
     } finally {
@@ -1276,7 +1358,10 @@ export default function EditorPage() {
       const data = await response.json();
       if (!data.success) throw new Error(data.error ?? "Remotion render failed");
 
-      toast.success(`Remotion render initiated! Video path: ${data.videoUrl}`);
+      if (data.videoUrl) {
+        setRenderedVideoUrl(data.videoUrl);
+      }
+      toast.success(`Remotion render complete: ${data.videoUrl}`);
     } catch (err: any) {
       toast.error(err.message || "Failed to render Remotion composition");
     } finally {
@@ -1303,8 +1388,9 @@ export default function EditorPage() {
         script: c.script,
         highlightWords: c.highlightWords,
       })),
+      visualScenes: themedVisualScenes,
     };
-  }, [project]);
+  }, [project, themedVisualScenes]);
 
   const activeEditPlan = useMemo(() => {
     if (!localProjectForPlan) return null;
@@ -1347,15 +1433,18 @@ export default function EditorPage() {
 
   const scriptVisualScenes = useMemo(
     () =>
-      createScriptVisualScenes(
+      themedVisualScenes?.length
+        ? themedVisualScenes
+        : createScriptVisualScenes(
         (project?.transcription ?? []).map((caption) => ({
           text: caption.word,
           start: caption.start,
           end: caption.end,
         })),
         project?.duration ?? 0,
+        captionSettings.brandThemeId,
       ),
-    [project?.duration, project?.transcription],
+    [captionSettings.brandThemeId, project?.duration, project?.transcription, themedVisualScenes],
   );
 
   const activeScriptVisualScene = useMemo(() => {
@@ -1899,7 +1988,7 @@ export default function EditorPage() {
                   engineMode === mode ? "bg-blue-600 text-white shadow-sm" : "text-gray-400 hover:text-white hover:bg-white/5"
                 }`}
               >
-                {mode === "remotion" ? "Remotion Engine" : mode === "hyperframes" ? "Hyperframes HTML" : "Canvas Player"}
+                {mode === "remotion" ? "Remotion Engine" : mode === "hyperframes" ? "HyperFrames Engine" : "Canvas Player"}
               </button>
             ))}
           </div>
@@ -1946,7 +2035,7 @@ export default function EditorPage() {
             disabled={isCompilingHyperframes || !project}
           >
             {isCompilingHyperframes ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <ExternalLink className="h-3.5 w-3.5 text-emerald-400" />}
-            Hyperframes
+            Render HyperFrames
           </Button>
 
           <Button
@@ -1958,6 +2047,17 @@ export default function EditorPage() {
             {isExporting ? <Loader2 className="h-4 w-4 mr-1.5 animate-spin" /> : <Download className="h-4 w-4 mr-1.5" />}
             Export {exportQuality.toUpperCase()}
           </Button>
+
+          {renderedVideoUrl && (
+            <a
+              href={renderedVideoUrl}
+              download
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium bg-green-600/20 border border-green-500/30 hover:bg-green-600/30 text-green-200 transition-colors"
+            >
+              <Download className="h-3.5 w-3.5 text-green-400" />
+              Download MP4
+            </a>
+          )}
         </div>
       </header>
 
@@ -1996,6 +2096,41 @@ export default function EditorPage() {
                           {look.name}
                         </span>
                         <span className="block text-[11px] leading-4 text-gray-400">{look.description}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </section>
+
+              <section>
+                <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Brand Theme</h3>
+                <div className="grid grid-cols-2 gap-2">
+                  {BRAND_THEMES.map((theme) => {
+                    const active = captionSettings.brandThemeId === theme.id;
+                    return (
+                      <button
+                        key={theme.id}
+                        onClick={() => {
+                          const selectedTheme = getBrandTheme(theme.id);
+                          updateCaptionSettings({
+                            brandThemeId: selectedTheme.id,
+                            emphasisColor: selectedTheme.accent,
+                            activeWordColor: selectedTheme.accent,
+                            textColor: selectedTheme.text,
+                            fontFamily: selectedTheme.fontFamily,
+                          });
+                        }}
+                        className={`rounded-lg border p-2.5 text-left transition-colors ${
+                          active ? "border-blue-400 bg-blue-500/15" : "border-white/10 bg-white/5 hover:bg-white/10"
+                        }`}
+                      >
+                        <span className="mb-2 flex gap-1.5">
+                          {[theme.background, theme.accent, theme.secondary].map((color) => (
+                            <span key={color} className="h-4 w-4 rounded-full border border-white/20" style={{ backgroundColor: color }} />
+                          ))}
+                        </span>
+                        <span className="block text-xs font-semibold text-white">{theme.name}</span>
+                        <span className="mt-1 block text-[10px] leading-4 text-gray-500">{theme.description}</span>
                       </button>
                     );
                   })}
@@ -2666,7 +2801,31 @@ export default function EditorPage() {
                       </div>
                     </div>
 
-                    <input
+                    <div className="flex items-center justify-between text-xs text-gray-400 font-medium">
+                      <span>Caption Text</span>
+                      <div className="flex items-center gap-1">
+                        <button
+                          disabled={effectiveSelectedCaptionIndex <= 0}
+                          onClick={() => setSelectedCaptionIndex(effectiveSelectedCaptionIndex - 1)}
+                          className="rounded px-1.5 py-0.5 border border-white/10 bg-black/40 text-[10px] hover:bg-white/10 disabled:opacity-30"
+                        >
+                          ← Prev
+                        </button>
+                        <span className="text-[10px] text-gray-500">
+                          {effectiveSelectedCaptionIndex + 1} / {project.transcription.length}
+                        </span>
+                        <button
+                          disabled={effectiveSelectedCaptionIndex >= project.transcription.length - 1}
+                          onClick={() => setSelectedCaptionIndex(effectiveSelectedCaptionIndex + 1)}
+                          className="rounded px-1.5 py-0.5 border border-white/10 bg-black/40 text-[10px] hover:bg-white/10 disabled:opacity-30"
+                        >
+                          Next →
+                        </button>
+                      </div>
+                    </div>
+
+                    <textarea
+                      rows={3}
                       value={selectedCaption.word}
                       onChange={(event) => {
                         const value = event.target.value;
@@ -2677,7 +2836,8 @@ export default function EditorPage() {
                           void persistCaptionChanges(project.transcription, true);
                         }
                       }}
-                      className="w-full rounded-md border border-white/10 bg-black/30 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none"
+                      className="w-full rounded-lg border border-white/10 bg-black/40 p-3 text-sm text-white resize-none focus:border-blue-500 focus:outline-none transition-colors"
+                      placeholder="Type caption text..."
                     />
 
                     <label className="block space-y-1 text-xs text-gray-400">
@@ -2935,9 +3095,31 @@ export default function EditorPage() {
                     <p className="text-xs text-gray-500 text-left">Processing {uploadProgress}%</p>
                   </div>
                 ) : (
-                  <Button disabled={isUploading} className="w-full h-12 bg-white text-black hover:bg-gray-200">
-                    {isUploading ? "Uploading..." : "Select File"}
-                  </Button>
+                  <div className="space-y-3">
+                    <Button disabled={isUploading} className="w-full h-12 bg-white text-black hover:bg-gray-200">
+                      {isUploading ? "Uploading..." : "Select raw footage"}
+                    </Button>
+                    <label
+                      className="flex h-10 cursor-pointer items-center justify-center gap-2 rounded-lg border border-white/10 bg-white/5 text-xs font-medium text-gray-300 hover:bg-white/10"
+                      onClick={(event) => event.stopPropagation()}
+                    >
+                      <FileText className="h-3.5 w-3.5" />
+                      {suppliedCaptionName || "Optional: attach SRT or VTT"}
+                      <input
+                        type="file"
+                        accept=".srt,.vtt,text/vtt,application/x-subrip"
+                        className="sr-only"
+                        onClick={(event) => event.stopPropagation()}
+                        onChange={(event) => {
+                          const file = event.target.files?.[0];
+                          if (file) void handleSubtitleFile(file);
+                        }}
+                      />
+                    </label>
+                    <p className="text-[11px] text-gray-500">
+                      No caption file? The selected AI provider will transcribe automatically.
+                    </p>
+                  </div>
                 )}
               </div>
             </div>
@@ -2952,11 +3134,19 @@ export default function EditorPage() {
                 <RemotionPlayerPreview plan={activeEditPlan} />
               ) : engineMode === "hyperframes" && compositionUrl ? (
                 <iframe src={compositionUrl} className="w-full h-full border-0 bg-black" title="Hyperframes Preview" />
+              ) : engineMode === "hyperframes" && !compositionUrl ? (
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400 gap-3 px-8 text-center">
+                  <ExternalLink className="h-10 w-10 text-emerald-500/50" />
+                  <p className="text-sm font-medium text-gray-300">HyperFrames Engine Selected</p>
+                  <p className="text-xs text-gray-500">Click &quot;Render HyperFrames&quot; in the toolbar to compile the composition. The preview will appear here once ready.</p>
+                </div>
               ) : activeVideoSrc ? (
                 <video
                   ref={videoRef}
                   src={activeVideoSrc}
-                  className="absolute inset-x-0 bottom-0 w-full h-1/2 object-cover transition-transform duration-200"
+                  className={`absolute inset-x-0 w-full object-cover transition-all duration-300 ${
+                    activeScriptVisualScene ? "bottom-0 h-1/2" : "inset-0 h-full"
+                  }`}
                   style={{
                     filter: videoPreviewFilter,
                     transform: `translate(${videoPreviewTranslateX.toFixed(1)}px, ${videoPreviewTranslateY.toFixed(1)}px) scale(${videoPreviewScale.toFixed(3)})`,
@@ -2990,61 +3180,94 @@ export default function EditorPage() {
 
               {activeScriptVisualScene ? (
                 <div
-                  className="absolute inset-x-0 top-0 z-10 flex h-1/2 flex-col justify-center gap-3 overflow-hidden px-7 py-6 text-white"
+                  className="absolute inset-x-0 top-0 z-10 flex h-1/2 flex-col justify-between overflow-hidden p-6 text-white"
                   style={{
-                    background: `radial-gradient(circle at 72% 24%, ${toRgba(activeScriptVisualScene.palette.accent, 0.42)}, transparent 34%), radial-gradient(circle at 16% 78%, ${toRgba(activeScriptVisualScene.palette.secondary, 0.28)}, transparent 32%), linear-gradient(135deg, ${activeScriptVisualScene.palette.background}, #050505)`,
+                    backgroundColor: activeScriptVisualScene.palette.background,
+                    backgroundImage: `radial-gradient(ellipse at 80% 0%, ${toRgba(activeScriptVisualScene.palette.accent, 0.18)}, transparent 60%), radial-gradient(ellipse at 10% 100%, ${toRgba(activeScriptVisualScene.palette.secondary, 0.15)}, transparent 50%)`,
                   }}
                 >
-                  <div
-                    className="absolute inset-4 border"
-                    style={{ borderColor: toRgba(activeScriptVisualScene.palette.accent, 0.35) }}
-                  />
-                  <div
-                    className="absolute -right-10 top-8 h-28 w-28 rounded-full border-[12px]"
-                    style={{
-                      borderTopColor: activeScriptVisualScene.palette.accent,
-                      borderRightColor: activeScriptVisualScene.palette.accent,
-                      borderBottomColor: activeScriptVisualScene.palette.accent,
-                      borderLeftColor: "transparent",
-                    }}
-                  />
-                  {activeScriptVisualScene.motif === "warning" ? (
-                    <div
-                      className="absolute left-[16%] top-[20%] h-[58%] w-[68%]"
-                      style={{
-                        border: `16px solid ${activeScriptVisualScene.palette.accent}`,
-                        clipPath: "polygon(50% 0, 100% 100%, 0 100%)",
-                        filter: `drop-shadow(0 0 20px ${toRgba(activeScriptVisualScene.palette.accent, 0.5)})`,
-                      }}
-                    />
-                  ) : activeScriptVisualScene.motif === "money" ? (
-                    <>
-                      <div className="absolute left-[14%] top-[24%] h-[46%] w-[72%] rounded-2xl" style={{ backgroundColor: toRgba(activeScriptVisualScene.palette.accent, 0.24) }} />
-                      <div className="absolute left-[24%] top-[34%] h-[25%] w-[52%] rounded-xl bg-transparent" style={{ border: `8px solid ${activeScriptVisualScene.palette.secondary}` }} />
-                      <div className="absolute left-[44%] top-[30%] h-[34%] w-[12%] rounded-full" style={{ backgroundColor: activeScriptVisualScene.palette.accent }} />
-                    </>
-                  ) : activeScriptVisualScene.motif === "growth" ? (
-                    <>
-                      {[0.18, 0.36, 0.54, 0.72].map((left, index) => (
-                        <div
-                          key={left}
-                          className="absolute bottom-[17%] w-[11%] rounded-t-md"
-                          style={{
-                            left: `${left * 100}%`,
-                            height: `${[25, 39, 55, 68][index]}%`,
-                            backgroundColor: index % 2 ? activeScriptVisualScene.palette.accent : activeScriptVisualScene.palette.secondary,
-                            opacity: 0.76,
-                          }}
+                  {/* Brand Header */}
+                  <div className="flex items-center justify-between z-20">
+                    <div className="flex items-center gap-2">
+                      {getBrandTheme(captionSettings.brandThemeId).logoUrl ? (
+                        <img
+                          src={getBrandTheme(captionSettings.brandThemeId).logoUrl}
+                          alt="Brand Logo"
+                          className="h-6 w-6 object-contain"
                         />
-                      ))}
-                    </>
-                  ) : (
-                    <>
-                      <div className="absolute left-[18%] bottom-[17%] h-[28%] w-[15%] rounded-full" style={{ backgroundColor: activeScriptVisualScene.palette.accent }} />
-                      <div className="absolute left-[40%] bottom-[17%] h-[48%] w-[15%] rounded-full" style={{ backgroundColor: activeScriptVisualScene.palette.secondary }} />
-                      <div className="absolute left-[62%] bottom-[17%] h-[62%] w-[15%] rounded-full" style={{ backgroundColor: activeScriptVisualScene.palette.accent }} />
-                    </>
-                  )}
+                      ) : (
+                        <div
+                          className="h-5 w-5 rounded-full"
+                          style={{ backgroundColor: activeScriptVisualScene.palette.accent }}
+                        />
+                      )}
+                      <span
+                        className="text-xs font-semibold uppercase tracking-wider opacity-80"
+                        style={{ color: getBrandTheme(captionSettings.brandThemeId).text }}
+                      >
+                        {getBrandTheme(captionSettings.brandThemeId).name}
+                      </span>
+                    </div>
+
+                    <span
+                      className="rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest"
+                      style={{
+                        backgroundColor: toRgba(activeScriptVisualScene.palette.accent, 0.18),
+                        color: activeScriptVisualScene.palette.accent,
+                        border: `1px solid ${toRgba(activeScriptVisualScene.palette.accent, 0.35)}`,
+                      }}
+                    >
+                      {activeScriptVisualScene.motif}
+                    </span>
+                  </div>
+
+                  {/* Center Card Content */}
+                  <div className="relative z-20 my-auto flex flex-col items-center justify-center text-center px-4 py-3">
+                    <div
+                      className="w-full max-w-xs rounded-2xl p-5 shadow-2xl backdrop-blur-xl border border-white/10"
+                      style={{
+                        backgroundColor: toRgba(getBrandTheme(captionSettings.brandThemeId).surface, 0.88),
+                        boxShadow: `0 20px 40px ${toRgba("#000000", 0.4)}, 0 0 30px ${toRgba(activeScriptVisualScene.palette.accent, 0.12)}`,
+                      }}
+                    >
+                      <h3
+                        className="text-xl font-extrabold tracking-tight leading-snug mb-2"
+                        style={{ color: getBrandTheme(captionSettings.brandThemeId).text }}
+                      >
+                        {activeScriptVisualScene.title}
+                      </h3>
+
+                      {activeScriptVisualScene.motif === "warning" ? (
+                        <div className="mt-3 flex items-center justify-center gap-2 rounded-xl p-3 bg-amber-500/10 border border-amber-500/30 text-amber-400">
+                          <span className="text-lg">⚠️</span>
+                          <span className="text-xs font-semibold">Important Notice</span>
+                        </div>
+                      ) : activeScriptVisualScene.motif === "money" ? (
+                        <div className="mt-3 flex items-center justify-between rounded-xl p-3 bg-emerald-500/10 border border-emerald-500/30">
+                          <span className="text-xs text-emerald-300 font-medium">Revenue Impact</span>
+                          <span className="text-base font-extrabold text-emerald-400">+100%</span>
+                        </div>
+                      ) : activeScriptVisualScene.motif === "growth" ? (
+                        <div className="mt-3 flex items-end justify-between gap-1.5 h-12 px-2">
+                          {[30, 50, 75, 100].map((height, i) => (
+                            <div
+                              key={i}
+                              className="w-1/4 rounded-t-md transition-all"
+                              style={{
+                                height: `${height}%`,
+                                backgroundColor: i === 3 ? activeScriptVisualScene.palette.accent : toRgba(activeScriptVisualScene.palette.accent, 0.3),
+                              }}
+                            />
+                          ))}
+                        </div>
+                      ) : (
+                        <div
+                          className="mt-3 h-1 w-16 mx-auto rounded-full"
+                          style={{ backgroundColor: activeScriptVisualScene.palette.accent }}
+                        />
+                      )}
+                    </div>
+                  </div>
                 </div>
               ) : null}
 
@@ -3189,6 +3412,9 @@ export default function EditorPage() {
           <Button variant="ghost" size="sm" className="h-7 text-xs text-gray-400 hover:text-white" onClick={redoTimelineChange}>
             Redo
           </Button>
+          <Button variant="ghost" size="sm" className="h-7 text-xs text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10" onClick={() => setIsTranscriptOpen(true)}>
+            <FileText className="h-3 w-3 mr-1" /> Transcript Editor
+          </Button>
           <div className="flex-1" />
           <Slider
             value={[currentPositionPercent]}
@@ -3235,6 +3461,7 @@ export default function EditorPage() {
                 const isActive = currentTime >= caption.start && currentTime <= caption.end;
                 const isLowConfidence =
                   Number.isFinite(caption.confidence) && Number(caption.confidence) < LOW_CONFIDENCE_THRESHOLD;
+                const isEditingInline = inlineEditingIndex === index;
 
                 return (
                   <div
@@ -3255,14 +3482,46 @@ export default function EditorPage() {
                       setSelectedCaptionIndex(index);
                       setCurrentTime(caption.start);
                     }}
+                    onDoubleClick={(event) => {
+                      event.stopPropagation();
+                      setInlineEditingIndex(index);
+                    }}
                   >
                     <div
                       className="absolute left-0 top-0 bottom-0 w-1.5 cursor-ew-resize bg-white/30 hover:bg-white/70"
                       onMouseDown={(event) => beginCaptionDrag(event, index, "resize-start")}
                     />
-                    <span className="px-2 text-[10px] text-yellow-100 truncate w-full text-center pointer-events-none">
-                      {caption.word}{isLowConfidence ? " • low" : ""}
-                    </span>
+                    
+                    {isEditingInline ? (
+                      <input
+                        autoFocus
+                        value={caption.word}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          updateCaptionAtIndex(index, (c) => ({ ...c, word: val }));
+                        }}
+                        onBlur={() => {
+                          setInlineEditingIndex(null);
+                          if (project?.transcription) {
+                            void persistCaptionChanges(project.transcription, true);
+                          }
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            setInlineEditingIndex(null);
+                            if (project?.transcription) {
+                              void persistCaptionChanges(project.transcription, true);
+                            }
+                          }
+                        }}
+                        className="w-full bg-black/80 px-1 py-0.5 text-[10px] text-white outline-none rounded"
+                      />
+                    ) : (
+                      <span className="px-2 text-[10px] text-yellow-100 truncate w-full text-center pointer-events-none">
+                        {caption.word}{isLowConfidence ? " • low" : ""}
+                      </span>
+                    )}
+
                     <div
                       className="absolute right-0 top-0 bottom-0 w-1.5 cursor-ew-resize bg-white/30 hover:bg-white/70"
                       onMouseDown={(event) => beginCaptionDrag(event, index, "resize-end")}
@@ -3274,6 +3533,92 @@ export default function EditorPage() {
           </div>
         </div>
       </div>
+
+      {/* Full Transcript Editor Modal */}
+      {isTranscriptOpen && project && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+          <div className="flex h-[80vh] w-full max-w-3xl flex-col rounded-2xl border border-white/10 bg-[#141414] shadow-2xl overflow-hidden">
+            <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
+              <div className="flex items-center gap-2">
+                <FileText className="h-5 w-5 text-emerald-400" />
+                <h2 className="text-base font-semibold text-white">Full Transcript Editor</h2>
+                <span className="rounded-full bg-white/10 px-2 py-0.5 text-xs text-gray-400">
+                  {project.transcription.length} clips
+                </span>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-8 text-gray-400 hover:text-white"
+                onClick={() => setIsTranscriptOpen(false)}
+              >
+                Close ✕
+              </Button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-6 space-y-3">
+              {project.transcription.map((caption, index) => (
+                <div
+                  key={`transcript-${index}`}
+                  className={`flex items-start gap-4 rounded-xl border p-3.5 transition-colors ${
+                    currentTime >= caption.start && currentTime <= caption.end
+                      ? "border-amber-500/50 bg-amber-500/10"
+                      : "border-white/5 bg-white/[0.02] hover:border-white/10 hover:bg-white/[0.04]"
+                  }`}
+                >
+                  <button
+                    onClick={() => setCurrentTime(caption.start)}
+                    className="flex shrink-0 items-center gap-1 rounded-md border border-white/10 bg-black/40 px-2 py-1 text-xs font-mono text-gray-400 hover:border-white/20 hover:text-white"
+                  >
+                    <Play className="h-2.5 w-2.5" />
+                    {caption.start.toFixed(2)}s
+                  </button>
+
+                  <div className="flex-1 space-y-1">
+                    <textarea
+                      rows={2}
+                      value={caption.word}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        updateCaptionAtIndex(index, (c) => ({ ...c, word: val }));
+                      }}
+                      onBlur={() => {
+                        if (project?.transcription) {
+                          void persistCaptionChanges(project.transcription, true);
+                        }
+                      }}
+                      className="w-full rounded-lg border border-white/10 bg-black/50 p-2.5 text-sm text-white focus:border-emerald-500 focus:outline-none resize-none"
+                    />
+                    <div className="flex items-center justify-between text-[11px] text-gray-500">
+                      <span>End: {caption.end.toFixed(2)}s</span>
+                      {caption.highlightWords?.length ? (
+                        <span className="text-amber-400 font-medium">
+                          Highlights: {caption.highlightWords.join(", ")}
+                        </span>
+                      ) : null}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex items-center justify-between border-t border-white/10 bg-black/30 px-6 py-4">
+              <p className="text-xs text-gray-400">Edits auto-save when you click away or close.</p>
+              <Button
+                onClick={() => {
+                  if (project?.transcription) {
+                    void persistCaptionChanges(project.transcription, false);
+                  }
+                  setIsTranscriptOpen(false);
+                }}
+                className="bg-emerald-600 text-white hover:bg-emerald-500"
+              >
+                Done Editing
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
