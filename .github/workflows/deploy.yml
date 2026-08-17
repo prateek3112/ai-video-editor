@@ -33,13 +33,23 @@ jobs:
               }
           }
 
-          # 2. Open Firewall Ports 9999 & 3000
+          # 2. Open Firewall Ports 8000, 9999 & 3000
+          New-NetFirewallRule -DisplayName "AI-Video-Editor-8000" -Direction Inbound -LocalPort 8000 -Protocol TCP -Action Allow -ErrorAction SilentlyContinue
           New-NetFirewallRule -DisplayName "AI-Video-Editor-9999" -Direction Inbound -LocalPort 9999 -Protocol TCP -Action Allow -ErrorAction SilentlyContinue
           New-NetFirewallRule -DisplayName "AI-Video-Editor-3000" -Direction Inbound -LocalPort 3000 -Protocol TCP -Action Allow -ErrorAction SilentlyContinue
 
-          # Reset netsh portproxy so Node binds directly to 0.0.0.0:9999
+          # Reset netsh portproxy so Node binds directly to 0.0.0.0:8000
           netsh interface portproxy reset
 
+          # Stop any existing process occupying port 8000 or 9999
+          $stalePorts = @(8000, 9999)
+          foreach ($p in $stalePorts) {
+              $pids = Get-NetTCPConnection -LocalPort $p -ErrorAction SilentlyContinue | Select-Object -ExpandProperty OwningProcess -Unique
+              foreach ($procId in $pids) {
+                  Stop-Process -Id $procId -Force -ErrorAction SilentlyContinue
+              }
+          }
+          
           # 3. Ensure .env.production exists
           if (-not (Test-Path ".env.production")) {
               if (Test-Path ".env.production.example") {
@@ -104,7 +114,7 @@ jobs:
 
           # Create launcher batch script using standalone server.js
           $runnerBat = Join-Path $standaloneDir "run-247-server.bat"
-          $batContent = "@echo off`r`ncd /d `"$standaloneDir`"`r`nset PORT=9999`r`nset HOSTNAME=0.0.0.0`r`nset NODE_ENV=production`r`n`"$nodeExe`" server.js > C:\ai-video-editor-247.log 2>&1"
+          $batContent = "@echo off`r`ncd /d `"$standaloneDir`"`r`nset PORT=8000`r`nset HOSTNAME=0.0.0.0`r`nset NODE_ENV=production`r`n`"$nodeExe`" server.js > C:\ai-video-editor-247.log 2>&1"
           Set-Content -Path $runnerBat -Value $batContent
 
           # Register Scheduled Task with PT0S (Infinite Time Limit) running under SYSTEM
@@ -125,8 +135,8 @@ jobs:
           Write-Host "--- Active Node Processes ---"
           Get-Process -Name node -ErrorAction SilentlyContinue | Format-Table Id, ProcessName, CPU, WorkingSet
 
-          Write-Host "--- Active Port Bindings (9999) ---"
-          Get-NetTCPConnection -LocalPort 9999 -ErrorAction SilentlyContinue | Format-Table LocalAddress, LocalPort, State, OwningProcess
+          Write-Host "--- Active Port Bindings (8000) ---"
+          Get-NetTCPConnection -LocalPort 8000 -ErrorAction SilentlyContinue | Format-Table LocalAddress, LocalPort, State, OwningProcess
 
           Write-Host "--- Server Log Output (C:\ai-video-editor-247.log) ---"
           if (Test-Path "C:\ai-video-editor-247.log") {
