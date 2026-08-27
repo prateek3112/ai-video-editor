@@ -62,9 +62,13 @@ export const transcriptionQueue = {
             brandThemeId: data.brandThemeId,
           });
         } catch (visualErr) {
-          // Visual scene generation is non-critical — captions alone are enough
-          console.warn(`[Queue] Visual scene generation failed (non-critical):`, visualErr);
-          visualScenes = [];
+          console.warn(`[Queue] AI visual scene generation failed, falling back to deterministic brand scenes:`, visualErr);
+          const { createScriptVisualScenes } = await import('./script-visuals');
+          visualScenes = createScriptVisualScenes(
+            updatedProject.captions.map((caption) => ({ text: caption.text, start: caption.start, end: caption.end })),
+            updatedProject.duration,
+            data.brandThemeId,
+          );
         }
 
         if (visualScenes.length) {

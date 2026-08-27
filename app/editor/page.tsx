@@ -1362,8 +1362,9 @@ export default function EditorPage() {
         setRenderedVideoUrl(data.videoUrl);
       }
       toast.success(`Remotion render complete: ${data.videoUrl}`);
-    } catch (err: any) {
-      toast.error(err.message || "Failed to render Remotion composition");
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Failed to render Remotion composition";
+      toast.error(message);
     } finally {
       setIsRenderingRemotion(false);
     }
@@ -1376,7 +1377,7 @@ export default function EditorPage() {
       videoUrl: project.videoUrl ?? "",
       sourceVideoUrl: project.videoUrl ?? "",
       duration: project.duration,
-      status: (project.status ?? "ready") as any,
+      status: (project.status ?? "ready") as "processing" | "transcribing" | "ready" | "rendering" | "completed" | "failed",
       createdAt: new Date().toISOString(),
       captions: (project.transcription ?? []).map((c, i) => ({
         id: `cap-${i}`,

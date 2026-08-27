@@ -70,8 +70,9 @@ export function AiCreateDialog() {
       editorUrl.searchParams.set("engine", engine);
       editorUrl.searchParams.set("theme", brandThemeId);
       window.location.href = editorUrl.toString();
-    } catch (err: any) {
-      toast.error(err.message || "Failed to generate video project");
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Failed to generate video project";
+      toast.error(message);
     } finally {
       setIsLoading(false);
     }
@@ -122,7 +123,7 @@ export function AiCreateDialog() {
               <label className="text-xs font-semibold text-gray-600">Video Engine</label>
               <select
                 value={engine}
-                onChange={(e) => setEngine(e.target.value as any)}
+                onChange={(e) => setEngine(e.target.value as "remotion" | "hyperframes")}
                 className="w-full p-2.5 text-xs font-semibold text-blue-700 bg-blue-50/70 border border-blue-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="remotion">Remotion (React)</option>
@@ -135,7 +136,7 @@ export function AiCreateDialog() {
               <label className="text-xs font-semibold text-gray-600">Language</label>
               <select
                 value={language}
-                onChange={(e) => setLanguage(e.target.value as any)}
+                onChange={(e) => setLanguage(e.target.value as "hinglish" | "english" | "hindi")}
                 className="w-full p-2.5 text-xs font-medium bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="hinglish">Hinglish</option>

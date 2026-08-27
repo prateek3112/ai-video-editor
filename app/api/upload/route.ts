@@ -11,7 +11,24 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: false, error: "File is required" }, { status: 400 });
     }
 
-    const ext = path.extname(file.name) || ".mp4";
+    // 500MB Max File Size Limit
+    const MAX_SIZE_BYTES = 500 * 1024 * 1024;
+    if (file.size > MAX_SIZE_BYTES) {
+      return NextResponse.json(
+        { success: false, error: "File size exceeds the 500MB limit" },
+        { status: 413 }
+      );
+    }
+
+    const ext = (path.extname(file.name) || ".mp4").toLowerCase();
+    const ALLOWED_EXTENSIONS = new Set([".mp4", ".mov", ".webm", ".mkv", ".avi", ".mp3", ".wav", ".m4a", ".aac", ".ogg"]);
+    if (!ALLOWED_EXTENSIONS.has(ext)) {
+      return NextResponse.json(
+        { success: false, error: `Unsupported file type: ${ext}. Supported formats: MP4, MOV, WEBM, MKV, AVI, MP3, WAV, M4A, AAC.` },
+        { status: 400 }
+      );
+    }
+
     const safeBaseName = path
       .basename(file.name, ext)
       .replace(/[^a-zA-Z0-9_-]/g, "-")

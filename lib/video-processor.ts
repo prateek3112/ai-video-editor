@@ -323,8 +323,12 @@ async function transcribeWithGemini(
   const geminiClient = new GoogleGenAI({ apiKey });
 
   const audioPath = await extractAudioForTranscription(inputPath);
-  const audioBuffer = await fsp.readFile(audioPath);
-  await fsp.unlink(audioPath).catch(() => undefined);
+  let audioBuffer: Buffer;
+  try {
+    audioBuffer = await fsp.readFile(audioPath);
+  } finally {
+    await fsp.unlink(audioPath).catch(() => undefined);
+  }
 
   const audioBase64 = audioBuffer.toString('base64');
   const parsed = await requestGeminiSegments(geminiClient, audioBase64, duration);
@@ -1037,29 +1041,51 @@ export async function processVideoRender(
   const outputPath = path.join(renderDir, outputFilename);
   const outputPublicUrl = `/renders/${outputFilename}`;
 
-  const inputPath = resolveProjectInputPath(project);
+  let inputPath = resolveProjectInputPath(project);
+  let tempBaseVideo: string | null = null;
 
   if (!inputPath) {
-    throw new Error('Local source video not found for rendering');
+    // If no raw video was uploaded (e.g. AI-created composition or text-to-video), generate a dark canvas video
+    const canvasDuration = Math.max(1, Math.ceil(project.duration || 10));
+    tempBaseVideo = path.join(os.tmpdir(), `base-canvas-${projectId}-${Date.now()}.mp4`);
+    await new Promise<void>((resolve, reject) => {
+      ffmpeg()
+        .input(`color=c=0x0a0c10:s=1080x1920:d=${canvasDuration}:r=30`)
+        .inputFormat('lavfi')
+        .input('anullsrc=r=44100:cl=stereo')
+        .inputFormat('lavfi')
+        .outputOptions(['-t', String(canvasDuration), '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-shortest'])
+        .output(tempBaseVideo!)
+        .on('end', () => resolve())
+        .on('error', (err) => reject(err))
+        .run();
+    });
+    inputPath = tempBaseVideo;
   }
 
-  await renderWithFfmpeg(
-    inputPath,
-    outputPath,
-    settings,
-    quality,
-    project.captions.map((cap) => ({
-      text: cap.text,
-      start: cap.start,
-      end: cap.end,
-      confidence: cap.confidence,
-      script: cap.script,
-      highlightWords: cap.highlightWords,
-      positionX: cap.positionX,
-      positionY: cap.positionY,
-    })),
-    project.duration,
-  );
+  try {
+    await renderWithFfmpeg(
+      inputPath,
+      outputPath,
+      settings,
+      quality,
+      project.captions.map((cap) => ({
+        text: cap.text,
+        start: cap.start,
+        end: cap.end,
+        confidence: cap.confidence,
+        script: cap.script,
+        highlightWords: cap.highlightWords,
+        positionX: cap.positionX,
+        positionY: cap.positionY,
+      })),
+      project.duration || 10,
+    );
+  } finally {
+    if (tempBaseVideo) {
+      await fsp.unlink(tempBaseVideo).catch(() => undefined);
+    }
+  }
 
   return outputPublicUrl;
 }
