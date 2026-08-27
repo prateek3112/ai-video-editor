@@ -85,19 +85,21 @@ export function ByobKeyDialog({ triggerText = "AI Provider" }: { triggerText?: s
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger>
-        <Button
-          variant="outline"
-          size="sm"
-          className={`h-9 rounded-full px-3 text-xs font-medium gap-1.5 ${
-            isConfigured ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-200" : "border-white/15 text-gray-300"
-          }`}
-        >
-          {config.provider === "local-whisper" ? <HardDrive className="h-3.5 w-3.5" /> : <Key className="h-3.5 w-3.5" />}
-          <span>{isConfigured ? selected.label : triggerText}</span>
-          {isConfigured && <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />}
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger
+        render={
+          <Button
+            variant="outline"
+            size="sm"
+            className={`h-9 rounded-full px-3 text-xs font-medium gap-1.5 ${
+              isConfigured ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-200" : "border-white/15 text-gray-300"
+            }`}
+          >
+            {config.provider === "local-whisper" ? <HardDrive className="h-3.5 w-3.5" /> : <Key className="h-3.5 w-3.5" />}
+            <span>{isConfigured ? selected.label : triggerText}</span>
+            {isConfigured && <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />}
+          </Button>
+        }
+      />
 
       <DialogContent className="sm:max-w-xl rounded-2xl border border-gray-200 bg-white p-6 shadow-2xl">
         <DialogHeader className="space-y-2">

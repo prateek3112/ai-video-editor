@@ -80,13 +80,15 @@ export function AiCreateDialog() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>
-        <Button size="lg" className="h-14 px-8 text-base rounded-full shadow-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white gap-2 font-medium">
-          <Sparkles className="h-5 w-5 text-yellow-300 animate-pulse" />
-          <span>AI Create Mode</span>
-          <ArrowRight className="h-4 w-4 opacity-80" />
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger
+        render={
+          <Button size="lg" className="h-14 px-8 text-base rounded-full shadow-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white gap-2 font-medium">
+            <Sparkles className="h-5 w-5 text-yellow-300 animate-pulse" />
+            <span>AI Create Mode</span>
+            <ArrowRight className="h-4 w-4 opacity-80" />
+          </Button>
+        }
+      />
 
       <DialogContent className="sm:max-w-xl bg-white rounded-3xl p-6 border shadow-2xl">
         <DialogHeader className="space-y-2">

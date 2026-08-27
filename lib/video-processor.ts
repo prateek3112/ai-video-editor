@@ -129,15 +129,48 @@ function wrapCaptionText(input: string, maxWordsPerLine: number, maxLines: numbe
 }
 
 function resolveLocalInputPath(videoUrl: string): string | null {
-  if (!videoUrl || videoUrl.startsWith('http')) return null;
+  if (!videoUrl) return null;
 
-  if (path.isAbsolute(videoUrl) && fs.existsSync(videoUrl)) {
-    return videoUrl;
+  // Clean hash/fragments like #t=0,35.1 or query params ?foo=bar
+  let cleaned = videoUrl.split('#')[0].split('?')[0].trim();
+  if (!cleaned) return null;
+
+  // If already an absolute path that exists
+  if (path.isAbsolute(cleaned) && fs.existsSync(cleaned)) {
+    return cleaned;
   }
 
-  const normalized = videoUrl.startsWith('/') ? videoUrl.slice(1) : videoUrl;
-  const publicPath = path.join(process.cwd(), 'public', normalized);
-  if (fs.existsSync(publicPath)) return publicPath;
+  // Handle URL forms like http://.../api/uploads/filename or /api/uploads/filename
+  if (/^https?:\/\//i.test(cleaned)) {
+    try {
+      const parsed = new URL(cleaned);
+      cleaned = parsed.pathname;
+    } catch {
+      // not a parseable URL
+    }
+  }
+
+  const normalized = cleaned.startsWith('/') ? cleaned.slice(1) : cleaned;
+  const filename = path.basename(cleaned);
+
+  // Candidate paths in order of likelihood
+  const candidates = [
+    path.join(process.cwd(), 'public', normalized),
+    path.join(process.cwd(), normalized),
+    path.join(process.cwd(), 'public', 'uploads', filename),
+    path.join(process.cwd(), 'uploads', filename),
+    path.join(os.tmpdir(), filename),
+    // Common Windows live server directories
+    path.join('C:', 'ai-video-editor-live', 'public', 'uploads', filename),
+    path.join('C:', 'ai-video-editor-live', 'public', normalized),
+    path.join('C:', 'actions-runner', '_work', 'ai-video-editor', 'ai-video-editor', 'public', 'uploads', filename),
+  ];
+
+  for (const candidate of candidates) {
+    if (fs.existsSync(candidate)) {
+      return candidate;
+    }
+  }
 
   return null;
 }
