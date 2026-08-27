@@ -31,7 +31,8 @@ interface RemotionCompositionProps {
 }
 
 function mediaSource(src: string): string {
-  if (/^https?:\/\//i.test(src) || src.startsWith("data:")) return src;
+  if (!src) return "";
+  if (/^https?:\/\//i.test(src) || src.startsWith("data:") || src.startsWith("blob:") || src.startsWith("/api/")) return src;
   return staticFile(src.replace(/^\/+/, ""));
 }
 
@@ -105,6 +106,54 @@ const MotifGraphic: React.FC<{ scene: ScriptVisualScene }> = ({ scene }) => {
         ))}
         <div style={{ position: "absolute", left: 82, top: 70, width: 100, height: 8, background: "white", transform: "rotate(-22deg)" }} />
         <div style={{ position: "absolute", left: 82, top: 130, width: 100, height: 8, background: "white", transform: "rotate(24deg)" }} />
+      </div>
+    );
+  }
+
+  if (scene.motif === "rocket") {
+    return (
+      <div style={{ position: "relative", width: 220, height: 220, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ fontSize: 130, filter: `drop-shadow(0 0 30px ${scene.palette.accent}88)` }}>🚀</div>
+      </div>
+    );
+  }
+
+  if (scene.motif === "fire") {
+    return (
+      <div style={{ position: "relative", width: 220, height: 220, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ fontSize: 130, filter: `drop-shadow(0 0 36px ${scene.palette.accent})` }}>🔥</div>
+      </div>
+    );
+  }
+
+  if (scene.motif === "trophy") {
+    return (
+      <div style={{ position: "relative", width: 220, height: 220, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ fontSize: 130, filter: `drop-shadow(0 0 32px ${scene.palette.accent}99)` }}>🏆</div>
+      </div>
+    );
+  }
+
+  if (scene.motif === "brain" || scene.motif === "idea") {
+    return (
+      <div style={{ position: "relative", width: 220, height: 220, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ fontSize: 130, filter: `drop-shadow(0 0 32px ${scene.palette.accent}88)` }}>💡</div>
+      </div>
+    );
+  }
+
+  if (scene.motif === "chart") {
+    return (
+      <div style={{ position: "relative", width: 220, height: 220, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ fontSize: 130, filter: `drop-shadow(0 0 32px ${scene.palette.accent}88)` }}>📈</div>
+      </div>
+    );
+  }
+
+  if (scene.motif === "shield") {
+    return (
+      <div style={{ position: "relative", width: 220, height: 220, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ fontSize: 130, filter: `drop-shadow(0 0 32px ${scene.palette.accent}88)` }}>🛡️</div>
       </div>
     );
   }

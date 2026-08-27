@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
-    <html lang="en" className={cn("font-sans", geist.variable, inter.variable, sora.variable)}>
+    <html lang="en" suppressHydrationWarning className={cn("font-sans", geist.variable, inter.variable, sora.variable)}>
       <body suppressHydrationWarning>
         {children}
         <Toaster richColors position="top-right" />

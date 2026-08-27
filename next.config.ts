@@ -20,6 +20,14 @@ const nextConfig: NextConfig = {
     ],
   },
   output: 'standalone',
+  async rewrites() {
+    return [
+      {
+        source: '/uploads/:filename',
+        destination: '/api/uploads/:filename',
+      },
+    ];
+  },
   transpilePackages: ['motion'],
   serverExternalPackages: [
     '@remotion/bundler',

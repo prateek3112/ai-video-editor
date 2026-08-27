@@ -25,6 +25,7 @@ export const RemotionPlayerPreview: React.FC<RemotionPlayerPreviewProps> = ({ pl
         compositionHeight={height}
         fps={plan.fps}
         controls
+        acknowledgeRemotionLicense
         style={{
           width: "100%",
           height: "100%",
@@ -32,6 +33,14 @@ export const RemotionPlayerPreview: React.FC<RemotionPlayerPreviewProps> = ({ pl
           objectFit: "contain",
         }}
         showVolumeControls={false}
+        errorFallback={({ error }: { error: Error }) => (
+          <div className="flex items-center justify-center w-full h-full bg-slate-950 text-white/60 text-sm p-8 text-center">
+            <div>
+              <div className="text-red-400 font-medium mb-2">Media Error</div>
+              <div className="text-xs text-white/40">{error.message}</div>
+            </div>
+          </div>
+        )}
       />
     </div>
   );

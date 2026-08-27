@@ -29,7 +29,8 @@ export type FloatingGlowingCaptionsProps = {
 };
 
 function resolveMediaSource(src: string): string {
-  if (/^https?:\/\//i.test(src) || src.startsWith("data:")) return src;
+  if (!src) return "";
+  if (/^https?:\/\//i.test(src) || src.startsWith("data:") || src.startsWith("blob:") || src.startsWith("/api/")) return src;
   return staticFile(src.replace(/^\/+/, ""));
 }
 

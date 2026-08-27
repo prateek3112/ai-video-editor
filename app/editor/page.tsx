@@ -403,11 +403,8 @@ export default function EditorPage() {
   const [localPreviewUrl, setLocalPreviewUrl] = useState<string | null>(null);
   const [selectedCaptionIndex, setSelectedCaptionIndex] = useState<number | null>(null);
   const [isSavingCaptions, setIsSavingCaptions] = useState(false);
-  const [engineMode, setEngineMode] = useState<"remotion" | "hyperframes" | "canvas">(() => {
-    if (typeof window === "undefined") return "canvas";
-    const requested = new URLSearchParams(window.location.search).get("engine");
-    return requested === "hyperframes" ? "hyperframes" : requested === "remotion" ? "remotion" : "canvas";
-  });
+  const [engineMode, setEngineMode] = useState<"remotion" | "hyperframes" | "canvas">("canvas");
+  const [hasMounted, setHasMounted] = useState(false);
   const [suppliedCaptions, setSuppliedCaptions] = useState<ParsedSubtitleCaption[]>([]);
   const [suppliedCaptionName, setSuppliedCaptionName] = useState("");
   const [inlineEditingIndex, setInlineEditingIndex] = useState<number | null>(null);
@@ -508,6 +505,15 @@ export default function EditorPage() {
       }
     }
   }, [applyApiProject, updateCaptionSettings]);
+
+  // Sync engine mode from URL after hydration to avoid React error #418
+  useEffect(() => {
+    setHasMounted(true);
+    const params = new URLSearchParams(window.location.search);
+    const requested = params.get("engine");
+    if (requested === "hyperframes") setEngineMode("hyperframes");
+    else if (requested === "remotion") setEngineMode("remotion");
+  }, []);
 
   const persistCaptionChanges = useCallback(async (nextCaptions: TimelineCaption[], silent = false) => {
     if (!project) return;
@@ -3131,7 +3137,12 @@ export default function EditorPage() {
               ref={previewFrameRef}
               className="aspect-[9/16] h-full max-h-[70vh] bg-gray-900 rounded-lg overflow-hidden relative shadow-2xl border border-white/10"
             >
-              {engineMode === "remotion" && activeEditPlan ? (
+              {!hasMounted ? (
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-gray-900">
+                  <div className="h-12 w-12 rounded-full border-2 border-white/10 border-t-emerald-500 animate-spin" />
+                  <p className="text-sm text-gray-400 animate-pulse">Initializing editor...</p>
+                </div>
+              ) : engineMode === "remotion" && activeEditPlan ? (
                 <RemotionPlayerPreview plan={activeEditPlan} />
               ) : engineMode === "hyperframes" && compositionUrl ? (
                 <iframe src={compositionUrl} className="w-full h-full border-0 bg-black" title="Hyperframes Preview" />
@@ -3173,9 +3184,17 @@ export default function EditorPage() {
                     setCurrentTime(0);
                   }}
                 />
+              ) : isUploading ? (
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-gray-900/80">
+                  <div className="h-12 w-12 rounded-full border-2 border-white/10 border-t-blue-500 animate-spin" />
+                  <p className="text-sm text-gray-300 animate-pulse">Processing your video...</p>
+                  <p className="text-xs text-gray-500">{uploadProgress}% complete</p>
+                </div>
               ) : (
-                <div className="absolute inset-0 flex items-center justify-center text-gray-500 text-sm">
-                  <span>No video loaded</span>
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-500 gap-3 px-8 text-center">
+                  <Film className="h-10 w-10 text-gray-600" />
+                  <p className="text-sm font-medium text-gray-400">No video loaded</p>
+                  <p className="text-xs text-gray-600">Upload footage or use AI Create Mode to generate a video</p>
                 </div>
               )}
 
