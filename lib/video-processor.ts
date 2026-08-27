@@ -1057,7 +1057,7 @@ export async function processVideoRender(
         .outputOptions(['-t', String(canvasDuration), '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-shortest'])
         .output(tempBaseVideo!)
         .on('end', () => resolve())
-        .on('error', (err) => reject(err))
+        .on('error', (err: Error) => reject(err))
         .run();
     });
     inputPath = tempBaseVideo;

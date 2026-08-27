@@ -18,14 +18,15 @@ export interface CaptionWord {
   end: number;   // seconds
 }
 
-export interface FloatingGlowingCaptionsProps {
+export type FloatingGlowingCaptionsProps = {
   videoSrc: string;
   words: CaptionWord[];
   fontSize?: number;
   positionYPercent?: number;
   letterSpacing?: number;
   textTransform?: "uppercase" | "none" | "capitalize";
-}
+  [key: string]: unknown;
+};
 
 function resolveMediaSource(src: string): string {
   if (/^https?:\/\//i.test(src) || src.startsWith("data:")) return src;

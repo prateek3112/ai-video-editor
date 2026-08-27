@@ -19,7 +19,7 @@ export interface ViralChecklistItem {
   frame?: number;
 }
 
-export interface ViralChecklistProps {
+export type ViralChecklistProps = {
   videoSrc: string;
   title: string;
   subtitle?: string;
@@ -37,7 +37,8 @@ export interface ViralChecklistProps {
   titleSize?: number;
   textColor?: string;
   accentColor?: string;
-}
+  [key: string]: unknown;
+};
 
 export const ViralChecklist: React.FC<ViralChecklistProps> = ({
   videoSrc,
