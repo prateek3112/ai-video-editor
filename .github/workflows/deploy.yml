@@ -12,8 +12,19 @@ jobs:
   deploy:
     runs-on: self-hosted
     steps:
+      - name: Stop Running Service Before Checkout
+        shell: powershell
+        run: |
+          Write-Host "Stopping any running service to release Windows file locks..."
+          Stop-ScheduledTask -TaskName "AIVideoEditor247" -ErrorAction SilentlyContinue
+          Unregister-ScheduledTask -TaskName "AIVideoEditor247" -Confirm:$false -ErrorAction SilentlyContinue
+          Get-Process -Name node -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+          Start-Sleep -Seconds 2
+
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          clean: false
 
       - name: Deploy Native Node.js Application on Windows Server
         shell: powershell
@@ -78,47 +89,43 @@ jobs:
           Write-Host "Building production Next.js bundle..."
           npm run build
 
-          # 6. Copy static assets to Next.js standalone directory
-          if (Test-Path ".next\standalone") {
-              if (Test-Path "public") {
-                  Copy-Item -Path "public" -Destination ".next\standalone\public" -Recurse -Force -ErrorAction SilentlyContinue
-              }
-              if (Test-Path ".next\static") {
-                  New-Item -ItemType Directory -Path ".next\standalone\.next\static" -Force -ErrorAction SilentlyContinue
-                  Copy-Item -Path ".next\static\*" -Destination ".next\standalone\.next\static" -Recurse -Force -ErrorAction SilentlyContinue
-              }
+          # 6. Deploy to dedicated live directory C:\ai-video-editor-live (decoupled from runner workspace)
+          $liveDir = "C:\ai-video-editor-live"
+          Write-Host "Syncing build artifacts to $liveDir..."
+          if (-not (Test-Path $liveDir)) {
+              New-Item -ItemType Directory -Path $liveDir -Force | Out-Null
           }
 
-          # 7. Register & Start Permanent 24/7 Un-killable Windows Service
+          # Copy standalone build
+          if (Test-Path ".next\standalone") {
+              Copy-Item -Path ".next\standalone\*" -Destination $liveDir -Recurse -Force
+          }
+          
+          # Copy public static files
+          if (Test-Path "public") {
+              New-Item -ItemType Directory -Path "$liveDir\public" -Force -ErrorAction SilentlyContinue | Out-Null
+              Copy-Item -Path "public\*" -Destination "$liveDir\public" -Recurse -Force -ErrorAction SilentlyContinue
+          }
+
+          # Copy .next/static
+          if (Test-Path ".next\static") {
+              New-Item -ItemType Directory -Path "$liveDir\.next\static" -Force -ErrorAction SilentlyContinue | Out-Null
+              Copy-Item -Path ".next\static\*" -Destination "$liveDir\.next\static" -Recurse -Force -ErrorAction SilentlyContinue
+          }
+
+          # 7. Register & Start Permanent 24/7 Windows Service from C:\ai-video-editor-live
           Write-Host "Registering permanent 24/7 Windows Service..."
           
-          # Stop existing Node processes & tasks
-          Unregister-ScheduledTask -TaskName "AIVideoEditor247" -Confirm:$false -ErrorAction SilentlyContinue
-          Unregister-ScheduledTask -TaskName "AIVideoEditorService" -Confirm:$false -ErrorAction SilentlyContinue
-          Unregister-ScheduledTask -TaskName "AIVideoEditor" -Confirm:$false -ErrorAction SilentlyContinue
-          Get-Process -Name node -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
-
-          $workDir = $env:GITHUB_WORKSPACE
-          $standaloneDir = Join-Path $workDir ".next\standalone"
           $nodeCmd = Get-Command node.exe -ErrorAction SilentlyContinue
           $nodeExe = if ($nodeCmd) { $nodeCmd.Source } else { Join-Path $env:SystemDrive "Program Files\nodejs\node.exe" }
-          
-          # Copy public & .next/static into .next/standalone
-          if (Test-Path "$workDir\public") {
-              Copy-Item -Path "$workDir\public" -Destination "$standaloneDir\public" -Recurse -Force -ErrorAction SilentlyContinue
-          }
-          if (Test-Path "$workDir\.next\static") {
-              New-Item -ItemType Directory -Path "$standaloneDir\.next\static" -Force -ErrorAction SilentlyContinue
-              Copy-Item -Path "$workDir\.next\static\*" -Destination "$standaloneDir\.next\static" -Recurse -Force -ErrorAction SilentlyContinue
-          }
 
           # Create launcher batch script using standalone server.js on Port 3000
-          $runnerBat = Join-Path $standaloneDir "run-247-server.bat"
-          $batContent = "@echo off`r`ncd /d `"$standaloneDir`"`r`nset PORT=3000`r`nset HOSTNAME=0.0.0.0`r`nset NODE_ENV=production`r`n`"$nodeExe`" server.js > C:\ai-video-editor-247.log 2>&1"
+          $runnerBat = Join-Path $liveDir "run-247-server.bat"
+          $batContent = "@echo off`r`ncd /d `"$liveDir`"`r`nset PORT=3000`r`nset HOSTNAME=0.0.0.0`r`nset NODE_ENV=production`r`n`"$nodeExe`" server.js > C:\ai-video-editor-247.log 2>&1"
           Set-Content -Path $runnerBat -Value $batContent
 
-          # Register Scheduled Task with PT0S (Infinite Time Limit) running under SYSTEM
-          $action = New-ScheduledTaskAction -Execute "cmd.exe" -Argument "/c `"$runnerBat`"" -WorkingDirectory $standaloneDir
+          # Register Scheduled Task with Infinite Time Limit running under SYSTEM
+          $action = New-ScheduledTaskAction -Execute "cmd.exe" -Argument "/c `"$runnerBat`"" -WorkingDirectory $liveDir
           $trigger = New-ScheduledTaskTrigger -AtStartup
           $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -ExecutionTimeLimit (New-TimeSpan -Days 9999) -RestartCount 999 -RestartInterval (New-TimeSpan -Minutes 1)
 
