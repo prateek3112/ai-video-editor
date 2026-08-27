@@ -9,9 +9,15 @@ coverage/
 !.env.production.example
 ref.mp4
 toedit.mov
+*.MOV
+*.mov
+*.wav
+*.mp3
+*.pcm
 public/uploads/*
 !public/uploads/.gitkeep
 public/renders/*
 !public/renders/.gitkeep
 public/compositions/*
 !public/compositions/.gitkeep
+

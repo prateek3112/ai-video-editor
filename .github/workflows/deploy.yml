@@ -38,11 +38,11 @@ jobs:
           New-NetFirewallRule -DisplayName "AI-Video-Editor-9999" -Direction Inbound -LocalPort 9999 -Protocol TCP -Action Allow -ErrorAction SilentlyContinue
           New-NetFirewallRule -DisplayName "AI-Video-Editor-3000" -Direction Inbound -LocalPort 3000 -Protocol TCP -Action Allow -ErrorAction SilentlyContinue
 
-          # Reset netsh portproxy so Node binds directly to 0.0.0.0:8000
+          # Reset netsh portproxy so Node binds directly to 0.0.0.0:3000
           netsh interface portproxy reset
 
-          # Stop any existing process occupying port 8000 or 9999
-          $stalePorts = @(8000, 9999)
+          # Stop any existing process occupying port 3000 or 9999
+          $stalePorts = @(3000, 9999)
           foreach ($p in $stalePorts) {
               $pids = Get-NetTCPConnection -LocalPort $p -ErrorAction SilentlyContinue | Select-Object -ExpandProperty OwningProcess -Unique
               foreach ($procId in $pids) {
@@ -112,9 +112,9 @@ jobs:
               Copy-Item -Path "$workDir\.next\static\*" -Destination "$standaloneDir\.next\static" -Recurse -Force -ErrorAction SilentlyContinue
           }
 
-          # Create launcher batch script using standalone server.js
+          # Create launcher batch script using standalone server.js on Port 3000
           $runnerBat = Join-Path $standaloneDir "run-247-server.bat"
-          $batContent = "@echo off`r`ncd /d `"$standaloneDir`"`r`nset PORT=8000`r`nset HOSTNAME=0.0.0.0`r`nset NODE_ENV=production`r`n`"$nodeExe`" server.js > C:\ai-video-editor-247.log 2>&1"
+          $batContent = "@echo off`r`ncd /d `"$standaloneDir`"`r`nset PORT=3000`r`nset HOSTNAME=0.0.0.0`r`nset NODE_ENV=production`r`n`"$nodeExe`" server.js > C:\ai-video-editor-247.log 2>&1"
           Set-Content -Path $runnerBat -Value $batContent
 
           # Register Scheduled Task with PT0S (Infinite Time Limit) running under SYSTEM
@@ -135,14 +135,22 @@ jobs:
           Write-Host "--- Active Node Processes ---"
           Get-Process -Name node -ErrorAction SilentlyContinue | Format-Table Id, ProcessName, CPU, WorkingSet
 
-          Write-Host "--- Active Port Bindings (8000) ---"
-          Get-NetTCPConnection -LocalPort 8000 -ErrorAction SilentlyContinue | Format-Table LocalAddress, LocalPort, State, OwningProcess
+          Write-Host "--- Active Port Bindings (3000) ---"
+          Get-NetTCPConnection -LocalPort 3000 -ErrorAction SilentlyContinue | Format-Table LocalAddress, LocalPort, State, OwningProcess
 
           Write-Host "--- Server Log Output (C:\ai-video-editor-247.log) ---"
           if (Test-Path "C:\ai-video-editor-247.log") {
               Get-Content "C:\ai-video-editor-247.log" -Tail 50
           } else {
               Write-Host "Log file C:\ai-video-editor-247.log does not exist."
+          }
+
+          Write-Host "--- Local Health Check ---"
+          try {
+              $response = Invoke-WebRequest -Uri "http://127.0.0.1:3000" -UseBasicParsing -TimeoutSec 10
+              Write-Host "Health Check: HTTP $($response.StatusCode)"
+          } catch {
+              Write-Host "Health Check Warning: $($_.Exception.Message)"
           }
 
           Write-Host "Deployment Audit Completed!"
