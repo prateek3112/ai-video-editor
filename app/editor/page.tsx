@@ -3179,7 +3179,7 @@ export default function EditorPage() {
                 </div>
               )}
 
-              {activeScriptVisualScene ? (
+              {engineMode === "canvas" && activeScriptVisualScene ? (
                 <div
                   className="absolute inset-x-0 top-0 z-10 flex h-1/2 flex-col justify-between overflow-hidden p-6 text-white"
                   style={{
@@ -3272,7 +3272,9 @@ export default function EditorPage() {
                 </div>
               ) : null}
 
-              <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10" />
+              {engineMode === "canvas" && (
+                <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10 pointer-events-none" />
+              )}
               {engineMode === "canvas" && project && displayLines.length > 0 && (
                 <div
                   className={`absolute z-20 px-4 text-center select-none ${previewInteraction?.mode === "move" ? "cursor-grabbing" : "cursor-grab"}`}
@@ -3430,20 +3432,56 @@ export default function EditorPage() {
         </div>
 
         <div className="flex-1 overflow-auto relative p-4 gap-2 flex flex-col">
-          <div className="absolute top-0 bottom-0" style={{ left: `${Math.max(6, currentPositionPercent)}%` }}>
-            <div className="w-px h-full bg-red-500 z-20" />
-            <div className="w-3 h-3 bg-red-500 rounded-sm -ml-1.5 -mt-[calc(100%+8px)]" />
-          </div>
-
-          <div className="flex h-16 w-full items-center gap-4">
-            <span className="w-16 text-xs text-gray-500 font-medium">Video 1</span>
+          {/* Track 1: Video */}
+          <div className="flex h-14 w-full items-center gap-4">
+            <span className="w-16 text-xs text-gray-500 font-medium shrink-0">Video 1</span>
             <div className="flex-1 h-full bg-blue-900/30 border border-blue-500/30 rounded-md overflow-hidden flex relative">
               <div className="absolute inset-y-0 left-0 right-0 bg-blue-600/20 border-x border-blue-500/50" />
+              <div
+                className="absolute top-0 bottom-0 w-0.5 bg-red-500 z-20 pointer-events-none shadow-sm"
+                style={{ left: `${Math.max(0, Math.min(100, currentPositionPercent))}%` }}
+              />
             </div>
           </div>
 
+          {/* Track 2: Visual Scenes / Callouts (if present) */}
+          {project?.visualScenes && project.visualScenes.length > 0 && (
+            <div className="flex h-12 w-full items-center gap-4">
+              <span className="w-16 text-xs text-purple-400 font-medium shrink-0">Visuals</span>
+              <div className="flex-1 h-full bg-purple-950/20 border border-purple-500/25 rounded-md relative overflow-hidden">
+                {project.visualScenes.map((scene, idx) => {
+                  const duration = Math.max(project.duration, 0.01);
+                  const left = (scene.start / duration) * 100;
+                  const width = Math.max(1.5, ((scene.end - scene.start) / duration) * 100);
+                  const isActive = currentTime >= scene.start && currentTime <= scene.end;
+                  return (
+                    <div
+                      key={scene.id || `scene-${idx}`}
+                      className={`absolute top-1 bottom-1 rounded-sm border px-2 flex items-center justify-between text-[10px] font-semibold truncate transition-colors cursor-pointer ${
+                        isActive
+                          ? "border-purple-400 bg-purple-500/35 text-purple-200 shadow-sm"
+                          : "border-purple-500/40 bg-purple-500/15 text-purple-300 hover:bg-purple-500/25"
+                      }`}
+                      style={{ left: `${left}%`, width: `${width}%` }}
+                      onClick={() => setCurrentTime(scene.start)}
+                      title={`${scene.eyebrow}: ${scene.title} (${scene.layout})`}
+                    >
+                      <span className="truncate">{scene.title || scene.eyebrow}</span>
+                      <span className="text-[9px] uppercase opacity-70 ml-1 shrink-0 font-mono">{scene.layout}</span>
+                    </div>
+                  );
+                })}
+                <div
+                  className="absolute top-0 bottom-0 w-0.5 bg-red-500 z-20 pointer-events-none shadow-sm"
+                  style={{ left: `${Math.max(0, Math.min(100, currentPositionPercent))}%` }}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Track 3: Captions */}
           <div className="flex h-14 w-full items-center gap-4">
-            <span className="w-16 text-xs text-gray-500 font-medium">Captions</span>
+            <span className="w-16 text-xs text-yellow-500/90 font-medium shrink-0">Captions</span>
             <div
               ref={timelineTrackRef}
               className="flex-1 h-full bg-white/5 rounded-md relative overflow-hidden border border-white/10"
@@ -3469,7 +3507,7 @@ export default function EditorPage() {
                     key={`${caption.start}-${caption.end}-${index}`}
                     className={`absolute top-1 bottom-1 rounded-sm border flex items-center overflow-hidden ${
                       isSelected
-                        ? "border-blue-400 bg-blue-500/35"
+                        ? "border-blue-400 bg-blue-500/35 ring-1 ring-blue-400"
                         : isActive
                           ? "border-yellow-400 bg-yellow-500/30"
                           : isLowConfidence
@@ -3518,7 +3556,7 @@ export default function EditorPage() {
                         className="w-full bg-black/80 px-1 py-0.5 text-[10px] text-white outline-none rounded"
                       />
                     ) : (
-                      <span className="px-2 text-[10px] text-yellow-100 truncate w-full text-center pointer-events-none">
+                      <span className="px-2 text-[10px] text-yellow-100 truncate w-full text-center pointer-events-none font-medium">
                         {caption.word}{isLowConfidence ? " • low" : ""}
                       </span>
                     )}
@@ -3530,6 +3568,11 @@ export default function EditorPage() {
                   </div>
                 );
               })}
+
+              <div
+                className="absolute top-0 bottom-0 w-0.5 bg-red-500 z-20 pointer-events-none shadow-sm"
+                style={{ left: `${Math.max(0, Math.min(100, currentPositionPercent))}%` }}
+              />
             </div>
           </div>
         </div>
