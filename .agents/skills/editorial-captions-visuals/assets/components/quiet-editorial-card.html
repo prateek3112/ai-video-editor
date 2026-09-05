@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Quiet Editorial Card Component</title>
+  </head>
+  <body>
+    <template>
+      <style>
+        :root {
+          --qe-canvas: #f7f7f6;
+          --qe-ink: #0d0d0d;
+          --qe-secondary: #6b6b6b;
+          --qe-border: #d9d9d6;
+          --qe-surface: #ffffff;
+          --qe-quiet: #f5f5f3;
+          --qe-success: #10a37f;
+          --qe-sans: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+          --qe-serif: "Georgia", "Georgia QEUI", Times, serif;
+        }
+
+        .qe-card-stage {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-family: var(--qe-sans);
+        }
+
+        /* --- Editorial Document Card --- */
+        .qe-document-card {
+          position: relative;
+          width: 860px;
+          background: var(--qe-surface);
+          border: 2px solid var(--qe-border);
+          border-radius: 24px;
+          padding: 36px 44px;
+          box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+          color: var(--qe-ink);
+        }
+
+        /* Kicker with Ink Rule */
+        .qe-kicker-wrap {
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          margin-bottom: 20px;
+        }
+        .qe-kicker-rule {
+          width: 36px;
+          height: 3px;
+          background: var(--qe-ink);
+          border-radius: 2px;
+        }
+        .qe-kicker-text {
+          font-size: 18px;
+          font-weight: 700;
+          letter-spacing: 0.16em;
+          text-transform: uppercase;
+          color: var(--qe-secondary);
+        }
+
+        /* Headline */
+        .qe-card-headline {
+          font-family: var(--qe-serif);
+          font-size: 46px;
+          font-weight: 400;
+          line-height: 1.15;
+          letter-spacing: -0.03em;
+          margin-bottom: 24px;
+          color: var(--qe-ink);
+        }
+        .qe-card-headline em {
+          font-style: italic;
+        }
+
+        /* Progress Rail */
+        .qe-progress-rail {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          position: relative;
+          margin-top: 28px;
+          padding-top: 24px;
+          border-top: 1px solid var(--qe-border);
+        }
+        .qe-step-item {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          font-size: 16px;
+          font-weight: 600;
+          color: var(--qe-secondary);
+        }
+        .qe-step-badge {
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          border: 1.5px solid var(--qe-border);
+          background: var(--qe-quiet);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 13px;
+          font-weight: 700;
+          color: var(--qe-ink);
+          transition: all 0.2s ease;
+        }
+        .qe-step-badge.active {
+          background: var(--qe-ink);
+          border-color: var(--qe-ink);
+          color: #ffffff;
+        }
+        .qe-step-badge.complete {
+          background: var(--qe-success);
+          border-color: var(--qe-success);
+          color: #ffffff;
+        }
+
+        /* Cursor Element */
+        .qe-cursor {
+          position: absolute;
+          width: 32px;
+          height: 32px;
+          pointer-events: none;
+          z-index: 50;
+          opacity: 0;
+        }
+        .qe-cursor svg {
+          filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.2));
+        }
+      </style>
+
+      <div
+        id="qe-card-root"
+        data-composition-id="quiet-editorial-card"
+        data-start="0"
+        data-duration="6"
+        data-width="1080"
+        data-height="1920"
+        style="position:absolute;inset:0;width:1080px;height:1920px;pointer-events:none"
+      >
+        <div class="qe-card-stage">
+          <div class="qe-document-card" id="qe-main-card">
+            <div class="qe-kicker-wrap">
+              <div class="qe-kicker-rule"></div>
+              <div class="qe-kicker-text" id="qe-kicker">EDITORIAL SPECIFICATION</div>
+            </div>
+            <div class="qe-card-headline" id="qe-headline">
+              Crafting <em>effortless retention</em> with structured clarity.
+            </div>
+            <div class="qe-progress-rail">
+              <div class="qe-step-item">
+                <div class="qe-step-badge complete" id="step-1">✓</div>
+                <span>Hook</span>
+              </div>
+              <div class="qe-step-item">
+                <div class="qe-step-badge active" id="step-2">2</div>
+                <span>Insight</span>
+              </div>
+              <div class="qe-step-item">
+                <div class="qe-step-badge" id="step-3">3</div>
+                <span>Action</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cause-and-effect Cursor Pointer -->
+          <div class="qe-cursor" id="qe-cursor">
+            <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#000000" stroke-width="2">
+              <polygon points="3 3 10 21 14 14 21 10 3 3" fill="#0D0D0D" stroke="#FFFFFF" stroke-width="1.5" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        (function () {
+          const timeline = gsap.timeline({ paused: true });
+
+          // Card Entrance
+          timeline.fromTo(
+            "#qe-main-card",
+            { opacity: 0, y: 36, scale: 0.96 },
+            { opacity: 1, y: 0, scale: 1, duration: 0.45, ease: "power3.out" },
+            0.2
+          );
+
+          // Cursor enters and travels to Step 3
+          timeline.fromTo(
+            "#qe-cursor",
+            { opacity: 0, x: 200, y: 700 },
+            { opacity: 1, x: 500, y: 550, duration: 0.6, ease: "power2.inOut" },
+            1.0
+          );
+
+          // Cursor clicks Step 3
+          timeline.to("#qe-cursor", { scale: 0.8, duration: 0.08, ease: "power1.in" }, 1.6);
+          timeline.to("#qe-cursor", { scale: 1.0, duration: 0.08, ease: "power1.out" }, 1.68);
+
+          // Step 3 activates at click
+          timeline.to(
+            "#step-3",
+            { backgroundColor: "#10A37F", borderColor: "#10A37F", color: "#FFFFFF", duration: 0.15 },
+            1.68
+          );
+
+          // Cursor departs
+          timeline.to("#qe-cursor", { opacity: 0, y: "+=60", duration: 0.4, ease: "power2.in" }, 2.2);
+
+          // Card exit
+          timeline.to(
+            "#qe-main-card",
+            { opacity: 0, y: -20, scale: 0.98, duration: 0.35, ease: "power2.in" },
+            5.5
+          );
+
+          timeline.seek(0);
+          window.__timelines = window.__timelines || {};
+          window.__timelines["quiet-editorial-card"] = timeline;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

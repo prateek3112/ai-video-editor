@@ -1,694 +1,624 @@
 {
   "words": [
     {
-      "word": "BHAI",
-      "start": 0.057,
-      "end": 0.297
-    },
-    {
-      "word": "CHINA",
-      "start": 0.777,
-      "end": 1.157
-    },
-    {
-      "word": "NE",
-      "start": 1.157,
-      "end": 1.257
-    },
-    {
-      "word": "SABKO",
-      "start": 1.547,
-      "end": 1.837
-    },
-    {
-      "word": "PAGAL",
-      "start": 1.837,
-      "end": 2.117
-    },
-    {
-      "word": "KAR",
-      "start": 2.117,
-      "end": 2.217
-    },
-    {
-      "word": "DIYA",
-      "start": 2.217,
-      "end": 2.457
-    },
-    {
-      "word": "HAI",
-      "start": 2.457,
-      "end": 2.537
-    },
-    {
-      "word": "DEEPSEEK",
-      "start": 2.807,
-      "end": 3.197
-    },
-    {
-      "word": "NE",
-      "start": 3.197,
-      "end": 3.327
-    },
-    {
-      "word": "CLAUDE",
-      "start": 3.497,
-      "end": 3.802
-    },
-    {
-      "word": "CODE",
-      "start": 3.802,
-      "end": 4.107
-    },
-    {
-      "word": "KA",
-      "start": 4.107,
-      "end": 4.237
+      "word": "IS",
+      "start": 0.54,
+      "end": 0.69
     },
     {
       "word": "FREE",
-      "start": 4.387,
-      "end": 4.677
-    },
-    {
-      "word": "ALTERNATIVE",
-      "start": 4.677,
-      "end": 5.237
-    },
-    {
-      "word": "LAUNCH",
-      "start": 5.237,
-      "end": 5.517
-    },
-    {
-      "word": "KAR",
-      "start": 5.517,
-      "end": 5.617
-    },
-    {
-      "word": "DIYA",
-      "start": 5.617,
-      "end": 5.827
-    },
-    {
-      "word": "HAI",
-      "start": 5.827,
-      "end": 5.887
-    },
-    {
-      "word": "AUR",
-      "start": 5.887,
-      "end": 5.967
-    },
-    {
-      "word": "ISKE",
-      "start": 5.967,
-      "end": 6.227
-    },
-    {
-      "word": "ALMOST",
-      "start": 6.227,
-      "end": 6.707
-    },
-    {
-      "word": "2",
-      "start": 6.817,
-      "end": 6.907
-    },
-    {
-      "word": "LAKH",
-      "start": 6.907,
-      "end": 7.157
-    },
-    {
-      "word": "SE",
-      "start": 7.157,
-      "end": 7.247
-    },
-    {
-      "word": "ZYADA",
-      "start": 7.427,
-      "end": 7.787
-    },
-    {
-      "word": "STARS",
-      "start": 7.787,
-      "end": 8.087
-    },
-    {
-      "word": "HAIN",
-      "start": 8.087,
-      "end": 8.167
-    },
-    {
-      "word": "SIRF",
-      "start": 8.167,
-      "end": 8.447
-    },
-    {
-      "word": "EK",
-      "start": 8.447,
-      "end": 8.657
-    },
-    {
-      "word": "HI",
-      "start": 8.657,
-      "end": 8.787
-    },
-    {
-      "word": "HAFTE",
-      "start": 8.787,
-      "end": 9.077
-    },
-    {
-      "word": "MEIN",
-      "start": 9.077,
-      "end": 9.177
-    },
-    {
-      "word": "ISKA",
-      "start": 9.617,
-      "end": 9.877
-    },
-    {
-      "word": "NAAM",
-      "start": 9.877,
-      "end": 10.087
-    },
-    {
-      "word": "HAI",
-      "start": 10.087,
-      "end": 10.157
-    },
-    {
-      "word": "DEEPSEEK",
-      "start": 10.157,
-      "end": 10.667
-    },
-    {
-      "word": "HARNESS",
-      "start": 10.667,
-      "end": 11.087
-    },
-    {
-      "word": "AUR",
-      "start": 11.237,
-      "end": 11.437
-    },
-    {
-      "word": "EK",
-      "start": 11.437,
-      "end": 11.597
-    },
-    {
-      "word": "CLAUDE",
-      "start": 11.667,
-      "end": 11.927
-    },
-    {
-      "word": "CODE",
-      "start": 11.927,
-      "end": 12.187
-    },
-    {
-      "word": "SE",
-      "start": 12.187,
-      "end": 12.287
-    },
-    {
-      "word": "BHI",
-      "start": 12.287,
-      "end": 12.397
-    },
-    {
-      "word": "ZYADA",
-      "start": 12.397,
-      "end": 12.727
-    },
-    {
-      "word": "CRAZY",
-      "start": 12.727,
-      "end": 13.067
-    },
-    {
-      "word": "HAI",
-      "start": 13.067,
-      "end": 13.207
-    },
-    {
-      "word": "KYUNKI",
-      "start": 13.437,
-      "end": 13.757
-    },
-    {
-      "word": "CLAUDE",
-      "start": 13.757,
-      "end": 14.022
-    },
-    {
-      "word": "CODE",
-      "start": 14.022,
-      "end": 14.287
-    },
-    {
-      "word": "MEIN",
-      "start": 14.287,
-      "end": 14.397
-    },
-    {
-      "word": "TUM",
-      "start": 14.397,
-      "end": 14.597
-    },
-    {
-      "word": "EK",
-      "start": 14.657,
-      "end": 14.887
+      "start": 0.77,
+      "end": 0.98
     },
     {
       "word": "AI",
-      "start": 14.887,
-      "end": 15.117
+      "start": 1.05,
+      "end": 1.25
     },
     {
-      "word": "AGENT",
-      "start": 15.117,
-      "end": 15.347
+      "word": "TOOL",
+      "start": 1.25,
+      "end": 1.48
     },
     {
-      "word": "USE",
-      "start": 15.347,
-      "end": 15.547
+      "word": "SE",
+      "start": 1.51,
+      "end": 1.63
     },
     {
-      "word": "KARTE",
-      "start": 15.547,
-      "end": 15.727
+      "word": "TUM",
+      "start": 1.76,
+      "end": 1.93
+    },
+    {
+      "word": "APNE",
+      "start": 2.05,
+      "end": 2.27
+    },
+    {
+      "word": "BUSINESS",
+      "start": 2.27,
+      "end": 2.62
+    },
+    {
+      "word": "KE",
+      "start": 2.62,
+      "end": 2.76
+    },
+    {
+      "word": "LIYE",
+      "start": 2.76,
+      "end": 2.9
+    },
+    {
+      "word": "LEADS",
+      "start": 2.9,
+      "end": 3.23
+    },
+    {
+      "word": "DHUND",
+      "start": 3.23,
+      "end": 3.49
+    },
+    {
+      "word": "SAKTE",
+      "start": 3.49,
+      "end": 3.76
     },
     {
       "word": "HO",
-      "start": 15.727,
-      "end": 15.827
+      "start": 3.76,
+      "end": 3.84
     },
     {
-      "word": "LEKIN",
-      "start": 15.937,
-      "end": 16.197
+      "word": "MARKET",
+      "start": 4.09,
+      "end": 4.41
     },
     {
-      "word": "DEEPSEEK",
-      "start": 16.197,
-      "end": 16.637
+      "word": "RESEARCH",
+      "start": 4.41,
+      "end": 4.88
     },
     {
-      "word": "MEIN",
-      "start": 16.637,
-      "end": 16.737
+      "word": "KAR",
+      "start": 4.88,
+      "end": 5.06
     },
     {
-      "word": "LITERALLY",
-      "start": 16.737,
-      "end": 17.157
+      "word": "SAKTE",
+      "start": 5.06,
+      "end": 5.26
     },
     {
-      "word": "EVERYTHING",
-      "start": 17.157,
-      "end": 17.587
-    },
-    {
-      "word": "IS",
-      "start": 17.587,
-      "end": 17.677
-    },
-    {
-      "word": "A",
-      "start": 17.677,
-      "end": 17.707
-    },
-    {
-      "word": "PLUGIN",
-      "start": 17.707,
-      "end": 18.237
-    },
-    {
-      "word": "MODELS",
-      "start": 18.667,
-      "end": 19.127
-    },
-    {
-      "word": "TOOLS",
-      "start": 19.127,
-      "end": 19.537
-    },
-    {
-      "word": "MEMORY",
-      "start": 19.537,
-      "end": 20.087
-    },
-    {
-      "word": "SKILLS",
-      "start": 20.087,
-      "end": 20.657
+      "word": "HO",
+      "start": 5.26,
+      "end": 5.34
     },
     {
       "word": "AUR",
-      "start": 20.807,
-      "end": 20.957
+      "start": 5.48,
+      "end": 5.62
     },
     {
-      "word": "EVEN",
-      "start": 20.957,
-      "end": 21.217
+      "word": "APNE",
+      "start": 5.62,
+      "end": 5.86
     },
     {
-      "word": "THE",
-      "start": 21.217,
-      "end": 21.287
+      "word": "COMPETITORS",
+      "start": 6.09,
+      "end": 6.64
     },
     {
-      "word": "AGENT",
-      "start": 21.287,
-      "end": 21.662
+      "word": "KO",
+      "start": 6.64,
+      "end": 6.81
     },
     {
-      "word": "LOOP",
-      "start": 21.662,
-      "end": 22.037
+      "word": "INSTAGRAM",
+      "start": 6.81,
+      "end": 7.42
     },
     {
-      "word": "MATLAB",
-      "start": 22.257,
-      "end": 22.547
-    },
-    {
-      "word": "TUM",
-      "start": 22.547,
-      "end": 22.687
-    },
-    {
-      "word": "EK",
-      "start": 22.687,
-      "end": 22.867
-    },
-    {
-      "word": "COMPONENT",
-      "start": 22.867,
-      "end": 23.337
-    },
-    {
-      "word": "UTHAO",
-      "start": 23.337,
-      "end": 23.637
-    },
-    {
-      "word": "REPLACE",
-      "start": 23.777,
-      "end": 24.237
-    },
-    {
-      "word": "KARO",
-      "start": 24.237,
-      "end": 24.497
+      "word": "TWITTER",
+      "start": 7.42,
+      "end": 7.79
     },
     {
       "word": "AUR",
-      "start": 24.497,
-      "end": 24.637
+      "start": 7.79,
+      "end": 7.96
     },
     {
-      "word": "APNA",
-      "start": 24.637,
-      "end": 24.897
+      "word": "REDDIT",
+      "start": 7.96,
+      "end": 8.35
     },
     {
-      "word": "KHUD",
-      "start": 24.897,
-      "end": 25.127
+      "word": "PAR",
+      "start": 8.35,
+      "end": 8.52
     },
     {
-      "word": "KA",
-      "start": 25.127,
-      "end": 25.267
+      "word": "TRACK",
+      "start": 8.52,
+      "end": 8.79
     },
     {
-      "word": "AI",
-      "start": 25.267,
-      "end": 25.512
+      "word": "BHI",
+      "start": 8.79,
+      "end": 8.95
     },
     {
-      "word": "AGENT",
-      "start": 25.512,
-      "end": 25.757
+      "word": "KAR",
+      "start": 8.95,
+      "end": 9.17
     },
     {
-      "word": "BUILD",
-      "start": 25.757,
-      "end": 26.017
+      "word": "SAKTE",
+      "start": 9.17,
+      "end": 9.35
     },
     {
-      "word": "KARO",
-      "start": 26.017,
-      "end": 26.167
+      "word": "HO",
+      "start": 9.35,
+      "end": 9.42
     },
     {
       "word": "AND",
-      "start": 26.337,
-      "end": 26.467
+      "start": 9.42,
+      "end": 9.57
     },
     {
       "word": "THE",
-      "start": 26.467,
-      "end": 26.547
+      "start": 9.6,
+      "end": 9.69
     },
     {
       "word": "CRAZY",
-      "start": 26.547,
-      "end": 26.837
+      "start": 9.69,
+      "end": 10.02
     },
     {
       "word": "PART",
-      "start": 26.837,
-      "end": 27.137
+      "start": 10.02,
+      "end": 10.22
     },
     {
       "word": "IS",
-      "start": 27.137,
-      "end": 27.277
+      "start": 10.22,
+      "end": 10.39
     },
     {
-      "word": "TUM",
-      "start": 27.277,
-      "end": 27.537
-    },
-    {
-      "word": "KISI",
-      "start": 27.657,
-      "end": 27.897
-    },
-    {
-      "word": "BHI",
-      "start": 27.897,
-      "end": 28.007
+      "word": "TUMHARA",
+      "start": 10.64,
+      "end": 11.02
     },
     {
       "word": "AI",
-      "start": 28.007,
-      "end": 28.247
+      "start": 11.02,
+      "end": 11.23
     },
     {
-      "word": "MODEL",
-      "start": 28.247,
-      "end": 28.487
+      "word": "AGENT",
+      "start": 11.23,
+      "end": 11.53
     },
     {
-      "word": "KO",
-      "start": 28.487,
-      "end": 28.587
+      "word": "13+",
+      "start": 11.66,
+      "end": 12.01
     },
     {
-      "word": "LOCALLY",
-      "start": 28.587,
-      "end": 29.077
+      "word": "PLATFORMS",
+      "start": 12.01,
+      "end": 12.52
     },
     {
-      "word": "RUN",
-      "start": 29.077,
-      "end": 29.277
+      "word": "SE",
+      "start": 12.52,
+      "end": 12.6
+    },
+    {
+      "word": "INFORMATION",
+      "start": 12.6,
+      "end": 13.23
+    },
+    {
+      "word": "COLLECT",
+      "start": 13.23,
+      "end": 13.56
     },
     {
       "word": "KAR",
-      "start": 29.277,
-      "end": 29.387
+      "start": 13.56,
+      "end": 13.68
     },
     {
-      "word": "SAKTE",
-      "start": 29.387,
-      "end": 29.627
+      "word": "SAKTA",
+      "start": 13.68,
+      "end": 13.88
     },
     {
-      "word": "HO",
-      "start": 29.627,
-      "end": 29.747
+      "word": "HAI",
+      "start": 13.88,
+      "end": 14.07
     },
     {
-      "word": "AUR",
-      "start": 30.137,
-      "end": 30.347
+      "word": "SIRF",
+      "start": 14.07,
+      "end": 14.33
     },
     {
-      "word": "CLAUDE",
-      "start": 30.347,
-      "end": 30.617
+      "word": "IS",
+      "start": 14.33,
+      "end": 14.43
     },
     {
-      "word": "CODE",
-      "start": 30.617,
-      "end": 30.887
+      "word": "EK",
+      "start": 14.43,
+      "end": 14.63
     },
     {
-      "word": "AUR",
-      "start": 30.887,
-      "end": 31.027
+      "word": "TOOL",
+      "start": 14.63,
+      "end": 14.86
     },
     {
-      "word": "CODEX",
-      "start": 31.027,
-      "end": 31.427
+      "word": "SE",
+      "start": 14.86,
+      "end": 14.97
     },
     {
-      "word": "KO",
-      "start": 31.427,
-      "end": 31.547
+      "word": "YOUTUBE",
+      "start": 15.25,
+      "end": 15.68
     },
     {
-      "word": "BHI",
-      "start": 31.547,
-      "end": 31.687
+      "word": "SE",
+      "start": 15.68,
+      "end": 15.77
     },
     {
-      "word": "SUB",
-      "start": 31.687,
-      "end": 31.857
+      "word": "TRANSCRIPTS",
+      "start": 15.77,
+      "end": 16.33
     },
     {
-      "word": "AGENTS",
-      "start": 31.857,
-      "end": 32.227
+      "word": "ANALYZE",
+      "start": 16.33,
+      "end": 16.66
     },
     {
-      "word": "BANA",
-      "start": 32.227,
-      "end": 32.397
+      "word": "KARO",
+      "start": 16.66,
+      "end": 16.89
     },
     {
-      "word": "SAKTE",
-      "start": 32.397,
-      "end": 32.617
+      "word": "TWITTER",
+      "start": 16.99,
+      "end": 17.34
     },
     {
-      "word": "HO",
-      "start": 32.617,
-      "end": 32.747
+      "word": "PE",
+      "start": 17.34,
+      "end": 17.45
     },
     {
-      "word": "PLUS",
-      "start": 33.007,
-      "end": 33.277
+      "word": "DISCUSSIONS",
+      "start": 17.45,
+      "end": 18
     },
     {
-      "word": "53",
-      "start": 33.277,
-      "end": 33.647
+      "word": "TRACK",
+      "start": 18,
+      "end": 18.25
     },
     {
-      "word": "TOOLS",
-      "start": 33.647,
-      "end": 34.027
+      "word": "KARO",
+      "start": 18.25,
+      "end": 18.47
     },
     {
-      "word": "OUT",
-      "start": 34.027,
-      "end": 34.257
+      "word": "LINKEDIN",
+      "start": 18.57,
+      "end": 18.96
     },
     {
-      "word": "OF",
-      "start": 34.257,
-      "end": 34.377
+      "word": "SE",
+      "start": 18.96,
+      "end": 19.06
     },
     {
-      "word": "THE",
-      "start": 34.377,
-      "end": 34.467
+      "word": "POTENTIAL",
+      "start": 19.06,
+      "end": 19.53
     },
     {
-      "word": "BOX",
-      "start": 34.467,
-      "end": 34.787
+      "word": "LEADS",
+      "start": 19.53,
+      "end": 19.78
     },
     {
-      "word": "MILTE",
-      "start": 34.787,
-      "end": 35.137
+      "word": "DHUNDHO",
+      "start": 19.78,
+      "end": 20.08
     },
     {
-      "word": "HAIN",
-      "start": 35.137,
-      "end": 35.267
+      "word": "YA",
+      "start": 20.08,
+      "end": 20.24
     },
     {
-      "word": "COMMENT",
-      "start": 35.537,
-      "end": 35.847
+      "word": "INSTAGRAM",
+      "start": 20.35,
+      "end": 20.91
     },
     {
-      "word": "DEEPSEEK",
-      "start": 35.847,
-      "end": 36.327
+      "word": "PE",
+      "start": 20.91,
+      "end": 21
+    },
+    {
+      "word": "COMPETITORS",
+      "start": 21,
+      "end": 21.65
+    },
+    {
+      "word": "KA",
+      "start": 21.65,
+      "end": 21.78
+    },
+    {
+      "word": "CONTENT",
+      "start": 21.78,
+      "end": 22.18
+    },
+    {
+      "word": "ANALYZE",
+      "start": 22.18,
+      "end": 22.56
+    },
+    {
+      "word": "KARO",
+      "start": 22.56,
+      "end": 22.75
     },
     {
       "word": "AND",
-      "start": 36.327,
-      "end": 36.467
-    },
-    {
-      "word": "I",
-      "start": 36.467,
-      "end": 36.567
-    },
-    {
-      "word": "WILL",
-      "start": 36.567,
-      "end": 36.697
-    },
-    {
-      "word": "SEND",
-      "start": 36.697,
-      "end": 36.877
-    },
-    {
-      "word": "YOU",
-      "start": 36.877,
-      "end": 36.957
+      "start": 22.75,
+      "end": 22.91
     },
     {
       "word": "THE",
-      "start": 36.957,
-      "end": 37.047
+      "start": 22.91,
+      "end": 23.01
     },
     {
-      "word": "COMPLETE",
-      "start": 37.047,
-      "end": 37.427
+      "word": "CRAZY",
+      "start": 23.01,
+      "end": 23.33
     },
     {
-      "word": "SETUP",
-      "start": 37.427,
-      "end": 37.717
+      "word": "PART",
+      "start": 23.33,
+      "end": 23.51
     },
     {
-      "word": "GUIDE",
-      "start": 37.717,
-      "end": 38.007
+      "word": "ISKE",
+      "start": 23.71,
+      "end": 23.95
+    },
+    {
+      "word": "LIYE",
+      "start": 23.95,
+      "end": 24.16
+    },
+    {
+      "word": "HAR",
+      "start": 24.16,
+      "end": 24.36
+    },
+    {
+      "word": "PLATFORM",
+      "start": 24.36,
+      "end": 24.8
+    },
+    {
+      "word": "KI",
+      "start": 24.8,
+      "end": 24.96
+    },
+    {
+      "word": "ALAG",
+      "start": 24.96,
+      "end": 25.29
+    },
+    {
+      "word": "API",
+      "start": 25.29,
+      "end": 25.68
+    },
+    {
+      "word": "YA",
+      "start": 25.68,
+      "end": 25.8
+    },
+    {
+      "word": "PAID",
+      "start": 25.8,
+      "end": 26.06
+    },
+    {
+      "word": "TOOL",
+      "start": 26.06,
+      "end": 26.31
+    },
+    {
+      "word": "LENE",
+      "start": 26.31,
+      "end": 26.54
+    },
+    {
+      "word": "KI",
+      "start": 26.54,
+      "end": 26.63
+    },
+    {
+      "word": "ZAROORAT",
+      "start": 26.63,
+      "end": 27.02
+    },
+    {
+      "word": "NAHI",
+      "start": 27.02,
+      "end": 27.24
+    },
+    {
+      "word": "HAI",
+      "start": 27.24,
+      "end": 27.35
+    },
+    {
+      "word": "EK",
+      "start": 27.35,
+      "end": 27.53
+    },
+    {
+      "word": "HI",
+      "start": 27.53,
+      "end": 27.64
+    },
+    {
+      "word": "TOOL",
+      "start": 27.64,
+      "end": 27.87
+    },
+    {
+      "word": "SE",
+      "start": 27.87,
+      "end": 27.97
+    },
+    {
+      "word": "TUM",
+      "start": 27.97,
+      "end": 28.16
+    },
+    {
+      "word": "LEAD",
+      "start": 28.16,
+      "end": 28.43
+    },
+    {
+      "word": "GENERATION",
+      "start": 28.43,
+      "end": 29.07
+    },
+    {
+      "word": "MARKET",
+      "start": 29.07,
+      "end": 29.41
+    },
+    {
+      "word": "RESEARCH",
+      "start": 29.41,
+      "end": 29.86
+    },
+    {
+      "word": "AUR",
+      "start": 29.86,
+      "end": 30
+    },
+    {
+      "word": "COMPETITOR",
+      "start": 30.15,
+      "end": 30.63
+    },
+    {
+      "word": "RESEARCH",
+      "start": 30.73,
+      "end": 31.25
+    },
+    {
+      "word": "YE",
+      "start": 31.25,
+      "end": 31.43
+    },
+    {
+      "word": "SAB",
+      "start": 31.43,
+      "end": 31.6
+    },
+    {
+      "word": "KAAM",
+      "start": 31.6,
+      "end": 31.83
+    },
+    {
+      "word": "AUTOMATE",
+      "start": 31.83,
+      "end": 32.33
+    },
+    {
+      "word": "KAR",
+      "start": 32.33,
+      "end": 32.48
+    },
+    {
+      "word": "SAKTE",
+      "start": 32.48,
+      "end": 32.65
+    },
+    {
+      "word": "HO",
+      "start": 32.65,
+      "end": 32.74
+    },
+    {
+      "word": "COMMENT",
+      "start": 33,
+      "end": 33.45
+    },
+    {
+      "word": "KAR",
+      "start": 33.45,
+      "end": 33.58
+    },
+    {
+      "word": "DO",
+      "start": 33.58,
+      "end": 33.72
+    },
+    {
+      "word": "AUR",
+      "start": 33.72,
+      "end": 33.86
+    },
+    {
+      "word": "MAIN",
+      "start": 33.86,
+      "end": 34.02
+    },
+    {
+      "word": "SARI",
+      "start": 34.02,
+      "end": 34.25
+    },
+    {
+      "word": "DETAILS",
+      "start": 34.25,
+      "end": 34.69
+    },
+    {
+      "word": "BEJ",
+      "start": 34.69,
+      "end": 34.88
+    },
+    {
+      "word": "DUNGA",
+      "start": 34.88,
+      "end": 35.15
     }
   ]
 }

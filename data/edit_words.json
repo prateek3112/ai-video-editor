@@ -1,0 +1,604 @@
+{
+  "words": [
+    {
+      "word": "BHAI",
+      "start": 0.85,
+      "end": 1.145
+    },
+    {
+      "word": "YE",
+      "start": 1.145,
+      "end": 1.342
+    },
+    {
+      "word": "FREE",
+      "start": 1.342,
+      "end": 1.637
+    },
+    {
+      "word": "AI",
+      "start": 1.637,
+      "end": 1.833
+    },
+    {
+      "word": "TOOL",
+      "start": 1.833,
+      "end": 2.128
+    },
+    {
+      "word": "TUMHARE",
+      "start": 2.128,
+      "end": 2.561
+    },
+    {
+      "word": "LIYE",
+      "start": 2.561,
+      "end": 2.856
+    },
+    {
+      "word": "JOBS",
+      "start": 2.856,
+      "end": 3.151
+    },
+    {
+      "word": "DHOONDEGA",
+      "start": 3.151,
+      "end": 3.78
+    },
+    {
+      "word": "HAR",
+      "start": 3.9,
+      "end": 4.124
+    },
+    {
+      "word": "JOB",
+      "start": 4.124,
+      "end": 4.348
+    },
+    {
+      "word": "KE",
+      "start": 4.348,
+      "end": 4.497
+    },
+    {
+      "word": "ACCORDING",
+      "start": 4.497,
+      "end": 4.974
+    },
+    {
+      "word": "TUMHARE",
+      "start": 4.974,
+      "end": 5.302
+    },
+    {
+      "word": "LIYE",
+      "start": 5.302,
+      "end": 5.526
+    },
+    {
+      "word": "RESUME",
+      "start": 5.526,
+      "end": 5.854
+    },
+    {
+      "word": "OPTIMIZE",
+      "start": 5.854,
+      "end": 6.332
+    },
+    {
+      "word": "KAREGA",
+      "start": 6.332,
+      "end": 6.66
+    },
+    {
+      "word": "AUR",
+      "start": 6.8,
+      "end": 6.996
+    },
+    {
+      "word": "KHUD",
+      "start": 6.996,
+      "end": 7.192
+    },
+    {
+      "word": "APPLY",
+      "start": 7.192,
+      "end": 7.48
+    },
+    {
+      "word": "BHI",
+      "start": 7.48,
+      "end": 7.676
+    },
+    {
+      "word": "KAR",
+      "start": 7.676,
+      "end": 7.873
+    },
+    {
+      "word": "DEGA",
+      "start": 7.873,
+      "end": 8.069
+    },
+    {
+      "word": "SAARI",
+      "start": 8.069,
+      "end": 8.357
+    },
+    {
+      "word": "JOBS",
+      "start": 8.357,
+      "end": 8.553
+    },
+    {
+      "word": "KE",
+      "start": 8.553,
+      "end": 8.684
+    },
+    {
+      "word": "LIYE",
+      "start": 8.684,
+      "end": 8.88
+    },
+    {
+      "word": "BAS",
+      "start": 9.05,
+      "end": 9.307
+    },
+    {
+      "word": "APNE",
+      "start": 9.307,
+      "end": 9.565
+    },
+    {
+      "word": "RESUME",
+      "start": 9.565,
+      "end": 9.942
+    },
+    {
+      "word": "EXPERIENCE",
+      "start": 9.942,
+      "end": 10.491
+    },
+    {
+      "word": "AUR",
+      "start": 10.491,
+      "end": 10.748
+    },
+    {
+      "word": "DETAILS",
+      "start": 10.748,
+      "end": 11.125
+    },
+    {
+      "word": "ADD",
+      "start": 11.125,
+      "end": 11.383
+    },
+    {
+      "word": "KARO",
+      "start": 11.383,
+      "end": 11.64
+    },
+    {
+      "word": "AUR",
+      "start": 11.8,
+      "end": 11.983
+    },
+    {
+      "word": "YE",
+      "start": 11.983,
+      "end": 12.104
+    },
+    {
+      "word": "TUMHARI",
+      "start": 12.104,
+      "end": 12.372
+    },
+    {
+      "word": "POORI",
+      "start": 12.372,
+      "end": 12.64
+    },
+    {
+      "word": "PROFILE",
+      "start": 12.64,
+      "end": 12.907
+    },
+    {
+      "word": "READY",
+      "start": 12.907,
+      "end": 13.175
+    },
+    {
+      "word": "KAR",
+      "start": 13.175,
+      "end": 13.357
+    },
+    {
+      "word": "DEGA",
+      "start": 13.357,
+      "end": 13.54
+    },
+    {
+      "word": "PHIR",
+      "start": 13.76,
+      "end": 13.962
+    },
+    {
+      "word": "YE",
+      "start": 13.962,
+      "end": 14.097
+    },
+    {
+      "word": "LINKEDIN",
+      "start": 14.097,
+      "end": 14.529
+    },
+    {
+      "word": "AUR",
+      "start": 14.529,
+      "end": 14.731
+    },
+    {
+      "word": "INDEED",
+      "start": 14.731,
+      "end": 15.028
+    },
+    {
+      "word": "JAISE",
+      "start": 15.028,
+      "end": 15.324
+    },
+    {
+      "word": "JOB",
+      "start": 15.324,
+      "end": 15.527
+    },
+    {
+      "word": "PLATFORMS",
+      "start": 15.527,
+      "end": 15.958
+    },
+    {
+      "word": "PAR",
+      "start": 15.958,
+      "end": 16.161
+    },
+    {
+      "word": "JAAYEGA",
+      "start": 16.161,
+      "end": 16.457
+    },
+    {
+      "word": "AUR",
+      "start": 16.457,
+      "end": 16.66
+    },
+    {
+      "word": "TUMHARE",
+      "start": 16.66,
+      "end": 16.956
+    },
+    {
+      "word": "LIYE",
+      "start": 16.956,
+      "end": 17.159
+    },
+    {
+      "word": "JOBS",
+      "start": 17.159,
+      "end": 17.361
+    },
+    {
+      "word": "FIND",
+      "start": 17.361,
+      "end": 17.563
+    },
+    {
+      "word": "KAREGA",
+      "start": 17.563,
+      "end": 17.86
+    },
+    {
+      "word": "PHIR",
+      "start": 18.1,
+      "end": 18.358
+    },
+    {
+      "word": "HAR",
+      "start": 18.358,
+      "end": 18.617
+    },
+    {
+      "word": "JOB",
+      "start": 18.617,
+      "end": 18.875
+    },
+    {
+      "word": "KO",
+      "start": 18.875,
+      "end": 19.048
+    },
+    {
+      "word": "SCORE",
+      "start": 19.048,
+      "end": 19.427
+    },
+    {
+      "word": "KAREGA",
+      "start": 19.427,
+      "end": 19.806
+    },
+    {
+      "word": "AUR",
+      "start": 19.806,
+      "end": 20.064
+    },
+    {
+      "word": "BATAYEGA",
+      "start": 20.064,
+      "end": 20.616
+    },
+    {
+      "word": "KI",
+      "start": 20.616,
+      "end": 20.788
+    },
+    {
+      "word": "TUMHARE",
+      "start": 20.788,
+      "end": 21.167
+    },
+    {
+      "word": "LIYE",
+      "start": 21.167,
+      "end": 21.426
+    },
+    {
+      "word": "KAUNSI",
+      "start": 21.426,
+      "end": 21.805
+    },
+    {
+      "word": "JOB",
+      "start": 21.805,
+      "end": 22.063
+    },
+    {
+      "word": "BEST",
+      "start": 22.063,
+      "end": 22.322
+    },
+    {
+      "word": "HAI",
+      "start": 22.322,
+      "end": 22.58
+    },
+    {
+      "word": "AUR",
+      "start": 22.8,
+      "end": 23.009
+    },
+    {
+      "word": "CRAZY",
+      "start": 23.009,
+      "end": 23.314
+    },
+    {
+      "word": "PART",
+      "start": 23.314,
+      "end": 23.523
+    },
+    {
+      "word": "YE",
+      "start": 23.523,
+      "end": 23.662
+    },
+    {
+      "word": "KI",
+      "start": 23.662,
+      "end": 23.801
+    },
+    {
+      "word": "JOB",
+      "start": 23.801,
+      "end": 24.01
+    },
+    {
+      "word": "KE",
+      "start": 24.01,
+      "end": 24.149
+    },
+    {
+      "word": "ACCORDING",
+      "start": 24.149,
+      "end": 24.594
+    },
+    {
+      "word": "TUMHARE",
+      "start": 24.594,
+      "end": 24.9
+    },
+    {
+      "word": "LIYE",
+      "start": 24.9,
+      "end": 25.108
+    },
+    {
+      "word": "RESUME",
+      "start": 25.108,
+      "end": 25.414
+    },
+    {
+      "word": "OPTIMIZE",
+      "start": 25.414,
+      "end": 25.859
+    },
+    {
+      "word": "KARKE",
+      "start": 25.859,
+      "end": 26.165
+    },
+    {
+      "word": "ATS",
+      "start": 26.165,
+      "end": 26.374
+    },
+    {
+      "word": "SCORE",
+      "start": 26.374,
+      "end": 26.68
+    },
+    {
+      "word": "BHI",
+      "start": 26.68,
+      "end": 26.888
+    },
+    {
+      "word": "CHECK",
+      "start": 26.888,
+      "end": 27.194
+    },
+    {
+      "word": "KAREGA",
+      "start": 27.194,
+      "end": 27.5
+    },
+    {
+      "word": "AUR",
+      "start": 27.5,
+      "end": 27.721
+    },
+    {
+      "word": "APPLICATION",
+      "start": 27.721,
+      "end": 28.192
+    },
+    {
+      "word": "BHI",
+      "start": 28.192,
+      "end": 28.413
+    },
+    {
+      "word": "KHUD",
+      "start": 28.413,
+      "end": 28.634
+    },
+    {
+      "word": "HANDLE",
+      "start": 28.634,
+      "end": 28.958
+    },
+    {
+      "word": "KAR",
+      "start": 28.958,
+      "end": 29.179
+    },
+    {
+      "word": "LEGA",
+      "start": 29.179,
+      "end": 29.4
+    },
+    {
+      "word": "I",
+      "start": 29.5,
+      "end": 29.626
+    },
+    {
+      "word": "HAVE",
+      "start": 29.626,
+      "end": 29.814
+    },
+    {
+      "word": "MADE",
+      "start": 29.814,
+      "end": 30.002
+    },
+    {
+      "word": "THIS",
+      "start": 30.002,
+      "end": 30.191
+    },
+    {
+      "word": "COMPLETE",
+      "start": 30.191,
+      "end": 30.593
+    },
+    {
+      "word": "LOCAL",
+      "start": 30.593,
+      "end": 30.869
+    },
+    {
+      "word": "SETUP",
+      "start": 30.869,
+      "end": 31.145
+    },
+    {
+      "word": "AND",
+      "start": 31.145,
+      "end": 31.333
+    },
+    {
+      "word": "COMPLETE",
+      "start": 31.333,
+      "end": 31.735
+    },
+    {
+      "word": "PDF",
+      "start": 31.735,
+      "end": 31.924
+    },
+    {
+      "word": "GUIDE",
+      "start": 31.924,
+      "end": 32.2
+    },
+    {
+      "word": "COMMENT",
+      "start": 32.2,
+      "end": 32.517
+    },
+    {
+      "word": "APPLY",
+      "start": 32.517,
+      "end": 32.834
+    },
+    {
+      "word": "AND",
+      "start": 32.834,
+      "end": 33.05
+    },
+    {
+      "word": "I",
+      "start": 33.05,
+      "end": 33.194
+    },
+    {
+      "word": "WILL",
+      "start": 33.194,
+      "end": 33.41
+    },
+    {
+      "word": "SEND",
+      "start": 33.41,
+      "end": 33.626
+    },
+    {
+      "word": "IT",
+      "start": 33.626,
+      "end": 33.77
+    },
+    {
+      "word": "TO",
+      "start": 33.77,
+      "end": 33.914
+    },
+    {
+      "word": "YOU",
+      "start": 33.914,
+      "end": 34.13
+    }
+  ]
+}

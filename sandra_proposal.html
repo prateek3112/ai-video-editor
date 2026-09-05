@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Business Operating System Proposal - Sandra</title>
+<style>
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    color: #242424;
+    font-size: 11.8px;
+    line-height: 1.5;
+    background: #eae6de;
+  }
+  .page {
+    width: 794px;
+    height: 1123px;
+    max-height: 1123px;
+    padding: 38px 44px 30px 44px;
+    page-break-after: always;
+    page-break-inside: avoid;
+    position: relative;
+    background: #ffffff;
+    margin: 0 auto 20px auto;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+    overflow: hidden;
+  }
+  .page:last-child { page-break-after: avoid; margin-bottom: 0; }
+  @media print {
+    body { background: transparent; }
+    .page { margin: 0; box-shadow: none; }
+  }
+ 
+  /* Header */
+  .pageheader {
+    display: table;
+    width: 100%;
+    border-bottom: 1px solid #dfd9ce;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+  }
+  .pageheader .brand { display: table-cell; font-family: Georgia, serif; font-size: 12.5px; color: #162420; font-weight: bold; letter-spacing: 0.4px; }
+  .pageheader .pagelbl { display: table-cell; text-align: right; font-size: 9.5px; color: #8c6d3f; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+ 
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: #8c6d3f;
+    font-weight: bold;
+    margin-bottom: 5px;
+    margin-top: 13px;
+  }
+  .section-label:first-of-type { margin-top: 0; }
+  h2.pagetitle {
+    font-family: Georgia, serif;
+    font-size: 20px;
+    color: #162420;
+    margin-bottom: 5px;
+  }
+  .lead { font-size: 11.5px; color: #444; margin-bottom: 12px; line-height: 1.48; }
+ 
+  /* Cover */
+  .cover {
+    background: #162420;
+    color: #f4efe6;
+    padding: 0;
+  }
+  .cover-inner { padding: 54px 50px; height: 1123px; position: relative; }
+  .cover .brand-name {
+    font-family: Georgia, serif;
+    font-size: 21px;
+    letter-spacing: 0.5px;
+    font-weight: bold;
+  }
+  .cover .brand-tag {
+    font-size: 10px;
+    color: #c9b487;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .cover .maintitle {
+    font-family: Georgia, serif;
+    font-size: 36px;
+    line-height: 1.22;
+    margin-top: 190px;
+    max-width: 560px;
+  }
+  .cover .subtitle {
+    font-size: 14px;
+    color: #d8d3c6;
+    margin-top: 16px;
+    max-width: 520px;
+    line-height: 1.5;
+  }
+  .cover .meta-block {
+    position: absolute;
+    bottom: 50px;
+    left: 50px;
+    right: 50px;
+    border-top: 1px solid #33443e;
+    padding-top: 16px;
+    font-size: 10px;
+    color: #c9b487;
+    display: table;
+    width: calc(100% - 100px);
+  }
+  .cover .meta-block .m { display: table-cell; width: 33.3%; }
+  .cover .meta-block .m span { display: block; color: #d8d3c6; font-size: 12px; margin-top: 3px; font-weight: 500; }
+ 
+  /* Diagram Box */
+  .diagram-box {
+    border: 1px solid #e5e0d6;
+    border-radius: 5px;
+    padding: 10px 8px;
+    margin: 6px 0 12px 0;
+    background: #faf8f5;
+  }
+  .diagram-caption {
+    text-align: center;
+    font-size: 9.3px;
+    color: #666;
+    margin-top: 4px;
+    font-style: italic;
+  }
+ 
+  /* Items */
+  .item {
+    display: table;
+    width: 100%;
+    padding: 7px 0;
+    border-bottom: 1px solid #ebe6dd;
+  }
+  .item .num {
+    display: table-cell;
+    width: 24px;
+    font-family: Georgia, serif;
+    color: #8c6d3f;
+    font-size: 13.5px;
+    font-weight: bold;
+    vertical-align: top;
+    padding-top: 1px;
+  }
+  .item .txt { display: table-cell; vertical-align: top; }
+  .item .txt b { color: #162420; font-size: 11.5px; }
+  .item .txt p { font-size: 10.8px; color: #555; margin-top: 2px; line-height: 1.4; }
+ 
+  /* Pricing Cards */
+  .cards {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 12px 0;
+    margin-top: 2px;
+  }
+  .card {
+    display: table-cell;
+    width: 50%;
+    vertical-align: top;
+    border: 1px solid #d8d2c7;
+    border-radius: 5px;
+    overflow: hidden;
+    background: #ffffff;
+  }
+  .card-head { background: #162420; color: #f4efe6; padding: 11px 14px; }
+  .card-head .tag { font-size: 8.8px; letter-spacing: 1px; text-transform: uppercase; color: #c9b487; margin-bottom: 2px; font-weight: bold; }
+  .card-head .title { font-family: Georgia, serif; font-size: 14.5px; margin-bottom: 3px; line-height: 1.25; }
+  .card-head .desc { font-size: 9.8px; color: #d8d3c6; line-height: 1.38; }
+  .card-body { padding: 11px 14px 12px 14px; }
+  .line { display: table; width: 100%; font-size: 10.2px; padding: 4px 0; border-bottom: 1px dotted #dedede; }
+  .line .desc-cell { display: table-cell; color: #444; padding-right: 5px; }
+  .line .price-cell { display: table-cell; text-align: right; color: #162420; white-space: nowrap; width: 56px; font-weight: 600; }
+  .card-total { display: table; width: 100%; margin-top: 8px; padding-top: 7px; border-top: 2px solid #162420; }
+  .card-total .lbl { display: table-cell; font-size: 11.2px; font-weight: bold; color: #162420; }
+  .card-total .amt { display: table-cell; text-align: right; font-size: 17px; font-weight: bold; color: #162420; }
+  .card-foot { font-size: 9.2px; color: #8c6d3f; margin-top: 5px; font-style: italic; }
+ 
+  .addon {
+    margin-top: 11px;
+    padding: 9px 12px;
+    background: #f7f4ed;
+    border-left: 3px solid #c9b487;
+    border-radius: 0 4px 4px 0;
+    font-size: 10.6px;
+    color: #444;
+    line-height: 1.4;
+  }
+  .addon b { color: #162420; }
+ 
+  .terms { display: table; width: 100%; margin-top: 6px; }
+  .terms .col { display: table-cell; width: 33.3%; vertical-align: top; padding-right: 10px; font-size: 10.2px; color: #444; }
+  .terms .col b { display: block; color: #162420; font-size: 10.8px; margin-bottom: 2px; }
+ 
+  .cta-box {
+    margin-top: 14px;
+    background: #162420;
+    color: #f4efe6;
+    border-radius: 5px;
+    padding: 14px 18px;
+  }
+  .cta-box .h { font-family: Georgia, serif; font-size: 14px; margin-bottom: 3px; color: #f4efe6; }
+  .cta-box .p { font-size: 10.8px; color: #d8d3c6; line-height: 1.42; }
+ 
+  .footer { margin-top: 14px; padding-top: 8px; border-top: 1px solid #dfd9ce; display: table; width: 100%; }
+  .footer .left { display: table-cell; font-size: 9.6px; color: #666; }
+  .footer .right { display: table-cell; text-align: right; font-size: 9.6px; color: #666; }
+  .fine-print { margin-top: 6px; font-size: 8.5px; color: #999; line-height: 1.35; }
+</style>
+</head>
+<body>
+ 
+<!-- ========== PAGE 1: COVER ========== -->
+<div class="page cover">
+  <div class="cover-inner">
+    <div class="brand-name">THE AUTOMATION GUY</div>
+    <div class="brand-tag">Autonomous Systems &amp; AI Engineering</div>
+ 
+    <div class="maintitle">AI Business Operating System<br>&amp; Autonomous Mobile Spa</div>
+    <div class="subtitle">A scalable multi-agent business architecture &mdash; powered by a central CEO Orchestrator and specialist sub-agents, coupled with a high-converting immersive 3D website. Engineered for 100% autonomous MVP operations with seamless future venture scaling.</div>
+ 
+    <div class="meta-block">
+      <div class="m">PREPARED FOR<span>Sandra</span></div>
+      <div class="m">PROPOSAL DATE<span>17 August 2026</span></div>
+      <div class="m">VALID UNTIL<span>16 September 2026</span></div>
+    </div>
+  </div>
+</div>
+ 
+<!-- ========== PAGE 2: ARCHITECTURE & FLOWCHART ========== -->
+<div class="page">
+  <div class="pageheader"><div class="brand">THE AUTOMATION GUY</div><div class="pagelbl">Architecture &amp; Flow</div></div>
+ 
+  <h2 class="pagetitle">Central CEO Intelligence &amp; Multi-Agent Network</h2>
+  <div class="lead">
+    Your business operates as an autonomous digital company. At the core sits the <b>Master CEO Agent</b>, which receives all touchpoints, classifies intent, validates context, and routes execution to specialist sub-agents powered by autonomous task execution (Hermes/Claude Skill framework). Launching first for your <b>Mobile Spa</b>, this engine is built to scale across future business lines effortlessly.
+  </div>
+ 
+  <div class="section-label">End-to-End System Flowchart</div>
+  <div class="diagram-box">
+    <svg viewBox="0 0 706 315" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L5,3 L0,6 Z" fill="#8c6d3f"/>
+        </marker>
+        <marker id="arr-gold" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L5,3 L0,6 Z" fill="#c9b487"/>
+        </marker>
+      </defs>
+ 
+      <!-- LAYER 1: Ingestion Channels -->
+      <g>
+        <rect x="8" y="10" width="160" height="295" rx="5" fill="#f5f2eb" stroke="#c9b487" stroke-width="1.2"/>
+        <text x="88" y="32" text-anchor="middle" font-size="10" font-weight="bold" fill="#162420">CUSTOMER CHANNELS</text>
+        <line x1="20" y1="40" x2="156" y2="40" stroke="#dfd9ce" stroke-width="1"/>
+        
+        <rect x="18" y="52" width="140" height="64" rx="4" fill="#fff" stroke="#d5cebe"/>
+        <text x="88" y="70" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#162420">Immersive 3D Web</text>
+        <text x="88" y="85" text-anchor="middle" font-size="8" fill="#666">Visual Treatment Selector</text>
+        <text x="88" y="98" text-anchor="middle" font-size="8" fill="#666">&amp; Instant Booking Form</text>
+
+        <rect x="18" y="128" width="140" height="64" rx="4" fill="#fff" stroke="#d5cebe"/>
+        <text x="88" y="146" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#162420">WhatsApp Business</text>
+        <text x="88" y="161" text-anchor="middle" font-size="8" fill="#666">Conversational Intake</text>
+        <text x="88" y="174" text-anchor="middle" font-size="8" fill="#666">&amp; 24/7 Enquiries</text>
+
+        <rect x="18" y="204" width="140" height="64" rx="4" fill="#fff" stroke="#d5cebe"/>
+        <text x="88" y="222" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#162420">Email &amp; Direct Inbound</text>
+        <text x="88" y="237" text-anchor="middle" font-size="8" fill="#666">Corporate Enquiries</text>
+        <text x="88" y="250" text-anchor="middle" font-size="8" fill="#666">&amp; VIP Group Packages</text>
+      </g>
+ 
+      <!-- Arrow 1 to Master CEO -->
+      <line x1="168" y1="157" x2="216" y2="157" stroke="#8c6d3f" stroke-width="1.6" marker-end="url(#arr)"/>
+ 
+      <!-- LAYER 2: Master CEO Orchestrator -->
+      <g>
+        <rect x="218" y="80" width="190" height="155" rx="6" fill="#162420" stroke="#c9b487" stroke-width="1.8"/>
+        <text x="313" y="105" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#f4efe6">MASTER CEO AGENT</text>
+        <text x="313" y="120" text-anchor="middle" font-size="8.5" fill="#c9b487">Central Orchestration &amp; Routing</text>
+        <line x1="234" y1="128" x2="392" y2="128" stroke="#33443e" stroke-width="1"/>
+        
+        <rect x="230" y="136" width="166" height="28" rx="3" fill="#20332d"/>
+        <text x="313" y="153" text-anchor="middle" font-size="8" fill="#d8d3c6">&bull; Intent Classification &amp; Context</text>
+
+        <rect x="230" y="168" width="166" height="28" rx="3" fill="#20332d"/>
+        <text x="313" y="185" text-anchor="middle" font-size="8" fill="#d8d3c6">&bull; Business Unit Routing (Spa / Future)</text>
+
+        <rect x="230" y="200" width="166" height="24" rx="3" fill="#20332d"/>
+        <text x="313" y="215" text-anchor="middle" font-size="8" fill="#c9b487">&bull; Hermes / Claude Skill Execution</text>
+      </g>
+ 
+      <!-- Arrows to 4 Specialist Sub-Agents -->
+      <line x1="408" y1="110" x2="480" y2="40" stroke="#8c6d3f" stroke-width="1.4" marker-end="url(#arr)"/>
+      <line x1="408" y1="135" x2="480" y2="108" stroke="#8c6d3f" stroke-width="1.4" marker-end="url(#arr)"/>
+      <line x1="408" y1="175" x2="480" y2="182" stroke="#8c6d3f" stroke-width="1.4" marker-end="url(#arr)"/>
+      <line x1="408" y1="205" x2="480" y2="255" stroke="#8c6d3f" stroke-width="1.4" marker-end="url(#arr)"/>
+ 
+      <!-- LAYER 3: 4 Specialist Sub-Agents -->
+      <g>
+        <!-- Agent 1 -->
+        <rect x="482" y="14" width="216" height="58" rx="4" fill="#fff" stroke="#162420" stroke-width="1.2"/>
+        <text x="590" y="32" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#162420">1. MARKETING SUB-AGENT</text>
+        <text x="590" y="47" text-anchor="middle" font-size="8" fill="#555">Automated seasonal outreach, promos</text>
+        <text x="590" y="59" text-anchor="middle" font-size="8" fill="#555">&amp; repeat-treatment re-engagement</text>
+
+        <!-- Agent 2 -->
+        <rect x="482" y="82" width="216" height="58" rx="4" fill="#fff" stroke="#162420" stroke-width="1.2"/>
+        <text x="590" y="100" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#162420">2. BOOKING &amp; PAYMENTS AGENT</text>
+        <text x="590" y="115" text-anchor="middle" font-size="8" fill="#555">Real-time slots, calendar sync &amp;</text>
+        <text x="590" y="127" text-anchor="middle" font-size="8" fill="#555">Stripe deposit collection</text>
+
+        <!-- Agent 3 -->
+        <rect x="482" y="154" width="216" height="58" rx="4" fill="#fff" stroke="#162420" stroke-width="1.2"/>
+        <text x="590" y="172" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#162420">3. OPERATIONS &amp; DISPATCH AGENT</text>
+        <text x="590" y="187" text-anchor="middle" font-size="8" fill="#555">UK postcode travel radius check, buffer</text>
+        <text x="590" y="199" text-anchor="middle" font-size="8" fill="#555">times &amp; mobile therapist kit lists</text>
+
+        <!-- Agent 4 -->
+        <rect x="482" y="226" width="216" height="58" rx="4" fill="#fff" stroke="#162420" stroke-width="1.2"/>
+        <text x="590" y="244" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#162420">4. CUSTOMER CARE &amp; AFTERCARE</text>
+        <text x="590" y="259" text-anchor="middle" font-size="8" fill="#555">Contraindication checks, 24/7 FAQs,</text>
+        <text x="590" y="271" text-anchor="middle" font-size="8" fill="#555">prep instructions &amp; review collection</text>
+      </g>
+    </svg>
+    <div class="diagram-caption">Integrated Architecture: Inbound Channels &rarr; Master CEO Intelligence &rarr; 4 Specialist Sub-Agents &rarr; Automated Execution.</div>
+  </div>
+ 
+  <div class="section-label">Automation Evolution: Autonomous MVP to Human Oversight</div>
+  <div class="diagram-box">
+    <svg viewBox="0 0 706 72" xmlns="http://www.w3.org/2000/svg">
+      <rect x="14" y="10" width="315" height="52" rx="4" fill="#162420"/>
+      <text x="171" y="29" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#c9b487">PHASE 1 &middot; 100% AUTONOMOUS MVP</text>
+      <text x="171" y="44" text-anchor="middle" font-size="8.5" fill="#f4efe6">Zero-friction launch: Bookings, payments &amp; support run on autopilot</text>
+
+      <line x1="334" y1="36" x2="370" y2="36" stroke="#8c6d3f" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <rect x="374" y="10" width="318" height="52" rx="4" fill="#fff" stroke="#c9b487" stroke-width="1.4"/>
+      <text x="533" y="29" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#8c6d3f">PHASE 2 &middot; HUMAN-IN-THE-LOOP (HITL)</text>
+      <text x="533" y="44" text-anchor="middle" font-size="8.5" fill="#162420">Configurable review triggers (VIP packages, custom discounts, edge cases)</text>
+    </svg>
+    <div class="diagram-caption">Launch fully automated to validate fast; add manual checkpoint triggers only where you want strategic oversight.</div>
+  </div>
+</div>
+ 
+<!-- ========== PAGE 3: WHAT'S INCLUDED ========== -->
+<div class="page">
+  <div class="pageheader"><div class="brand">THE AUTOMATION GUY</div><div class="pagelbl">Deliverables &amp; Scope</div></div>
+ 
+  <h2 class="pagetitle">Core Deliverables for Your Mobile Spa</h2>
+  <div class="lead">Every component is engineered to convert visitors, automate operations, and scale effortlessly.</div>
+ 
+  <div class="item">
+    <div class="num">01</div>
+    <div class="txt"><b>Immersive 3D Mobile Spa Website</b>
+      <p>A luxury, mobile-optimised web experience featuring interactive 3D elements (soothing visual ambience, treatment selector, custom consultation flow) designed for frictionless booking conversions.</p></div>
+  </div>
+  <div class="item">
+    <div class="num">02</div>
+    <div class="txt"><b>Master CEO Orchestrator (Multi-Business Ready)</b>
+      <p>The central AI brain. Analyzes every inbound message from Web, WhatsApp, or Email, determines intent, routes to the mobile spa system, and provides architecture to plug in future businesses.</p></div>
+  </div>
+  <div class="item">
+    <div class="num">03</div>
+    <div class="txt"><b>Marketing &amp; Retention Sub-Agent</b>
+      <p>Runs automated seasonal promotions, birthday/anniversary treatment offers, abandoned booking recovery, and re-engagement campaigns without manual input.</p></div>
+  </div>
+  <div class="item">
+    <div class="num">04</div>
+    <div class="txt"><b>Booking, Calendar &amp; Stripe Payment Sub-Agent</b>
+      <p>Checks therapist availability, syncs calendars (Google/Cal.com), collects deposits/full payments via Stripe, and issues automated instant SMS/WhatsApp confirmations.</p></div>
+  </div>
+  <div class="item">
+    <div class="num">05</div>
+    <div class="txt"><b>Mobile Operations &amp; Travel Dispatch Sub-Agent</b>
+      <p>Validates client postcode coverage, calculates travel buffers between appointments, checks mobile equipment kits, and dispatches on-the-day route details to therapists.</p></div>
+  </div>
+  <div class="item">
+    <div class="num">06</div>
+    <div class="txt"><b>Customer Care, Safety Pre-Check &amp; Review Sub-Agent</b>
+      <p>Provides instant 24/7 answers to treatment FAQs, conducts automated health/allergy pre-checks, sends preparation guidelines, and requests Google reviews post-treatment.</p></div>
+  </div>
+ 
+  <div class="section-label">Structured Delivery Timeline</div>
+  <div class="diagram-box">
+    <svg viewBox="0 0 706 100" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arr2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L5,3 L0,6 Z" fill="#c9b487"/>
+        </marker>
+      </defs>
+      <!-- Step 1 -->
+      <circle cx="56" cy="30" r="20" fill="#162420"/>
+      <text x="56" y="34" text-anchor="middle" font-size="10.5" fill="#f4efe6" font-weight="bold">1</text>
+      <text x="56" y="66" text-anchor="middle" font-size="9" fill="#162420" font-weight="bold">Discovery</text>
+      <text x="56" y="78" text-anchor="middle" font-size="7.5" fill="#777">Brand &amp; Logic</text>
+
+      <line x1="80" y1="30" x2="150" y2="30" stroke="#c9b487" stroke-width="1.3" marker-end="url(#arr2)"/>
+
+      <!-- Step 2 -->
+      <circle cx="176" cy="30" r="20" fill="#162420"/>
+      <text x="176" y="34" text-anchor="middle" font-size="10.5" fill="#f4efe6" font-weight="bold">2</text>
+      <text x="176" y="66" text-anchor="middle" font-size="9" fill="#162420" font-weight="bold">3D Web Build</text>
+      <text x="176" y="78" text-anchor="middle" font-size="7.5" fill="#777">UI &amp; Visuals</text>
+
+      <line x1="200" y1="30" x2="270" y2="30" stroke="#c9b487" stroke-width="1.3" marker-end="url(#arr2)"/>
+
+      <!-- Step 3 -->
+      <circle cx="296" cy="30" r="20" fill="#162420"/>
+      <text x="296" y="34" text-anchor="middle" font-size="10.5" fill="#f4efe6" font-weight="bold">3</text>
+      <text x="296" y="66" text-anchor="middle" font-size="9" fill="#162420" font-weight="bold">Agent Engine</text>
+      <text x="296" y="78" text-anchor="middle" font-size="7.5" fill="#777">CEO &amp; Sub-Agents</text>
+
+      <line x1="320" y1="30" x2="390" y2="30" stroke="#c9b487" stroke-width="1.3" marker-end="url(#arr2)"/>
+
+      <!-- Step 4 -->
+      <circle cx="416" cy="30" r="20" fill="#162420"/>
+      <text x="416" y="34" text-anchor="middle" font-size="10.5" fill="#f4efe6" font-weight="bold">4</text>
+      <text x="416" y="66" text-anchor="middle" font-size="9" fill="#162420" font-weight="bold">Integrations</text>
+      <text x="416" y="78" text-anchor="middle" font-size="7.5" fill="#777">WhatsApp &amp; Stripe</text>
+
+      <line x1="440" y1="30" x2="510" y2="30" stroke="#c9b487" stroke-width="1.3" marker-end="url(#arr2)"/>
+
+      <!-- Step 5 -->
+      <circle cx="536" cy="30" r="20" fill="#162420"/>
+      <text x="536" y="34" text-anchor="middle" font-size="10.5" fill="#f4efe6" font-weight="bold">5</text>
+      <text x="536" y="66" text-anchor="middle" font-size="9" fill="#162420" font-weight="bold">QA &amp; Launch</text>
+      <text x="536" y="78" text-anchor="middle" font-size="7.5" fill="#777">Live Handover</text>
+    </svg>
+    <div class="diagram-caption">Estimated delivery: 3&ndash;4 weeks (Option 1: Plug-In) or 6 weeks (Option 2: Full Methodology).</div>
+  </div>
+</div>
+ 
+<!-- ========== PAGE 4: INVESTMENT & PRICING ========== -->
+<div class="page">
+  <div class="pageheader"><div class="brand">THE AUTOMATION GUY</div><div class="pagelbl">Investment &amp; Quotation</div></div>
+ 
+  <h2 class="pagetitle">Quotation: Two Implementation Options</h2>
+  <div class="lead">Priced transparently based on whether you supply pre-configured Claude Skill business rules or engage our team to engineer the complete turnkey methodology.</div>
+ 
+  <div class="cards">
+    <!-- OPTION 1 -->
+    <div class="card">
+      <div class="card-head">
+        <div class="tag">Option 1</div>
+        <div class="title">Plug-In Build<br>(Your Claude Skill File)</div>
+        <div class="desc">You supply the completed Claude Skill files and business logic; we integrate them into the multi-agent backend, build your 3D website, and wire live APIs.</div>
+      </div>
+      <div class="card-body">
+        <div class="line"><div class="desc-cell">Discovery &amp; Claude skill file architecture review</div><div class="price-cell">£500</div></div>
+        <div class="line"><div class="desc-cell">Immersive 3D mobile website (design + build)</div><div class="price-cell">£3,200</div></div>
+        <div class="line"><div class="desc-cell">Multi-agent system integration (CEO + 4 sub-agents)</div><div class="price-cell">£2,850</div></div>
+        <div class="line"><div class="desc-cell">Automation wiring (WhatsApp, Stripe, Cal.com)</div><div class="price-cell">£1,000</div></div>
+        <div class="line" style="border-bottom:none;"><div class="desc-cell">QA testing, launch &amp; technical handover</div><div class="price-cell">£450</div></div>
+        <div class="card-total"><div class="lbl">Total Investment</div><div class="amt">£8,500</div></div>
+        <div class="card-foot">Estimated delivery: 3&ndash;4 weeks from kickoff</div>
+      </div>
+    </div>
+ 
+    <!-- OPTION 2 -->
+    <div class="card">
+      <div class="card-head">
+        <div class="tag">Option 2 &middot; Recommended</div>
+        <div class="title">Full Methodology<br>Build (Turnkey)</div>
+        <div class="desc">We handle everything &mdash; business logic mapping, prompt architecture, decision trees, fallback guards, 3D web development, and complete multi-agent wiring.</div>
+      </div>
+      <div class="card-body">
+        <div class="line"><div class="desc-cell">Deep discovery &amp; spa process mapping</div><div class="price-cell">£750</div></div>
+        <div class="line"><div class="desc-cell">Immersive 3D mobile website (design + build)</div><div class="price-cell">£3,200</div></div>
+        <div class="line"><div class="desc-cell">Custom agent engineering &amp; Claude Skill dev (CEO + 4 agents)</div><div class="price-cell">£5,400</div></div>
+        <div class="line"><div class="desc-cell">Automation wiring (Bookings, Route logic, Stripe)</div><div class="price-cell">£1,600</div></div>
+        <div class="line"><div class="desc-cell">Stress testing, edge-case QA &amp; deployment</div><div class="price-cell">£1,100</div></div>
+        <div class="line" style="border-bottom:none;"><div class="desc-cell">SOPs, admin training &amp; system handover</div><div class="price-cell">£800</div></div>
+        <div class="card-total"><div class="lbl">Total Investment</div><div class="amt">£12,850</div></div>
+        <div class="card-foot">Estimated delivery: 6 weeks from kickoff</div>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="addon">
+    <b>Optional Monthly Retainer &mdash; System Management &amp; Prompt Tuning:</b> Continuous prompt optimization, model updates, API monitoring, and performance reviews for <b>£450/month</b> (billed separately, cancel anytime).
+  </div>
+ 
+  <div class="section-label">Payment Milestone Structure</div>
+  <div class="terms">
+    <div class="col"><b>40% Deposit</b>To begin discovery, wireframes &amp; architecture</div>
+    <div class="col"><b>40% Milestone</b>Upon completed 3D website design &amp; core agent build</div>
+    <div class="col"><b>20% Final</b>Upon live testing, QA sign-off &amp; final deployment</div>
+  </div>
+</div>
+ 
+<!-- ========== PAGE 5: NEXT STEPS & AGREEMENT ========== -->
+<div class="page">
+  <div class="pageheader"><div class="brand">THE AUTOMATION GUY</div><div class="pagelbl">Next Steps &amp; Agreement</div></div>
+ 
+  <h2 class="pagetitle">Getting Started</h2>
+  <div class="lead">
+    Both pathways establish a 24/7 autonomous mobile spa operation with a scalable multi-agent foundation. Select the route that best matches your readiness.
+  </div>
+ 
+  <div class="cta-box">
+    <div class="h">Ready to launch your AI Mobile Spa?</div>
+    <div class="p">Please confirm whether you wish to proceed with <b>Option 1</b> (£8,500) or <b>Option 2</b> (£12,850). We will issue the project agreement and schedule your kickoff onboarding session immediately.</div>
+  </div>
+ 
+  <div class="section-label">Terms &amp; Operational Details</div>
+  <div class="item">
+    <div class="num">&bull;</div>
+    <div class="txt"><b>Third-Party Running Costs</b><p>Billed directly at cost (domain, cloud hosting, AI token usage / WhatsApp API &mdash; typically £25&ndash;£50/month depending on volume).</p></div>
+  </div>
+  <div class="item">
+    <div class="num">&bull;</div>
+    <div class="txt"><b>Included Revisions</b><p>Two dedicated revision rounds at each milestone stage to guarantee the design and agent behavior meet your standards.</p></div>
+  </div>
+  <div class="item">
+    <div class="num">&bull;</div>
+    <div class="txt"><b>100% Intellectual Property Ownership</b><p>You own all custom agent prompts, website source code, design assets, and database architecture outright upon final payment.</p></div>
+  </div>
+  <div class="item">
+    <div class="num">&bull;</div>
+    <div class="txt"><b>Future Venture Scalability</b><p>The Master CEO architecture allows additional business entities or new locations to be connected seamlessly as you expand.</p></div>
+  </div>
+ 
+  <div class="footer">
+    <div class="left">theautomationguy.ai &nbsp;|&nbsp; hello@theautomationguy.ai</div>
+    <div class="right">Proposal Date: 17 August 2026</div>
+  </div>
+  <div class="fine-print">
+    This proposal is valid until 16 September 2026. All figures quoted in GBP (£). Scope changes identified during discovery may adjust delivery timelines accordingly.
+  </div>
+</div>
+ 
+</body>
+</html>

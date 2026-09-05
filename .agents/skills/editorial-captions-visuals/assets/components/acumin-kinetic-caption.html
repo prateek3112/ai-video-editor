@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Acumin Kinetic Caption Component</title>
+  </head>
+  <body>
+    <template>
+      <style>
+        /* --- Font Faces --- */
+        @font-face {
+          font-family: "Acumin Pro";
+          src: url("fonts/AcuminPro-Bold.woff2") format("woff2"),
+               url("fonts/AcuminPro-Bold.otf") format("opentype");
+          font-weight: 700;
+          font-style: normal;
+        }
+        @font-face {
+          font-family: "Acumin Pro";
+          src: url("fonts/AcuminPro-Regular.woff2") format("woff2"),
+               url("fonts/AcuminPro-Regular.otf") format("opentype");
+          font-weight: 400;
+          font-style: normal;
+        }
+
+        :root {
+          --caption-sans: "Acumin Pro", "Helvetica Neue", Helvetica, -apple-system, BlinkMacSystemFont, sans-serif;
+          --caption-serif: "Georgia", "Georgia QEUI", Times, serif;
+          --caption-color: #ffffff;
+          --caption-accent: #ffe600;
+        }
+
+        .kinetic-caption-stage {
+          position: absolute;
+          inset: 0;
+          overflow: visible;
+          pointer-events: none;
+          font-family: var(--caption-sans);
+        }
+
+        /* --- Hook Heading (Top Negative Space) --- */
+        .hook-heading {
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);
+          top: var(--hook-y, 16%);
+          width: 90%;
+          text-align: center;
+          font-family: var(--caption-sans);
+          font-weight: 700;
+          font-size: var(--hook-size, 96px);
+          line-height: 0.95;
+          letter-spacing: -0.035em;
+          color: var(--caption-color);
+          text-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+          opacity: 0;
+          visibility: hidden;
+          white-space: nowrap;
+          z-index: 10;
+        }
+        .hook-heading.yellow {
+          color: var(--caption-accent);
+        }
+        .hook-heading.glow {
+          text-shadow: 0 0 20px rgba(255, 255, 255, 0.85), 0 0 40px rgba(255, 255, 255, 0.45);
+        }
+
+        /* --- Depth / Behind Head Hook --- */
+        .hook-depth {
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);
+          top: var(--depth-y, 14%);
+          width: 100%;
+          text-align: center;
+          font-family: var(--caption-sans);
+          font-weight: 700;
+          font-size: var(--depth-size, 160px);
+          letter-spacing: -0.04em;
+          color: #ffffff;
+          opacity: 0;
+          visibility: hidden;
+          z-index: 2; /* Sandwiched behind cutout layer (z-index: 3) */
+        }
+
+        /* --- Kinetic Body Captions --- */
+        .kinetic-cue-group {
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);
+          top: var(--caption-y, 54%);
+          max-width: var(--caption-max-width, 840px);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          opacity: 0;
+          visibility: hidden;
+          white-space: nowrap;
+          z-index: 20;
+        }
+
+        .kinetic-line {
+          display: inline-flex;
+          align-items: baseline;
+          justify-content: center;
+          gap: 0.28em;
+          font-family: var(--caption-sans);
+          font-weight: 400; /* Regular for body */
+          font-size: var(--caption-font-size, 64px);
+          line-height: 1.05;
+          color: var(--caption-color);
+          text-shadow: 0 2px 14px rgba(0, 0, 0, 0.55);
+        }
+
+        /* Subtle Card Surface for Busy Footage */
+        .kinetic-line.card {
+          padding: 14px 28px;
+          border-radius: 16px;
+          background: rgba(247, 247, 246, 0.94);
+          border: 2px solid #d9d9d6;
+          color: #0d0d0d;
+          text-shadow: none;
+          box-shadow: 0 12px 32px rgba(0, 0, 0, 0.14);
+        }
+
+        .kinetic-word.bold {
+          font-weight: 700;
+        }
+        .kinetic-word.yellow {
+          color: var(--caption-accent);
+          font-weight: 700;
+        }
+        .kinetic-word.serif-italic {
+          font-family: var(--caption-serif);
+          font-style: italic;
+          font-weight: 400;
+        }
+      </style>
+
+      <div
+        id="acumin-caption-root"
+        data-composition-id="acumin-kinetic-caption"
+        data-start="0"
+        data-duration="10"
+        data-width="1080"
+        data-height="1920"
+        style="position:absolute;inset:0;width:1080px;height:1920px;overflow:visible;pointer-events:none"
+      >
+        <div class="kinetic-caption-stage" id="kinetic-stage"></div>
+      </div>
+
+      <script>
+        (function () {
+          // --- Configuration & Transcript ---
+          const CUES = [
+            // Hook words (intro)
+            { id: "h0", text: "we're", start: 0.15, end: 0.55, isHook: true, color: "white" },
+            { id: "h1", text: "going to make", start: 0.58, end: 1.05, isHook: true, color: "white" },
+            { id: "h2", text: "talking videos", start: 1.08, end: 1.85, isHook: true, color: "white" },
+            { id: "h3", text: "less boring", start: 1.88, end: 2.65, isHook: true, color: "white" },
+            { id: "h4", text: "and more engaging", start: 2.68, end: 3.85, isHook: true, color: "yellow" },
+            // Body captions (1-2 words per cue, regular weight)
+            { id: "c0", text: "So every video", start: 4.1, end: 4.75 },
+            { id: "c1", text: "you make", start: 4.78, end: 5.25 },
+            { id: "c2", text: "moving forward", start: 5.28, end: 5.95 },
+            { id: "c3", text: "needs to have", start: 5.98, end: 6.55 },
+            { id: "c4", text: "captions", start: 6.58, end: 7.35, isBold: true },
+            { id: "c5", text: "like this", start: 7.38, end: 8.2 },
+          ];
+
+          const SURFACE_MODE = "clean"; // "clean" or "card"
+          const root = document.getElementById("acumin-caption-root");
+          const stage = document.getElementById("kinetic-stage");
+          const width = Number(root.dataset.width || 1080);
+          const height = Number(root.dataset.height || 1920);
+
+          root.style.setProperty("--hook-y", (height * 0.16) + "px");
+          root.style.setProperty("--caption-y", (height * 0.55) + "px");
+          root.style.setProperty("--caption-max-width", (width * 0.82) + "px");
+
+          const timeline = gsap.timeline({ paused: true });
+
+          CUES.forEach((cue, index) => {
+            if (cue.isHook) {
+              // Render Top Negative Space Hook
+              const hookEl = document.createElement("div");
+              hookEl.className = "hook-heading" + (cue.color === "yellow" ? " yellow" : "") + (cue.glow ? " glow" : "");
+              hookEl.id = "hook-" + index;
+              hookEl.textContent = cue.text;
+              stage.appendChild(hookEl);
+
+              const entranceDuration = Math.min(0.18, (cue.end - cue.start) * 0.35);
+              const exitDuration = Math.min(0.10, (cue.end - cue.start) * 0.20);
+              const exitStart = Math.max(cue.start + entranceDuration, cue.end - exitDuration);
+
+              timeline.set(hookEl, { visibility: "visible" }, cue.start);
+              timeline.fromTo(
+                hookEl,
+                { opacity: 0, y: 16, scale: 0.94 },
+                { opacity: 1, y: 0, scale: 1, duration: entranceDuration, ease: "power3.out" },
+                cue.start
+              );
+              timeline.to(
+                hookEl,
+                { opacity: 0, y: -8, duration: exitDuration, ease: "power2.in" },
+                exitStart
+              );
+              timeline.set(hookEl, { visibility: "hidden" }, cue.end);
+            } else {
+              // Render Kinetic Body Caption (1-2 words at chest level)
+              const cueGroup = document.createElement("div");
+              cueGroup.className = "kinetic-cue-group";
+              cueGroup.id = "cue-" + index;
+
+              const lineEl = document.createElement("div");
+              lineEl.className = "kinetic-line" + (SURFACE_MODE === "card" ? " card" : "");
+
+              const words = cue.text.split(" ");
+              words.forEach(w => {
+                const wordEl = document.createElement("span");
+                wordEl.className = "kinetic-word" + (cue.isBold ? " bold" : "") + (cue.isYellow ? " yellow" : "");
+                wordEl.textContent = w;
+                lineEl.appendChild(wordEl);
+              });
+
+              cueGroup.appendChild(lineEl);
+              stage.appendChild(cueGroup);
+
+              const entranceDur = Math.min(0.12, (cue.end - cue.start) * 0.35);
+              const exitDur = Math.min(0.08, (cue.end - cue.start) * 0.22);
+              const exitStart = Math.max(cue.start + entranceDur, cue.end - exitDur);
+
+              timeline.set(cueGroup, { visibility: "visible" }, cue.start);
+              timeline.fromTo(
+                cueGroup,
+                { opacity: 0, y: 12, scale: 0.97 },
+                { opacity: 1, y: 0, scale: 1, duration: entranceDur, ease: "power3.out" },
+                cue.start
+              );
+              timeline.to(
+                cueGroup,
+                { opacity: 0, y: -6, duration: exitDur, ease: "power2.in" },
+                exitStart
+              );
+              timeline.set(cueGroup, { visibility: "hidden" }, cue.end);
+            }
+          });
+
+          timeline.seek(0);
+          window.__timelines = window.__timelines || {};
+          window.__timelines["acumin-kinetic-caption"] = timeline;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

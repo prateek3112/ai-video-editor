@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Editorial Safe Zones Debug Overlay</title>
+  </head>
+  <body>
+    <template>
+      <style>
+        .safe-zone-overlay {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          z-index: 9999;
+          font-family: monospace;
+          font-size: 14px;
+          color: rgba(255, 255, 255, 0.85);
+        }
+        .sz-box {
+          position: absolute;
+          left: 0;
+          right: 0;
+          box-sizing: border-box;
+          padding: 8px 16px;
+        }
+        /* Top Status / Stories Bar */
+        .sz-top-system {
+          top: 0;
+          height: 180px;
+          background: rgba(239, 68, 68, 0.15);
+          border-bottom: 2px dashed rgba(239, 68, 68, 0.7);
+        }
+        /* Top Hook Heading Zone */
+        .sz-top-hook {
+          top: 180px;
+          height: 280px;
+          background: rgba(16, 185, 129, 0.12);
+          border-bottom: 2px solid rgba(16, 185, 129, 0.6);
+        }
+        /* Face Avoidance Corridor */
+        .sz-face-corridor {
+          top: 460px;
+          height: 520px;
+          background: rgba(245, 158, 11, 0.12);
+          border-bottom: 2px dashed rgba(245, 158, 11, 0.6);
+        }
+        /* Kinetic Caption Lane */
+        .sz-caption-lane {
+          top: 980px;
+          height: 300px;
+          background: rgba(59, 130, 246, 0.15);
+          border-bottom: 2px solid rgba(59, 130, 246, 0.7);
+        }
+        /* Lower Stage Zone */
+        .sz-lower-stage {
+          top: 1280px;
+          height: 280px;
+          background: rgba(168, 85, 247, 0.12);
+          border-bottom: 2px solid rgba(168, 85, 247, 0.6);
+        }
+        /* Right Rail Buttons */
+        .sz-right-rail {
+          top: 700px;
+          bottom: 360px;
+          right: 0;
+          width: 140px;
+          background: rgba(239, 68, 68, 0.2);
+          border-left: 2px dashed rgba(239, 68, 68, 0.8);
+        }
+        /* Bottom Platform UI */
+        .sz-bottom-system {
+          bottom: 0;
+          height: 360px;
+          background: rgba(239, 68, 68, 0.18);
+          border-top: 2px dashed rgba(239, 68, 68, 0.8);
+        }
+      </style>
+
+      <div
+        id="safe-zones-root"
+        data-composition-id="editorial-safe-zones"
+        data-start="0"
+        data-duration="999"
+        data-width="1080"
+        data-height="1920"
+        style="position:absolute;inset:0;width:1080px;height:1920px;pointer-events:none"
+      >
+        <div class="safe-zone-overlay">
+          <div class="sz-box sz-top-system">▲ TOP EXCLUSION ZONE (0 - 180px)</div>
+          <div class="sz-box sz-top-hook">★ TOP HOOK & HEADING ZONE (180 - 460px)</div>
+          <div class="sz-box sz-face-corridor">⚠ SPEAKER FACE & MOUTH EXCLUSION (460 - 980px)</div>
+          <div class="sz-box sz-caption-lane">■ KINETIC CAPTION CORRIDOR (980 - 1280px)</div>
+          <div class="sz-box sz-lower-stage">◆ LOWER STAGE ZONE (1280 - 1560px)</div>
+          <div class="sz-right-rail">▶ RIGHT ICONS (140px)</div>
+          <div class="sz-box sz-bottom-system">▼ BOTTOM PLATFORM EXCLUSION (1560 - 1920px)</div>
+        </div>
+      </div>
+    </template>
+  </body>
+</html>

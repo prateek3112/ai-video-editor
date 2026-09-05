@@ -1,0 +1,681 @@
+[
+  {
+    "text": "بھی",
+    "startMs": 0,
+    "endMs": 310,
+    "timestampMs": 980,
+    "confidence": 0.262524
+  },
+  {
+    "text": " یہ",
+    "startMs": 310,
+    "endMs": 620,
+    "timestampMs": 1220,
+    "confidence": 0.955798
+  },
+  {
+    "text": " فریعی",
+    "startMs": 620,
+    "endMs": 1030,
+    "timestampMs": 1460,
+    "confidence": 0.416226
+  },
+  {
+    "text": " ایڈول",
+    "startMs": 1030,
+    "endMs": 1540,
+    "timestampMs": 2140,
+    "confidence": 0.503571
+  },
+  {
+    "text": " تمہارے",
+    "startMs": 1540,
+    "endMs": 2160,
+    "timestampMs": 2440,
+    "confidence": 0.91715
+  },
+  {
+    "text": " کھوڑ",
+    "startMs": 2160,
+    "endMs": 2550,
+    "timestampMs": 2960,
+    "confidence": 0.412402
+  },
+  {
+    "text": " جوپز",
+    "startMs": 2550,
+    "endMs": 2960,
+    "timestampMs": 3100,
+    "confidence": 0.986027
+  },
+  {
+    "text": " دوڑے",
+    "startMs": 2960,
+    "endMs": 3360,
+    "timestampMs": 3440,
+    "confidence": 0.934665
+  },
+  {
+    "text": " گا",
+    "startMs": 3360,
+    "endMs": 3780,
+    "timestampMs": 3740,
+    "confidence": 0.995514
+  },
+  {
+    "text": " ہر",
+    "startMs": 3780,
+    "endMs": 3920,
+    "timestampMs": 4160,
+    "confidence": 0.826538
+  },
+  {
+    "text": " جوپ",
+    "startMs": 3920,
+    "endMs": 4130,
+    "timestampMs": 4360,
+    "confidence": 0.99835
+  },
+  {
+    "text": " کے",
+    "startMs": 4130,
+    "endMs": 4300,
+    "timestampMs": 4600,
+    "confidence": 0.75017
+  },
+  {
+    "text": " اکڑنگ",
+    "startMs": 4300,
+    "endMs": 4610,
+    "timestampMs": 4820,
+    "confidence": 0.87791
+  },
+  {
+    "text": " تمہارے",
+    "startMs": 4610,
+    "endMs": 5030,
+    "timestampMs": 5080,
+    "confidence": 0.268683
+  },
+  {
+    "text": " رزیوں",
+    "startMs": 5030,
+    "endMs": 5380,
+    "timestampMs": 5400,
+    "confidence": 0.998932
+  },
+  {
+    "text": " میں",
+    "startMs": 5380,
+    "endMs": 5590,
+    "timestampMs": 5700,
+    "confidence": 0.999533
+  },
+  {
+    "text": " اپتیمائیس",
+    "startMs": 5590,
+    "endMs": 6220,
+    "timestampMs": 6060,
+    "confidence": 0.992275
+  },
+  {
+    "text": " کرے",
+    "startMs": 6220,
+    "endMs": 6430,
+    "timestampMs": 6680,
+    "confidence": 0.998085
+  },
+  {
+    "text": " گا",
+    "startMs": 6430,
+    "endMs": 6660,
+    "timestampMs": 6680,
+    "confidence": 0.970731
+  },
+  {
+    "text": " اور",
+    "startMs": 6660,
+    "endMs": 6890,
+    "timestampMs": 7040,
+    "confidence": 0.948865
+  },
+  {
+    "text": " کھوڑ",
+    "startMs": 6890,
+    "endMs": 7150,
+    "timestampMs": 7040,
+    "confidence": 0.794901
+  },
+  {
+    "text": " اپلای",
+    "startMs": 7150,
+    "endMs": 7390,
+    "timestampMs": 7060,
+    "confidence": 0.957615
+  },
+  {
+    "text": " بھی",
+    "startMs": 7390,
+    "endMs": 7570,
+    "timestampMs": 7620,
+    "confidence": 0.968139
+  },
+  {
+    "text": " کر",
+    "startMs": 7570,
+    "endMs": 7710,
+    "timestampMs": 8040,
+    "confidence": 0.999327
+  },
+  {
+    "text": " دے",
+    "startMs": 7710,
+    "endMs": 7810,
+    "timestampMs": 8260,
+    "confidence": 0.925175
+  },
+  {
+    "text": " گا",
+    "startMs": 7810,
+    "endMs": 7930,
+    "timestampMs": 8940,
+    "confidence": 0.984727
+  },
+  {
+    "text": " ساہری",
+    "startMs": 7930,
+    "endMs": 8230,
+    "timestampMs": 9160,
+    "confidence": 0.964717
+  },
+  {
+    "text": " جوپز",
+    "startMs": 8230,
+    "endMs": 8470,
+    "timestampMs": 9160,
+    "confidence": 0.991524
+  },
+  {
+    "text": " کے",
+    "startMs": 8470,
+    "endMs": 8590,
+    "timestampMs": 9160,
+    "confidence": 0.736058
+  },
+  {
+    "text": " لیے",
+    "startMs": 8590,
+    "endMs": 8880,
+    "timestampMs": 9160,
+    "confidence": 0.999592
+  },
+  {
+    "text": " و",
+    "startMs": 8880,
+    "endMs": 9020,
+    "timestampMs": 9160,
+    "confidence": 0.846883
+  },
+  {
+    "text": " سپنے",
+    "startMs": 9020,
+    "endMs": 9300,
+    "timestampMs": 9180,
+    "confidence": 0.906901
+  },
+  {
+    "text": " رزیوں",
+    "startMs": 9300,
+    "endMs": 9580,
+    "timestampMs": 9600,
+    "confidence": 0.999895
+  },
+  {
+    "text": " میں",
+    "startMs": 9580,
+    "endMs": 9790,
+    "timestampMs": 9940,
+    "confidence": 0.999842
+  },
+  {
+    "text": " ایک",
+    "startMs": 9790,
+    "endMs": 10000,
+    "timestampMs": 10180,
+    "confidence": 0.993656
+  },
+  {
+    "text": " سپیرینز",
+    "startMs": 10000,
+    "endMs": 10490,
+    "timestampMs": 10440,
+    "confidence": 0.498856
+  },
+  {
+    "text": " اور",
+    "startMs": 10490,
+    "endMs": 10700,
+    "timestampMs": 10800,
+    "confidence": 0.873604
+  },
+  {
+    "text": " دیٹیل",
+    "startMs": 10700,
+    "endMs": 11120,
+    "timestampMs": 10800,
+    "confidence": 0.979185
+  },
+  {
+    "text": " ساہڈ",
+    "startMs": 11120,
+    "endMs": 11320,
+    "timestampMs": 11160,
+    "confidence": 0.495902
+  },
+  {
+    "text": " کروں",
+    "startMs": 11320,
+    "endMs": 11640,
+    "timestampMs": 11380,
+    "confidence": 0.997712
+  },
+  {
+    "text": " اور",
+    "startMs": 11640,
+    "endMs": 11810,
+    "timestampMs": 11820,
+    "confidence": 0.65278
+  },
+  {
+    "text": " یہ",
+    "startMs": 11810,
+    "endMs": 11920,
+    "timestampMs": 12180,
+    "confidence": 0.746206
+  },
+  {
+    "text": " تمہاری",
+    "startMs": 11920,
+    "endMs": 12290,
+    "timestampMs": 12180,
+    "confidence": 0.752592
+  },
+  {
+    "text": " پوری",
+    "startMs": 12290,
+    "endMs": 12450,
+    "timestampMs": 12180,
+    "confidence": 0.993202
+  },
+  {
+    "text": " پروفائل",
+    "startMs": 12450,
+    "endMs": 12820,
+    "timestampMs": 12700,
+    "confidence": 0.944706
+  },
+  {
+    "text": " ریڈی",
+    "startMs": 12820,
+    "endMs": 13010,
+    "timestampMs": 12980,
+    "confidence": 0.994957
+  },
+  {
+    "text": " کر",
+    "startMs": 13010,
+    "endMs": 13120,
+    "timestampMs": 13700,
+    "confidence": 0.841383
+  },
+  {
+    "text": " دے",
+    "startMs": 13120,
+    "endMs": 13220,
+    "timestampMs": 13700,
+    "confidence": 0.988548
+  },
+  {
+    "text": " گا",
+    "startMs": 13220,
+    "endMs": 13540,
+    "timestampMs": 13700,
+    "confidence": 0.997828
+  },
+  {
+    "text": " پھر",
+    "startMs": 13540,
+    "endMs": 13760,
+    "timestampMs": 13840,
+    "confidence": 0.296435
+  },
+  {
+    "text": " یہ",
+    "startMs": 13760,
+    "endMs": 13850,
+    "timestampMs": 13940,
+    "confidence": 0.995536
+  },
+  {
+    "text": " لنگڑن",
+    "startMs": 13850,
+    "endMs": 14150,
+    "timestampMs": 14020,
+    "confidence": 0.971704
+  },
+  {
+    "text": " اور",
+    "startMs": 14150,
+    "endMs": 14350,
+    "timestampMs": 14480,
+    "confidence": 0.982841
+  },
+  {
+    "text": " انڈیٹ",
+    "startMs": 14350,
+    "endMs": 14660,
+    "timestampMs": 14680,
+    "confidence": 0.84479
+  },
+  {
+    "text": " جسے",
+    "startMs": 14660,
+    "endMs": 14840,
+    "timestampMs": 15000,
+    "confidence": 0.997133
+  },
+  {
+    "text": " جوپ",
+    "startMs": 14840,
+    "endMs": 15020,
+    "timestampMs": 15320,
+    "confidence": 0.999125
+  },
+  {
+    "text": " پلاتفاؤںس",
+    "startMs": 15020,
+    "endMs": 15580,
+    "timestampMs": 15580,
+    "confidence": 0.699059
+  },
+  {
+    "text": " پر",
+    "startMs": 15580,
+    "endMs": 15740,
+    "timestampMs": 16040,
+    "confidence": 0.997546
+  },
+  {
+    "text": " جائے",
+    "startMs": 15740,
+    "endMs": 15990,
+    "timestampMs": 16160,
+    "confidence": 0.99859
+  },
+  {
+    "text": " گا",
+    "startMs": 15990,
+    "endMs": 16380,
+    "timestampMs": 16440,
+    "confidence": 0.998986
+  },
+  {
+    "text": " و",
+    "startMs": 16380,
+    "endMs": 16440,
+    "timestampMs": 16520,
+    "confidence": 0.747456
+  },
+  {
+    "text": " تمہارے",
+    "startMs": 16440,
+    "endMs": 16800,
+    "timestampMs": 16600,
+    "confidence": 0.91458
+  },
+  {
+    "text": " لیک",
+    "startMs": 16800,
+    "endMs": 16980,
+    "timestampMs": 17080,
+    "confidence": 0.940511
+  },
+  {
+    "text": " جوپز",
+    "startMs": 16980,
+    "endMs": 17220,
+    "timestampMs": 17080,
+    "confidence": 0.672635
+  },
+  {
+    "text": " فائنگ",
+    "startMs": 17220,
+    "endMs": 17520,
+    "timestampMs": 17300,
+    "confidence": 0.887246
+  },
+  {
+    "text": " کرے",
+    "startMs": 17520,
+    "endMs": 17700,
+    "timestampMs": 17640,
+    "confidence": 0.897049
+  },
+  {
+    "text": " گا",
+    "startMs": 17700,
+    "endMs": 17860,
+    "timestampMs": 17780,
+    "confidence": 0.999859
+  },
+  {
+    "text": " پھر",
+    "startMs": 18100,
+    "endMs": 18580,
+    "timestampMs": 18180,
+    "confidence": 0.606212
+  },
+  {
+    "text": " ہر",
+    "startMs": 18580,
+    "endMs": 19060,
+    "timestampMs": 18340,
+    "confidence": 0.721305
+  },
+  {
+    "text": " جوپ",
+    "startMs": 19060,
+    "endMs": 19780,
+    "timestampMs": 18600,
+    "confidence": 0.953584
+  },
+  {
+    "text": " کو",
+    "startMs": 19780,
+    "endMs": 20270,
+    "timestampMs": 19020,
+    "confidence": 0.876743
+  },
+  {
+    "text": " سکور",
+    "startMs": 20270,
+    "endMs": 21340,
+    "timestampMs": 19160,
+    "confidence": 0.159529
+  },
+  {
+    "text": " گرے",
+    "startMs": 21340,
+    "endMs": 21960,
+    "timestampMs": 19360,
+    "confidence": 0.624134
+  },
+  {
+    "text": " گا",
+    "startMs": 21960,
+    "endMs": 22580,
+    "timestampMs": 19760,
+    "confidence": 0.976144
+  },
+  {
+    "text": " اور",
+    "startMs": 22580,
+    "endMs": 23180,
+    "timestampMs": 19780,
+    "confidence": 0.775206
+  },
+  {
+    "text": " بتائے",
+    "startMs": 23180,
+    "endMs": 24400,
+    "timestampMs": 20020,
+    "confidence": 0.383308
+  },
+  {
+    "text": " گا",
+    "startMs": 24400,
+    "endMs": 24880,
+    "timestampMs": 20480,
+    "confidence": 0.967389
+  },
+  {
+    "text": " کہ",
+    "startMs": 24880,
+    "endMs": 25370,
+    "timestampMs": 20500,
+    "confidence": 0.334137
+  },
+  {
+    "text": " تمہارے",
+    "startMs": 25370,
+    "endMs": 26830,
+    "timestampMs": 21040,
+    "confidence": 0.668664
+  },
+  {
+    "text": " لیے",
+    "startMs": 26830,
+    "endMs": 27620,
+    "timestampMs": 21060,
+    "confidence": 0.841253
+  },
+  {
+    "text": " کانسی",
+    "startMs": 27620,
+    "endMs": 28760,
+    "timestampMs": 21400,
+    "confidence": 0.830265
+  },
+  {
+    "text": " جوپ",
+    "startMs": 28760,
+    "endMs": 29540,
+    "timestampMs": 21760,
+    "confidence": 0.962885
+  },
+  {
+    "text": " بسٹ",
+    "startMs": 29540,
+    "endMs": 30200,
+    "timestampMs": 21980,
+    "confidence": 0.580343
+  },
+  {
+    "text": " ہے",
+    "startMs": 30200,
+    "endMs": 31000,
+    "timestampMs": 22480,
+    "confidence": 0.871913
+  },
+  {
+    "text": " اور",
+    "startMs": 31000,
+    "endMs": 31200,
+    "timestampMs": 22820,
+    "confidence": 0.455615
+  },
+  {
+    "text": " کریسی",
+    "startMs": 31200,
+    "endMs": 31540,
+    "timestampMs": 22820,
+    "confidence": 0.192188
+  },
+  {
+    "text": " پر",
+    "startMs": 31540,
+    "endMs": 31630,
+    "timestampMs": 23400,
+    "confidence": 0.649761
+  },
+  {
+    "text": " یہ",
+    "startMs": 31630,
+    "endMs": 31760,
+    "timestampMs": 23700,
+    "confidence": 0.517092
+  },
+  {
+    "text": " جوپ",
+    "startMs": 31760,
+    "endMs": 31940,
+    "timestampMs": 23880,
+    "confidence": 0.98033
+  },
+  {
+    "text": " کے",
+    "startMs": 31940,
+    "endMs": 32070,
+    "timestampMs": 24180,
+    "confidence": 0.794235
+  },
+  {
+    "text": " اگڑنگ",
+    "startMs": 32070,
+    "endMs": 32370,
+    "timestampMs": 24300,
+    "confidence": 0.913241
+  },
+  {
+    "text": " تمہارے",
+    "startMs": 32370,
+    "endMs": 32750,
+    "timestampMs": 24620,
+    "confidence": 0.88757
+  },
+  {
+    "text": " رزیوں",
+    "startMs": 32750,
+    "endMs": 33060,
+    "timestampMs": 24960,
+    "confidence": 0.984659
+  },
+  {
+    "text": " میں",
+    "startMs": 33060,
+    "endMs": 33260,
+    "timestampMs": 25300,
+    "confidence": 0.913576
+  },
+  {
+    "text": " اپتیمائیس",
+    "startMs": 33260,
+    "endMs": 33810,
+    "timestampMs": 25400,
+    "confidence": 0.989854
+  },
+  {
+    "text": " کرتے",
+    "startMs": 33810,
+    "endMs": 34170,
+    "timestampMs": 26760,
+    "confidence": 0.995324
+  },
+  {
+    "text": " ہیں",
+    "startMs": 34170,
+    "endMs": 34480,
+    "timestampMs": 27440,
+    "confidence": 0.617603
+  }
+]

@@ -1,0 +1,940 @@
+[
+  {
+    "text": "bhai",
+    "startMs": 80,
+    "endMs": 390,
+    "timestampMs": 300,
+    "confidence": 0.199439
+  },
+  {
+    "text": " ye",
+    "startMs": 390,
+    "endMs": 720,
+    "timestampMs": 820,
+    "confidence": 0.266018
+  },
+  {
+    "text": " free",
+    "startMs": 720,
+    "endMs": 1010,
+    "timestampMs": 820,
+    "confidence": 0.686542
+  },
+  {
+    "text": " AI",
+    "startMs": 1010,
+    "endMs": 1180,
+    "timestampMs": 1260,
+    "confidence": 0.791911
+  },
+  {
+    "text": " tool",
+    "startMs": 1180,
+    "endMs": 1630,
+    "timestampMs": 1520,
+    "confidence": 0.181598
+  },
+  {
+    "text": " tumar",
+    "startMs": 1630,
+    "endMs": 1870,
+    "timestampMs": 1640,
+    "confidence": 0.128221
+  },
+  {
+    "text": " le",
+    "startMs": 1870,
+    "endMs": 2000,
+    "timestampMs": 1980,
+    "confidence": 0.727004
+  },
+  {
+    "text": " kuch",
+    "startMs": 2000,
+    "endMs": 2290,
+    "timestampMs": 2180,
+    "confidence": 0.250498
+  },
+  {
+    "text": " jobs",
+    "startMs": 2290,
+    "endMs": 2580,
+    "timestampMs": 2620,
+    "confidence": 0.867825
+  },
+  {
+    "text": " dood",
+    "startMs": 2580,
+    "endMs": 2860,
+    "timestampMs": 2720,
+    "confidence": 0.604683
+  },
+  {
+    "text": " ega",
+    "startMs": 2860,
+    "endMs": 3120,
+    "timestampMs": 2900,
+    "confidence": 0.143259
+  },
+  {
+    "text": " her",
+    "startMs": 3120,
+    "endMs": 3400,
+    "timestampMs": 3520,
+    "confidence": 0.119275
+  },
+  {
+    "text": " job",
+    "startMs": 3400,
+    "endMs": 3520,
+    "timestampMs": 3720,
+    "confidence": 0.91525
+  },
+  {
+    "text": " ke",
+    "startMs": 3520,
+    "endMs": 3650,
+    "timestampMs": 3900,
+    "confidence": 0.62463
+  },
+  {
+    "text": " according",
+    "startMs": 3650,
+    "endMs": 4250,
+    "timestampMs": 4160,
+    "confidence": 0.277923
+  },
+  {
+    "text": " tumar",
+    "startMs": 4250,
+    "endMs": 4530,
+    "timestampMs": 4340,
+    "confidence": 0.395871
+  },
+  {
+    "text": " le",
+    "startMs": 4530,
+    "endMs": 4640,
+    "timestampMs": 4600,
+    "confidence": 0.511689
+  },
+  {
+    "text": " resume",
+    "startMs": 4640,
+    "endMs": 4970,
+    "timestampMs": 4900,
+    "confidence": 0.622675
+  },
+  {
+    "text": " optimise",
+    "startMs": 4970,
+    "endMs": 5440,
+    "timestampMs": 5220,
+    "confidence": 0.946608
+  },
+  {
+    "text": " kare",
+    "startMs": 5440,
+    "endMs": 5670,
+    "timestampMs": 5520,
+    "confidence": 0.473611
+  },
+  {
+    "text": " ega",
+    "startMs": 5670,
+    "endMs": 5860,
+    "timestampMs": 5780,
+    "confidence": 0.121016
+  },
+  {
+    "text": " aur",
+    "startMs": 5860,
+    "endMs": 6050,
+    "timestampMs": 6080,
+    "confidence": 0.762492
+  },
+  {
+    "text": " kut",
+    "startMs": 6050,
+    "endMs": 6240,
+    "timestampMs": 6200,
+    "confidence": 0.714258
+  },
+  {
+    "text": " apply",
+    "startMs": 6240,
+    "endMs": 6610,
+    "timestampMs": 6720,
+    "confidence": 0.262798
+  },
+  {
+    "text": " vi",
+    "startMs": 6610,
+    "endMs": 6690,
+    "timestampMs": 6940,
+    "confidence": 0.112797
+  },
+  {
+    "text": " kare",
+    "startMs": 6690,
+    "endMs": 6940,
+    "timestampMs": 7060,
+    "confidence": 0.353171
+  },
+  {
+    "text": " tega",
+    "startMs": 6940,
+    "endMs": 7200,
+    "timestampMs": 7260,
+    "confidence": 0.116393
+  },
+  {
+    "text": " saari",
+    "startMs": 7200,
+    "endMs": 7520,
+    "timestampMs": 7440,
+    "confidence": 0.626085
+  },
+  {
+    "text": " jobs",
+    "startMs": 7520,
+    "endMs": 7770,
+    "timestampMs": 7740,
+    "confidence": 0.766816
+  },
+  {
+    "text": " ke",
+    "startMs": 7770,
+    "endMs": 7910,
+    "timestampMs": 7900,
+    "confidence": 0.719026
+  },
+  {
+    "text": " li",
+    "startMs": 7910,
+    "endMs": 8080,
+    "timestampMs": 8000,
+    "confidence": 0.470896
+  },
+  {
+    "text": " bha",
+    "startMs": 8080,
+    "endMs": 8370,
+    "timestampMs": 8320,
+    "confidence": 0.150674
+  },
+  {
+    "text": " sa",
+    "startMs": 8370,
+    "endMs": 8500,
+    "timestampMs": 8520,
+    "confidence": 0.55414
+  },
+  {
+    "text": " pne",
+    "startMs": 8500,
+    "endMs": 8750,
+    "timestampMs": 8600,
+    "confidence": 0.206539
+  },
+  {
+    "text": " resume",
+    "startMs": 8750,
+    "endMs": 9360,
+    "timestampMs": 9060,
+    "confidence": 0.960356
+  },
+  {
+    "text": " experience",
+    "startMs": 9360,
+    "endMs": 9920,
+    "timestampMs": 9800,
+    "confidence": 0.438203
+  },
+  {
+    "text": " or",
+    "startMs": 9920,
+    "endMs": 10060,
+    "timestampMs": 9980,
+    "confidence": 0.560974
+  },
+  {
+    "text": " details",
+    "startMs": 10060,
+    "endMs": 10570,
+    "timestampMs": 10280,
+    "confidence": 0.905638
+  },
+  {
+    "text": " add",
+    "startMs": 10570,
+    "endMs": 10790,
+    "timestampMs": 10580,
+    "confidence": 0.694365
+  },
+  {
+    "text": " karo",
+    "startMs": 10790,
+    "endMs": 10900,
+    "timestampMs": 10740,
+    "confidence": 0.0841487
+  },
+  {
+    "text": " aur",
+    "startMs": 10900,
+    "endMs": 11070,
+    "timestampMs": 11180,
+    "confidence": 0.685759
+  },
+  {
+    "text": " e",
+    "startMs": 11070,
+    "endMs": 11120,
+    "timestampMs": 11220,
+    "confidence": 0.118444
+  },
+  {
+    "text": " tumar",
+    "startMs": 11120,
+    "endMs": 11390,
+    "timestampMs": 11360,
+    "confidence": 0.707206
+  },
+  {
+    "text": " le",
+    "startMs": 11390,
+    "endMs": 11500,
+    "timestampMs": 11480,
+    "confidence": 0.621708
+  },
+  {
+    "text": " puri",
+    "startMs": 11500,
+    "endMs": 11720,
+    "timestampMs": 11660,
+    "confidence": 0.154601
+  },
+  {
+    "text": " profil",
+    "startMs": 11720,
+    "endMs": 12060,
+    "timestampMs": 12020,
+    "confidence": 0.237437
+  },
+  {
+    "text": " ready",
+    "startMs": 12060,
+    "endMs": 12350,
+    "timestampMs": 12320,
+    "confidence": 0.543683
+  },
+  {
+    "text": " kare",
+    "startMs": 12350,
+    "endMs": 12560,
+    "timestampMs": 12480,
+    "confidence": 0.235678
+  },
+  {
+    "text": " tega",
+    "startMs": 12560,
+    "endMs": 12880,
+    "timestampMs": 12620,
+    "confidence": 0.480158
+  },
+  {
+    "text": " phir",
+    "startMs": 12880,
+    "endMs": 13100,
+    "timestampMs": 13080,
+    "confidence": 0.0574393
+  },
+  {
+    "text": " le",
+    "startMs": 13100,
+    "endMs": 13210,
+    "timestampMs": 13220,
+    "confidence": 0.757621
+  },
+  {
+    "text": " LinkedIn",
+    "startMs": 13210,
+    "endMs": 13660,
+    "timestampMs": 13560,
+    "confidence": 0.225813
+  },
+  {
+    "text": " aur",
+    "startMs": 13660,
+    "endMs": 13840,
+    "timestampMs": 13780,
+    "confidence": 0.354934
+  },
+  {
+    "text": " indeed",
+    "startMs": 13840,
+    "endMs": 14220,
+    "timestampMs": 14080,
+    "confidence": 0.435851
+  },
+  {
+    "text": " jaise",
+    "startMs": 14220,
+    "endMs": 14450,
+    "timestampMs": 14340,
+    "confidence": 0.150281
+  },
+  {
+    "text": " job",
+    "startMs": 14450,
+    "endMs": 14600,
+    "timestampMs": 14700,
+    "confidence": 0.879784
+  },
+  {
+    "text": " platform",
+    "startMs": 14600,
+    "endMs": 15060,
+    "timestampMs": 15100,
+    "confidence": 0.388742
+  },
+  {
+    "text": " s",
+    "startMs": 15060,
+    "endMs": 15080,
+    "timestampMs": 15240,
+    "confidence": 0.155883
+  },
+  {
+    "text": " pga",
+    "startMs": 15080,
+    "endMs": 15300,
+    "timestampMs": 15320,
+    "confidence": 0.0844214
+  },
+  {
+    "text": " aayi",
+    "startMs": 15300,
+    "endMs": 15560,
+    "timestampMs": 15600,
+    "confidence": 0.0857267
+  },
+  {
+    "text": " aayi",
+    "startMs": 15560,
+    "endMs": 15740,
+    "timestampMs": 15740,
+    "confidence": 0.0228744
+  },
+  {
+    "text": " ki",
+    "startMs": 15740,
+    "endMs": 15830,
+    "timestampMs": 16400,
+    "confidence": 0.164651
+  },
+  {
+    "text": " tumar",
+    "startMs": 15830,
+    "endMs": 16200,
+    "timestampMs": 16400,
+    "confidence": 0.343624
+  },
+  {
+    "text": " le",
+    "startMs": 16200,
+    "endMs": 16380,
+    "timestampMs": 16400,
+    "confidence": 0.969132
+  },
+  {
+    "text": " jops",
+    "startMs": 16380,
+    "endMs": 16620,
+    "timestampMs": 16400,
+    "confidence": 0.105248
+  },
+  {
+    "text": " find",
+    "startMs": 16620,
+    "endMs": 16810,
+    "timestampMs": 16720,
+    "confidence": 0.623623
+  },
+  {
+    "text": " kare",
+    "startMs": 16810,
+    "endMs": 17020,
+    "timestampMs": 16900,
+    "confidence": 0.671517
+  },
+  {
+    "text": " ega",
+    "startMs": 17020,
+    "endMs": 17220,
+    "timestampMs": 17080,
+    "confidence": 0.802552
+  },
+  {
+    "text": " phir",
+    "startMs": 17220,
+    "endMs": 17480,
+    "timestampMs": 17440,
+    "confidence": 0.286629
+  },
+  {
+    "text": " her",
+    "startMs": 17480,
+    "endMs": 17680,
+    "timestampMs": 17660,
+    "confidence": 0.785412
+  },
+  {
+    "text": " job",
+    "startMs": 17680,
+    "endMs": 17880,
+    "timestampMs": 17880,
+    "confidence": 0.936279
+  },
+  {
+    "text": " ko",
+    "startMs": 17880,
+    "endMs": 18060,
+    "timestampMs": 18120,
+    "confidence": 0.485302
+  },
+  {
+    "text": " score",
+    "startMs": 18060,
+    "endMs": 18350,
+    "timestampMs": 18460,
+    "confidence": 0.72991
+  },
+  {
+    "text": " kare",
+    "startMs": 18350,
+    "endMs": 18610,
+    "timestampMs": 18540,
+    "confidence": 0.775053
+  },
+  {
+    "text": " ega",
+    "startMs": 18610,
+    "endMs": 18880,
+    "timestampMs": 18740,
+    "confidence": 0.865976
+  },
+  {
+    "text": " aur",
+    "startMs": 18880,
+    "endMs": 19100,
+    "timestampMs": 19100,
+    "confidence": 0.970354
+  },
+  {
+    "text": " beta",
+    "startMs": 19100,
+    "endMs": 19390,
+    "timestampMs": 19340,
+    "confidence": 0.267482
+  },
+  {
+    "text": " aayi",
+    "startMs": 19390,
+    "endMs": 19680,
+    "timestampMs": 19520,
+    "confidence": 0.330457
+  },
+  {
+    "text": " ka",
+    "startMs": 19680,
+    "endMs": 19810,
+    "timestampMs": 19660,
+    "confidence": 0.357457
+  },
+  {
+    "text": " ki",
+    "startMs": 19810,
+    "endMs": 19950,
+    "timestampMs": 19820,
+    "confidence": 0.634824
+  },
+  {
+    "text": " tumar",
+    "startMs": 19950,
+    "endMs": 20300,
+    "timestampMs": 20000,
+    "confidence": 0.978734
+  },
+  {
+    "text": " le",
+    "startMs": 20300,
+    "endMs": 20440,
+    "timestampMs": 20360,
+    "confidence": 0.967099
+  },
+  {
+    "text": " ye",
+    "startMs": 20440,
+    "endMs": 20640,
+    "timestampMs": 20460,
+    "confidence": 0.137251
+  },
+  {
+    "text": " konsi",
+    "startMs": 20640,
+    "endMs": 20930,
+    "timestampMs": 20680,
+    "confidence": 0.689761
+  },
+  {
+    "text": " job",
+    "startMs": 20930,
+    "endMs": 21140,
+    "timestampMs": 21120,
+    "confidence": 0.917606
+  },
+  {
+    "text": " best",
+    "startMs": 21140,
+    "endMs": 21510,
+    "timestampMs": 21340,
+    "confidence": 0.825945
+  },
+  {
+    "text": " hai",
+    "startMs": 21510,
+    "endMs": 21660,
+    "timestampMs": 21540,
+    "confidence": 0.374996
+  },
+  {
+    "text": " aur",
+    "startMs": 21660,
+    "endMs": 21920,
+    "timestampMs": 21960,
+    "confidence": 0.422447
+  },
+  {
+    "text": " kreasy",
+    "startMs": 21920,
+    "endMs": 22430,
+    "timestampMs": 22120,
+    "confidence": 0.460862
+  },
+  {
+    "text": " part",
+    "startMs": 22430,
+    "endMs": 22780,
+    "timestampMs": 22680,
+    "confidence": 0.752923
+  },
+  {
+    "text": " kye",
+    "startMs": 22780,
+    "endMs": 22960,
+    "timestampMs": 23000,
+    "confidence": 0.0949053
+  },
+  {
+    "text": " job",
+    "startMs": 22960,
+    "endMs": 23140,
+    "timestampMs": 23280,
+    "confidence": 0.771808
+  },
+  {
+    "text": " ke",
+    "startMs": 23140,
+    "endMs": 23240,
+    "timestampMs": 23480,
+    "confidence": 0.739543
+  },
+  {
+    "text": " according",
+    "startMs": 23240,
+    "endMs": 23770,
+    "timestampMs": 23700,
+    "confidence": 0.453824
+  },
+  {
+    "text": " tumar",
+    "startMs": 23770,
+    "endMs": 24040,
+    "timestampMs": 23880,
+    "confidence": 0.968165
+  },
+  {
+    "text": " le",
+    "startMs": 24040,
+    "endMs": 24150,
+    "timestampMs": 24140,
+    "confidence": 0.981382
+  },
+  {
+    "text": " resume",
+    "startMs": 24150,
+    "endMs": 24500,
+    "timestampMs": 24360,
+    "confidence": 0.997419
+  },
+  {
+    "text": " optimise",
+    "startMs": 24500,
+    "endMs": 24960,
+    "timestampMs": 24640,
+    "confidence": 0.988685
+  },
+  {
+    "text": " kare",
+    "startMs": 24960,
+    "endMs": 25270,
+    "timestampMs": 24940,
+    "confidence": 0.965281
+  },
+  {
+    "text": " te",
+    "startMs": 25270,
+    "endMs": 25320,
+    "timestampMs": 25180,
+    "confidence": 0.402416
+  },
+  {
+    "text": " 80",
+    "startMs": 25320,
+    "endMs": 25720,
+    "timestampMs": 25700,
+    "confidence": 0.398733
+  },
+  {
+    "text": " score",
+    "startMs": 25720,
+    "endMs": 25990,
+    "timestampMs": 26080,
+    "confidence": 0.657022
+  },
+  {
+    "text": " bi",
+    "startMs": 25990,
+    "endMs": 26080,
+    "timestampMs": 26220,
+    "confidence": 0.378811
+  },
+  {
+    "text": " check",
+    "startMs": 26080,
+    "endMs": 26380,
+    "timestampMs": 26340,
+    "confidence": 0.614973
+  },
+  {
+    "text": " kare",
+    "startMs": 26380,
+    "endMs": 26630,
+    "timestampMs": 26520,
+    "confidence": 0.650416
+  },
+  {
+    "text": " te",
+    "startMs": 26630,
+    "endMs": 26760,
+    "timestampMs": 26680,
+    "confidence": 0.839158
+  },
+  {
+    "text": " aur",
+    "startMs": 26760,
+    "endMs": 26930,
+    "timestampMs": 26780,
+    "confidence": 0.104894
+  },
+  {
+    "text": " application",
+    "startMs": 26930,
+    "endMs": 27520,
+    "timestampMs": 27300,
+    "confidence": 0.736161
+  },
+  {
+    "text": " bi",
+    "startMs": 27520,
+    "endMs": 27630,
+    "timestampMs": 27620,
+    "confidence": 0.452502
+  },
+  {
+    "text": " kode",
+    "startMs": 27630,
+    "endMs": 27850,
+    "timestampMs": 27760,
+    "confidence": 0.786221
+  },
+  {
+    "text": " handle",
+    "startMs": 27850,
+    "endMs": 28200,
+    "timestampMs": 28080,
+    "confidence": 0.903799
+  },
+  {
+    "text": " kare",
+    "startMs": 28200,
+    "endMs": 28420,
+    "timestampMs": 28180,
+    "confidence": 0.607462
+  },
+  {
+    "text": " le",
+    "startMs": 28420,
+    "endMs": 28540,
+    "timestampMs": 28360,
+    "confidence": 0.441251
+  },
+  {
+    "text": " te",
+    "startMs": 28540,
+    "endMs": 28640,
+    "timestampMs": 28460,
+    "confidence": 0.640256
+  },
+  {
+    "text": " i",
+    "startMs": 28640,
+    "endMs": 28850,
+    "timestampMs": 28960,
+    "confidence": 0.9891
+  },
+  {
+    "text": " have",
+    "startMs": 28850,
+    "endMs": 28910,
+    "timestampMs": 29260,
+    "confidence": 0.940916
+  },
+  {
+    "text": " made",
+    "startMs": 28910,
+    "endMs": 29120,
+    "timestampMs": 29640,
+    "confidence": 0.992551
+  },
+  {
+    "text": " this",
+    "startMs": 29120,
+    "endMs": 29350,
+    "timestampMs": 30060,
+    "confidence": 0.705711
+  },
+  {
+    "text": " complete",
+    "startMs": 29350,
+    "endMs": 29800,
+    "timestampMs": 30060,
+    "confidence": 1
+  },
+  {
+    "text": " local",
+    "startMs": 29800,
+    "endMs": 30080,
+    "timestampMs": 30060,
+    "confidence": 0.634529
+  },
+  {
+    "text": " setup",
+    "startMs": 30080,
+    "endMs": 30360,
+    "timestampMs": 30940,
+    "confidence": 1
+  },
+  {
+    "text": " and",
+    "startMs": 30360,
+    "endMs": 30530,
+    "timestampMs": 30940,
+    "confidence": 0.999603
+  },
+  {
+    "text": " complete",
+    "startMs": 30530,
+    "endMs": 31000,
+    "timestampMs": 30940,
+    "confidence": 1
+  },
+  {
+    "text": " PDF",
+    "startMs": 31000,
+    "endMs": 31180,
+    "timestampMs": 31140,
+    "confidence": 0.741178
+  },
+  {
+    "text": " guide",
+    "startMs": 31180,
+    "endMs": 31430,
+    "timestampMs": 31740,
+    "confidence": 0.99987
+  },
+  {
+    "text": " and",
+    "startMs": 31430,
+    "endMs": 31600,
+    "timestampMs": 31880,
+    "confidence": 0.334293
+  },
+  {
+    "text": " comment",
+    "startMs": 31600,
+    "endMs": 31990,
+    "timestampMs": 32100,
+    "confidence": 0.997029
+  },
+  {
+    "text": " and",
+    "startMs": 31990,
+    "endMs": 32160,
+    "timestampMs": 32400,
+    "confidence": 0.514093
+  },
+  {
+    "text": " i",
+    "startMs": 32160,
+    "endMs": 32210,
+    "timestampMs": 32600,
+    "confidence": 0.99412
+  },
+  {
+    "text": " will",
+    "startMs": 32210,
+    "endMs": 32420,
+    "timestampMs": 32920,
+    "confidence": 1
+  },
+  {
+    "text": " send",
+    "startMs": 32420,
+    "endMs": 32650,
+    "timestampMs": 33120,
+    "confidence": 1
+  },
+  {
+    "text": " it",
+    "startMs": 32650,
+    "endMs": 32760,
+    "timestampMs": 33120,
+    "confidence": 0.99987
+  },
+  {
+    "text": " to",
+    "startMs": 32760,
+    "endMs": 32870,
+    "timestampMs": 33120,
+    "confidence": 0.998437
+  },
+  {
+    "text": " you.",
+    "startMs": 32870,
+    "endMs": 33140,
+    "timestampMs": 33120,
+    "confidence": 1
+  }
+]
